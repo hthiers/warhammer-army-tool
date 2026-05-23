@@ -1,0 +1,29 @@
+import type { Unidad } from '../../types'
+import styles from './Sidebar.module.css'
+
+interface Props {
+  unidades: Unidad[]
+  unidadActual: string
+  onSeleccionar: (id: string) => void
+}
+
+export function Sidebar({ unidades, unidadActual, onSeleccionar }: Props) {
+  return (
+    <aside className={styles.sidebar}>
+      <div className={styles.title}>Unidades ({unidades.length})</div>
+      {unidades.map(u => (
+        <button
+          key={u.id}
+          className={`${styles.unitBtn} ${u.id === unidadActual ? styles.active : ''}`}
+          onClick={() => onSeleccionar(u.id)}
+        >
+          <span className={styles.dot} style={{ background: u.color }} />
+          <div className={styles.info}>
+            <span className={styles.nombre}>{u.nombre}</span>
+            <span className={styles.pts}>{u.pts} pts</span>
+          </div>
+        </button>
+      ))}
+    </aside>
+  )
+}

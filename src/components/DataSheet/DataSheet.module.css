@@ -1,0 +1,183 @@
+.wrapper {
+  display: flex;
+  gap: 14px;
+  align-items: flex-start;
+  width: 100%;
+}
+
+.sheet {
+  flex: 1;
+  min-width: 0;
+}
+
+.header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 14px;
+}
+
+.nombre {
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--text);
+  line-height: 1.2;
+}
+
+.keywords {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  margin-top: 6px;
+}
+
+.keyword {
+  font-size: 10px;
+  padding: 2px 7px;
+  border-radius: 10px;
+  background: var(--bg-tertiary);
+  color: var(--text-secondary);
+  border: var(--border);
+}
+
+.habBtn {
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 5px 10px;
+  border-radius: var(--radius-sm);
+  border: 0.5px solid var(--color-gold);
+  background: transparent;
+  color: var(--color-gold);
+  font-size: 11px;
+  font-weight: 500;
+  white-space: nowrap;
+  transition: background 0.1s;
+}
+
+.habBtn:hover {
+  background: var(--color-gold-bg);
+}
+
+.habBtnActive {
+  background: var(--color-gold-bg);
+}
+
+/* Stats */
+.statsRow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-bottom: 16px;
+}
+
+.statBox {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 8px 10px;
+  border-radius: var(--radius-sm);
+  border: var(--border);
+  background: var(--bg-secondary);
+  min-width: 46px;
+}
+
+.statVal {
+  font-size: 17px;
+  font-weight: 600;
+  color: var(--text);
+  line-height: 1;
+}
+
+.statLbl {
+  font-size: 9px;
+  color: var(--text-tertiary);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  margin-top: 3px;
+}
+
+/* Secciones */
+.section {
+  margin-bottom: 16px;
+}
+
+.sectionTitle {
+  font-size: 10px;
+  font-weight: 500;
+  color: var(--text-tertiary);
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  margin-bottom: 8px;
+}
+
+/* Tabla de armas */
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 12px;
+}
+
+.table th {
+  text-align: left;
+  padding: 5px 8px;
+  font-size: 10px;
+  font-weight: 500;
+  color: var(--text-tertiary);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  border-bottom: var(--border);
+}
+
+.table td {
+  padding: 7px 8px;
+  border-bottom: var(--border);
+  color: var(--text);
+  vertical-align: top;
+}
+
+.table tr:last-child td {
+  border-bottom: none;
+}
+
+.wNombre {
+  font-weight: 500;
+  display: block;
+}
+
+.wEspecial {
+  display: block;
+  font-size: 10px;
+  color: var(--text-tertiary);
+  margin-top: 2px;
+}
+
+/* Habilidades */
+.habilidades {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.habilidadCard {
+  padding: 10px 12px;
+  border-radius: var(--radius-md);
+  border: var(--border);
+  background: var(--bg);
+}
+
+.habilidadNombre {
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--text);
+  display: block;
+  margin-bottom: 3px;
+}
+
+.habilidadDesc {
+  font-size: 11px;
+  color: var(--text-secondary);
+  line-height: 1.55;
+}

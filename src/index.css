@@ -1,0 +1,59 @@
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+:root {
+  --color-gold: #BA7517;
+  --color-gold-light: #FAC775;
+  --color-gold-bg: #FAEEDA;
+  --color-gold-dark: #633806;
+  --color-gold-darker: #412402;
+  --font: 'Inter', system-ui, sans-serif;
+  --radius-sm: 6px;
+  --radius-md: 8px;
+  --radius-lg: 12px;
+  --border: 0.5px solid #e2e2e2;
+  --border-hover: 0.5px solid #c0c0c0;
+  --bg: #ffffff;
+  --bg-secondary: #f7f7f5;
+  --bg-tertiary: #f0eeeb;
+  --text: #1a1a1a;
+  --text-secondary: #555550;
+  --text-tertiary: #999990;
+  --shadow-sm: 0 1px 3px rgba(0,0,0,0.06);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --border: 0.5px solid #2e2e2e;
+    --border-hover: 0.5px solid #444;
+    --bg: #1a1a1a;
+    --bg-secondary: #222222;
+    --bg-tertiary: #2a2a2a;
+    --text: #f0f0ec;
+    --text-secondary: #aaa9a4;
+    --text-tertiary: #666660;
+    --shadow-sm: 0 1px 3px rgba(0,0,0,0.3);
+  }
+}
+
+html, body, #root {
+  height: 100%;
+  font-family: var(--font);
+  color: var(--text);
+  background: var(--bg-tertiary);
+  font-size: 14px;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+}
+
+button {
+  font-family: var(--font);
+  cursor: pointer;
+}
+
+select {
+  font-family: var(--font);
+}
