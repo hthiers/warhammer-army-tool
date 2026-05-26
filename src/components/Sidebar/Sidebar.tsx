@@ -8,10 +8,15 @@ interface Props {
 }
 
 export function Sidebar({ unidades, unidadActual, onSeleccionar }: Props) {
+  const totalPts = unidades.reduce((sum, u) => sum + u.pts, 0)
+  const ordenadas = [...unidades].sort((a, b) => a.nombre.localeCompare(b.nombre, 'es'))
   return (
     <aside className={styles.sidebar}>
-      <div className={styles.title}>Unidades ({unidades.length})</div>
-      {unidades.map(u => (
+      <div className={styles.title}>
+        <span>Unidades ({unidades.length})</span>
+        <span className={styles.totalPts}>{totalPts} pts</span>
+      </div>
+      {ordenadas.map(u => (
         <button
           key={u.id}
           className={`${styles.unitBtn} ${u.id === unidadActual ? styles.active : ''}`}

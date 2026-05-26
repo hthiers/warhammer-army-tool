@@ -1,0 +1,34 @@
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 10px;
+  font-weight: 500;
+  padding: 2px 7px;
+  border-radius: 10px;
+  white-space: nowrap;
+}
+
+.icono {
+  font-size: 10px;
+  line-height: 1;
+}
+
+/* Fases */
+.mando      { background: #EDE7F6; color: #4A1FA8; }
+.movimiento { background: #E3EEF8; color: #0D47A1; }
+.disparo    { background: #FFF0DC; color: #B85C00; }
+.carga      { background: #FFF5C0; color: #7A5800; }
+.lucha      { background: #FDEAEA; color: #9B1B1B; }
+.despliegue { background: #E0F4F0; color: #1A5C4A; }
+.cualquier  { background: #EEEEEE; color: #444444; }
+
+@media (prefers-color-scheme: dark) {
+  .mando      { background: #2D1B4E; color: #C4A3F5; }
+  .movimiento { background: #0D2A4A; color: #7EB8F7; }
+  .disparo    { background: #3A2000; color: #FFB366; }
+  .carga      { background: #2E2200; color: #FFD966; }
+  .lucha      { background: #3A0A0A; color: #F5A0A0; }
+  .despliegue { background: #0A2A24; color: #5ECFB8; }
+  .cualquier  { background: #2A2A2A; color: #AAAAAA; }
+}

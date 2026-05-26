@@ -1,4 +1,5 @@
 import type { Estratagema } from '../../types'
+import { FaseBadge } from '../FaseBadge/FaseBadge'
 import styles from './StratagemList.module.css'
 
 interface Props {
@@ -19,7 +20,7 @@ export function StratagemList({ estratagemas }: Props) {
             <span className={styles.pcBadge}>{s.pc}PC</span>
           </div>
           <div className={styles.meta}>
-            <span className={styles.fase}>{s.fase}</span>
+            <FaseBadge fase={s.fase} />
             {s.etiqueta && <span className={styles.etiqueta}>{s.etiqueta}</span>}
           </div>
           <p className={styles.efecto}>{s.efecto}</p>

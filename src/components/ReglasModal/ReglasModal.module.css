@@ -1,0 +1,133 @@
+.overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.65);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 200;
+  padding: 16px;
+}
+
+.box {
+  position: relative;
+  background: var(--bg-secondary);
+  border: var(--border);
+  border-radius: var(--radius-lg);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+  padding: 24px 28px 20px;
+  width: 100%;
+  max-width: 480px;
+  max-height: 90vh;
+  overflow-y: auto;
+}
+
+.close {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  border: none;
+  background: var(--bg);
+  color: var(--text-secondary);
+  font-size: 11px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+
+.close:hover {
+  background: var(--bg-tertiary, #eee);
+}
+
+.titulo {
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--text);
+  margin: 0 0 20px;
+}
+
+.seccion {
+  margin-bottom: 20px;
+}
+
+.seccion:last-child {
+  margin-bottom: 0;
+}
+
+.seccionTitulo {
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--color-gold, #BA7517);
+  margin: 0 0 10px;
+}
+
+/* Tabla para herir */
+.tabla {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+}
+
+.tabla th {
+  text-align: left;
+  font-size: 10px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--text-tertiary);
+  padding: 0 8px 6px 0;
+  border-bottom: var(--border);
+}
+
+.tabla td {
+  padding: 6px 8px 6px 0;
+  color: var(--text-secondary);
+  border-bottom: var(--border);
+}
+
+.tabla tr:last-child td {
+  border-bottom: none;
+}
+
+.tirada {
+  font-weight: 700;
+  color: var(--text) !important;
+  font-size: 14px;
+}
+
+/* Listas de reglas */
+.lista {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.lista li {
+  font-size: 12px;
+  color: var(--text-secondary);
+  line-height: 1.5;
+  padding-left: 12px;
+  position: relative;
+}
+
+.lista li::before {
+  content: '·';
+  position: absolute;
+  left: 0;
+  color: var(--text-tertiary);
+}
+
+.lista strong {
+  color: var(--text);
+  font-weight: 600;
+}

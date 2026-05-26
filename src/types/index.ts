@@ -9,6 +9,8 @@ export interface ArmaDistancia {
   FP: number
   D: number | string
   especial?: string
+  opcional?: boolean
+  esAlternativa?: boolean
 }
 
 export interface ArmaCombate {
@@ -19,6 +21,8 @@ export interface ArmaCombate {
   FP: number
   D: number | string
   especial?: string
+  opcional?: boolean
+  esAlternativa?: boolean
 }
 
 // ─── Unidad ──────────────────────────────────────────────────────────────────
@@ -43,6 +47,7 @@ export interface Unidad {
   nombre: string
   pts: number
   color: string
+  activo?: boolean
   palabrasClave: string[]
   stats: Stats
   distancia: ArmaDistancia[]
@@ -84,6 +89,26 @@ export interface Destacamento {
   nombre: string
 }
 
+// ─── Facción ──────────────────────────────────────────────────────────────────
+
+export interface ReglaFaccion {
+  id: string
+  nombre: string
+  desc: string
+  efectos?: string[]
+}
+
+export interface DatosFaccion {
+  id: string
+  nombre: string
+  color: string
+  unidades: Unidad[]
+  destacamentos: Destacamento[]
+  doctrinas: Record<string, Doctrina[]>
+  estratagemas: Record<string, Estratagema[]>
+  reglasFaccion: ReglaFaccion[]
+}
+
 // ─── Estado de la app ────────────────────────────────────────────────────────
 
-export type Pestana = 'ficha' | 'doctrinas' | 'estratagemas'
+export type Pestana = 'ficha' | 'doctrinas' | 'estratagemas' | 'faccion'

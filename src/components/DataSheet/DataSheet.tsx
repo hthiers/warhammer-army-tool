@@ -1,15 +1,22 @@
+import { useState } from 'react'
 import type { Unidad, Estratagema } from '../../types'
 import { AbilitiesPanel } from '../AbilitiesPanel/AbilitiesPanel'
+import { ImageModal } from '../ImageModal/ImageModal'
+import { ReglasEspeciales } from '../ReglaBadge/ReglaBadge'
 import styles from './DataSheet.module.css'
 
 interface Props {
   unidad: Unidad
+  faccionId: string
   estratagemasRelacionadas: Estratagema[]
   mostrarHabilidades: boolean
   onToggleHabilidades: () => void
 }
 
-export function DataSheet({ unidad, estratagemasRelacionadas, mostrarHabilidades, onToggleHabilidades }: Props) {
+export function DataSheet({ unidad, faccionId, estratagemasRelacionadas, mostrarHabilidades, onToggleHabilidades }: Props) {
+  const [mostrarImagen, setMostrarImagen] = useState(false)
+  const imageSrc = `/images/unidades/${faccionId}/${unidad.id}.jpg`
+
   return (
     <div className={styles.wrapper}>
       <div className={styles.sheet}>
@@ -23,12 +30,22 @@ export function DataSheet({ unidad, estratagemasRelacionadas, mostrarHabilidades
               ))}
             </div>
           </div>
-          <button
-            className={`${styles.habBtn} ${mostrarHabilidades ? styles.habBtnActive : ''}`}
-            onClick={onToggleHabilidades}
-          >
-            ⚡ {mostrarHabilidades ? 'Ocultar habilidades' : `Ver habilidades (${estratagemasRelacionadas.length})`}
-          </button>
+          <div className={styles.headerActions}>
+            <button
+              className={styles.imgBtn}
+              onClick={() => setMostrarImagen(true)}
+              aria-label="Ver imagen de la unidad"
+              title="Ver imagen"
+            >
+              🖼
+            </button>
+            <button
+              className={`${styles.habBtn} ${mostrarHabilidades ? styles.habBtnActive : ''}`}
+              onClick={onToggleHabilidades}
+            >
+              ⚡ {mostrarHabilidades ? 'Ocultar' : `Ver habilidades (${unidad.habilidades.length + estratagemasRelacionadas.length})`}
+            </button>
+          </div>
         </div>
 
         {/* Estadísticas */}
@@ -42,33 +59,45 @@ export function DataSheet({ unidad, estratagemasRelacionadas, mostrarHabilidades
         </div>
 
         {/* Armas a distancia */}
-        <section className={styles.section}>
-          <h3 className={styles.sectionTitle}>Armas a distancia</h3>
-          <table className={styles.table}>
-            <thead>
-              <tr>
-                <th>Arma</th><th>Rango</th><th>A</th>
-                <th>HA</th><th>F</th><th>FP</th><th>D</th>
-              </tr>
-            </thead>
-            <tbody>
-              {unidad.distancia.map((w, i) => (
-                <tr key={i}>
-                  <td>
-                    <span className={styles.wNombre}>{w.nombre}</span>
-                    {w.especial && <span className={styles.wEspecial}>[{w.especial}]</span>}
-                  </td>
-                  <td>{w.rango}</td>
-                  <td>{w.A}</td>
-                  <td>{w.HA}</td>
-                  <td>{w.F}</td>
-                  <td>{w.FP}</td>
-                  <td>{w.D}</td>
+        {unidad.distancia.length > 0 && (
+          <section className={styles.section}>
+            <h3 className={styles.sectionTitle}>Armas a distancia</h3>
+            <table className={styles.table}>
+              <thead>
+                <tr>
+                  <th>Arma</th><th>Rango</th><th>A</th>
+                  <th>HA</th><th>F</th><th>FP</th><th>D</th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
-        </section>
+              </thead>
+              <tbody>
+                {unidad.distancia.map((w, i) => (
+                  <tr key={i} className={w.opcional ? styles.rowOpcional : ''}>
+                    <td>
+                      <span className={styles.wNombre}>
+                        {w.esAlternativa && <span className={styles.altPrefix}>▸</span>}
+                        {w.nombre}
+                        {w.opcional && !w.esAlternativa && <span className={styles.opcBadge}>OPC</span>}
+                      </span>
+                      {w.especial && (
+                        <span className={styles.wEspecial}>
+                          [<ReglasEspeciales especial={w.especial} />]
+                        </span>
+                      )}
+                    </td>
+                    <td>{w.rango}</td>
+                    <td>{w.A}</td>
+                    <td>{w.HA}</td>
+                    <td>{w.F}</td>
+                    <td>{w.FP}</td>
+                    <td>{w.D}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </section>
+        )}
+
+        <hr className={styles.divider} />
 
         {/* Armas de combate */}
         <section className={styles.section}>
@@ -82,8 +111,19 @@ export function DataSheet({ unidad, estratagemasRelacionadas, mostrarHabilidades
             </thead>
             <tbody>
               {unidad.combate.map((w, i) => (
-                <tr key={i}>
-                  <td><span className={styles.wNombre}>{w.nombre}</span></td>
+                <tr key={i} className={w.opcional ? styles.rowOpcional : ''}>
+                  <td>
+                    <span className={styles.wNombre}>
+                      {w.esAlternativa && <span className={styles.altPrefix}>▸</span>}
+                      {w.nombre}
+                      {w.opcional && !w.esAlternativa && <span className={styles.opcBadge}>OPC</span>}
+                    </span>
+                    {w.especial && (
+                      <span className={styles.wEspecial}>
+                        [<ReglasEspeciales especial={w.especial} />]
+                      </span>
+                    )}
+                  </td>
                   <td>{w.A}</td>
                   <td>{w.HP}</td>
                   <td>{w.F}</td>
@@ -109,9 +149,18 @@ export function DataSheet({ unidad, estratagemasRelacionadas, mostrarHabilidades
         </section>
       </div>
 
-      {/* Panel lateral de estratagemas */}
+      {/* Panel lateral de habilidades + estratagemas */}
       {mostrarHabilidades && (
-        <AbilitiesPanel estratagemas={estratagemasRelacionadas} />
+        <AbilitiesPanel habilidades={unidad.habilidades} estratagemas={estratagemasRelacionadas} />
+      )}
+
+      {/* Modal de imagen */}
+      {mostrarImagen && (
+        <ImageModal
+          src={imageSrc}
+          alt={unidad.nombre}
+          onClose={() => setMostrarImagen(false)}
+        />
       )}
     </div>
   )

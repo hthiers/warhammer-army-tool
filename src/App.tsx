@@ -1,27 +1,62 @@
 import { useState } from 'react'
 import type { Pestana } from './types'
-import { UNIDADES } from './data/unidades'
-import { DESTACAMENTOS, DOCTRINAS } from './data/doctrinas'
-import { ESTRATAGEMAS } from './data/estratagemas'
+import { FACCIONES, FACCIONES_MAP } from './data/facciones'
 import { Topbar } from './components/Topbar/Topbar'
 import { Sidebar } from './components/Sidebar/Sidebar'
 import { DataSheet } from './components/DataSheet/DataSheet'
 import { DoctrineList } from './components/DoctrineList/DoctrineList'
 import { StratagemList } from './components/StratagemList/StratagemList'
+import { FactionPicker } from './components/FactionPicker/FactionPicker'
+import { ReglasModal } from './components/ReglasModal/ReglasModal'
+import { FaccionRulesList } from './components/FaccionRulesList/FaccionRulesList'
 import styles from './App.module.css'
 
+const STORAGE_KEY = 'wh40k-faccion'
+
+function getInitialFaccionId(): string | null {
+  return localStorage.getItem(STORAGE_KEY)
+}
+
 export default function App() {
-  const [destacamento, setDestacamento] = useState('gladius')
-  const [unidadId, setUnidadId] = useState(UNIDADES[0].id)
+  const [faccionId, setFaccionId] = useState<string | null>(getInitialFaccionId)
+  const [destacamento, setDestacamento] = useState<string>('')
+  const [unidadId, setUnidadId] = useState<string>('')
   const [pestana, setPestana] = useState<Pestana>('ficha')
   const [mostrarHabilidades, setMostrarHabilidades] = useState(false)
+  const [mostrarReglas, setMostrarReglas] = useState(false)
 
-  const unidad = UNIDADES.find(u => u.id === unidadId)!
-  const doctrinas = DOCTRINAS[destacamento] ?? []
-  const estratagemas = ESTRATAGEMAS[destacamento] ?? []
-  const estratagemasUnidad = estratagemas.filter(s =>
-    unidad.estratagemasRelacionadas.includes(s.id)
-  )
+  function handleSeleccionarFaccion(id: string) {
+    const faccion = FACCIONES_MAP[id]
+    localStorage.setItem(STORAGE_KEY, id)
+    setFaccionId(id)
+    setDestacamento(faccion.destacamentos[0].id)
+    setUnidadId(faccion.unidades[0].id)
+    setPestana('ficha')
+    setMostrarHabilidades(false)
+  }
+
+  function handleCambiarFaccion() {
+    localStorage.removeItem(STORAGE_KEY)
+    setFaccionId(null)
+  }
+
+  if (!faccionId || !FACCIONES_MAP[faccionId]) {
+    return <FactionPicker facciones={FACCIONES} onSeleccionar={handleSeleccionarFaccion} />
+  }
+
+  const faccion = FACCIONES_MAP[faccionId]
+  const unidadesActivas = faccion.unidades.filter(u => u.activo !== false)
+  const destId = destacamento || faccion.destacamentos[0].id
+  const unId = unidadId || unidadesActivas[0].id
+
+  const unidad = unidadesActivas.find(u => u.id === unId) ?? unidadesActivas[0]
+  const doctrinas = faccion.doctrinas[destId] ?? []
+  const estratagemas = faccion.estratagemas[destId] ?? []
+  const tieneGranadas = unidad.palabrasClave.includes('Granadas')
+  const estratagemasUnidad = estratagemas.filter(s => {
+    if (s.etiqueta === 'Universal') return s.id !== 'granada' || tieneGranadas
+    return unidad.estratagemasRelacionadas.includes(s.id)
+  })
 
   function handleSeleccionarUnidad(id: string) {
     setUnidadId(id)
@@ -37,20 +72,23 @@ export default function App() {
   return (
     <div className={styles.app}>
       <Topbar
-        destacamentos={DESTACAMENTOS}
-        destacamentoActual={destacamento}
+        faccion={faccion}
+        destacamentos={faccion.destacamentos}
+        destacamentoActual={destId}
         onCambiarDestacamento={handleCambiarDestacamento}
+        onCambiarFaccion={handleCambiarFaccion}
+        onAbrirReglas={() => setMostrarReglas(true)}
       />
+      {mostrarReglas && <ReglasModal onClose={() => setMostrarReglas(false)} />}
 
       <div className={styles.body}>
         <Sidebar
-          unidades={UNIDADES}
-          unidadActual={unidadId}
+          unidades={unidadesActivas}
+          unidadActual={unId}
           onSeleccionar={handleSeleccionarUnidad}
         />
 
         <div className={styles.main}>
-          {/* Pestañas */}
           <nav className={styles.tabs}>
             <button
               className={`${styles.tab} ${pestana === 'ficha' ? styles.tabActive : ''}`}
@@ -72,13 +110,20 @@ export default function App() {
               Estratagemas
               <span className={styles.count}>{estratagemas.length}</span>
             </button>
+            <button
+              className={`${styles.tab} ${pestana === 'faccion' ? styles.tabActive : ''}`}
+              onClick={() => setPestana('faccion')}
+            >
+              Facción
+              <span className={styles.count}>{faccion.reglasFaccion.length}</span>
+            </button>
           </nav>
 
-          {/* Contenido */}
           <div className={styles.content}>
             {pestana === 'ficha' && (
               <DataSheet
                 unidad={unidad}
+                faccionId={faccionId}
                 estratagemasRelacionadas={estratagemasUnidad}
                 mostrarHabilidades={mostrarHabilidades}
                 onToggleHabilidades={() => setMostrarHabilidades(v => !v)}
@@ -89,6 +134,9 @@ export default function App() {
             )}
             {pestana === 'estratagemas' && (
               <StratagemList estratagemas={estratagemas} />
+            )}
+            {pestana === 'faccion' && (
+              <FaccionRulesList reglas={faccion.reglasFaccion} faccionNombre={faccion.nombre} />
             )}
           </div>
         </div>
