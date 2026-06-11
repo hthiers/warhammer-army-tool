@@ -56,29 +56,16 @@ export interface Unidad {
   estratagemasRelacionadas: string[]
 }
 
-// ─── Doctrina ─────────────────────────────────────────────────────────────────
-
-export interface Doctrina {
-  id: string
-  nombre: string
-  ronda: string
-  rondaColor: string
-  rondaTexto: string
-  desc: string
-  efectos: string[]
-}
-
 // ─── Estratagema ──────────────────────────────────────────────────────────────
 
 export interface Estratagema {
   id: string
   nombre: string
-  pc: number
-  fase: string
-  desc: string
+  tipo: string
+  pm: number
+  cuando: string
+  blanco: string
   efecto: string
-  restriccion?: string
-  unidades: string[]
   etiqueta?: string
 }
 
@@ -87,6 +74,18 @@ export interface Estratagema {
 export interface Destacamento {
   id: string
   nombre: string
+}
+
+export interface ReglaDestacamento {
+  nombre: string
+  efectos: string[]
+}
+
+export interface Mejora {
+  id: string
+  nombre: string
+  restriccion: string
+  desc: string
 }
 
 // ─── Facción ──────────────────────────────────────────────────────────────────
@@ -104,7 +103,8 @@ export interface DatosFaccion {
   color: string
   unidades: Unidad[]
   destacamentos: Destacamento[]
-  doctrinas: Record<string, Doctrina[]>
+  reglas: Record<string, ReglaDestacamento>
+  mejoras: Record<string, Mejora[]>
   estratagemas: Record<string, Estratagema[]>
   reglasFaccion: ReglaFaccion[]
 }

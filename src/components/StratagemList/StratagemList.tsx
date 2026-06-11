@@ -17,14 +17,14 @@ export function StratagemList({ estratagemas }: Props) {
         <div key={s.id} className={styles.card}>
           <div className={styles.header}>
             <h3 className={styles.nombre}>{s.nombre}</h3>
-            <span className={styles.pcBadge}>{s.pc}PC</span>
+            <span className={styles.pcBadge}>{s.pm}PM</span>
           </div>
           <div className={styles.meta}>
-            <FaseBadge fase={s.fase} />
+            <FaseBadge fase={s.cuando} />
             {s.etiqueta && <span className={styles.etiqueta}>{s.etiqueta}</span>}
           </div>
           <p className={styles.efecto}>{s.efecto}</p>
-          {s.restriccion && <p className={styles.restriccion}>{s.restriccion}</p>}
+          {s.blanco && <p className={styles.restriccion}>{s.blanco}</p>}
         </div>
       ))}
     </div>

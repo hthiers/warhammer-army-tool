@@ -32,9 +32,9 @@ export function AbilitiesPanel({ habilidades, estratagemas }: Props) {
         <div key={s.id} className={styles.card}>
           <div className={styles.cardHeader}>
             <span className={styles.nombre}>{s.nombre}</span>
-            <span className={styles.pcBadge}>{s.pc}PC</span>
+            <span className={styles.pcBadge}>{s.pm}PM</span>
           </div>
-          <div className={styles.fase}><FaseBadge fase={s.fase} /></div>
+          <div className={styles.fase}><FaseBadge fase={s.cuando} /></div>
           <p className={styles.efecto}>{s.efecto}</p>
           {s.etiqueta && <span className={styles.etiqueta}>{s.etiqueta}</span>}
         </div>

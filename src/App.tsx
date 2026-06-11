@@ -50,7 +50,7 @@ export default function App() {
   const unId = unidadId || unidadesActivas[0].id
 
   const unidad = unidadesActivas.find(u => u.id === unId) ?? unidadesActivas[0]
-  const doctrinas = faccion.doctrinas[destId] ?? []
+  const regla = faccion.reglas[destId]
   const estratagemas = faccion.estratagemas[destId] ?? []
   const tieneGranadas = unidad.palabrasClave.includes('Granadas')
   const estratagemasUnidad = estratagemas.filter(s => {
@@ -100,8 +100,7 @@ export default function App() {
               className={`${styles.tab} ${pestana === 'doctrinas' ? styles.tabActive : ''}`}
               onClick={() => setPestana('doctrinas')}
             >
-              Doctrinas
-              <span className={styles.count}>{doctrinas.length}</span>
+              Destacamento
             </button>
             <button
               className={`${styles.tab} ${pestana === 'estratagemas' ? styles.tabActive : ''}`}
@@ -130,7 +129,7 @@ export default function App() {
               />
             )}
             {pestana === 'doctrinas' && (
-              <DoctrineList doctrinas={doctrinas} />
+              <DoctrineList regla={regla} />
             )}
             {pestana === 'estratagemas' && (
               <StratagemList estratagemas={estratagemas} />
