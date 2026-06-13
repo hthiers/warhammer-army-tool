@@ -35,7 +35,7 @@
   align-items: center;
   gap: 6px;
   padding: 10px 14px;
-  font-size: 13px;
+  font-size: 16px;
   font-weight: 400;
   color: var(--text-secondary);
   border: none;
@@ -57,7 +57,7 @@
 }
 
 .count {
-  font-size: 10px;
+  font-size: 16px;
   padding: 1px 5px;
   border-radius: 10px;
   background: var(--bg-tertiary);

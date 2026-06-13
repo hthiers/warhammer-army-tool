@@ -4,7 +4,7 @@ export interface ArmaDistancia {
   nombre: string
   rango: string
   A: number | string
-  HA: string
+  HP: string
   F: number
   FP: number
   D: number | string
@@ -16,7 +16,7 @@ export interface ArmaDistancia {
 export interface ArmaCombate {
   nombre: string
   A: number | string
-  HP: string
+  HA: string
   F: number
   FP: number
   D: number | string
@@ -66,6 +66,7 @@ export interface Estratagema {
   cuando: string
   blanco: string
   efecto: string
+  restricciones?: string
   etiqueta?: string
 }
 
@@ -111,4 +112,4 @@ export interface DatosFaccion {
 
 // ─── Estado de la app ────────────────────────────────────────────────────────
 
-export type Pestana = 'ficha' | 'doctrinas' | 'estratagemas' | 'faccion'
+export type Pestana = 'ficha' | 'destacamento' | 'faccion'

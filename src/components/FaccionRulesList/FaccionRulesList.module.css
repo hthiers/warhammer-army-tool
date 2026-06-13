@@ -6,7 +6,7 @@
 }
 
 .empty {
-  font-size: 13px;
+  font-size: 19px;
   color: var(--text-tertiary);
   padding: 24px 0;
 }
@@ -19,14 +19,14 @@
 }
 
 .nombre {
-  font-size: 14px;
+  font-size: 16px;
   font-weight: 700;
   color: var(--text);
   margin-bottom: 8px;
 }
 
 .desc {
-  font-size: 12px;
+  font-size: 16px;
   color: var(--text-secondary);
   line-height: 1.65;
   margin-bottom: 12px;
@@ -45,7 +45,7 @@
   display: flex;
   align-items: flex-start;
   gap: 8px;
-  font-size: 12px;
+  font-size: 16px;
   color: var(--text-secondary);
   line-height: 1.5;
 }

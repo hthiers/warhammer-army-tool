@@ -10,11 +10,11 @@ export const UNIDADES: Unidad[] = [
     palabrasClave: ['Infantería', 'Personaje', 'Fobos', 'Imperium', 'Adeptus Astartes'],
     stats: { MOV: '6"', RES: 4, HER: 5, SALV: '2+', INV: '4+', LID: '6+', OC: 1 },
     distancia: [
-      { nombre: 'Pistola bólter', rango: '12"', A: 1, HA: '2+', F: 4, FP: 0, D: 1, especial: 'Pistola' },
-      { nombre: 'Carabina bólter instigador', rango: '24"', A: 4, HA: '2+', F: 4, FP: -1, D: 2, especial: 'Precisión' },
+      { nombre: 'Pistola bólter', rango: '12"', A: 1, HP: '2+', F: 4, FP: 0, D: 1, especial: 'Pistola' },
+      { nombre: 'Carabina bólter instigador', rango: '24"', A: 4, HP: '2+', F: 4, FP: -1, D: 2, especial: 'Precisión' },
     ],
     combate: [
-      { nombre: 'Cuchillo de combate', A: 5, HP: '2+', F: 4, FP: 0, D: 1 },
+      { nombre: 'Cuchillo de combate', A: 5, HA: '2+', F: 4, FP: 0, D: 1 },
     ],
     habilidades: [
       {
@@ -40,15 +40,15 @@ export const UNIDADES: Unidad[] = [
     palabrasClave: ['Infantería', 'Personaje', 'Exterminador', 'Imperium', 'Adeptus Astartes'],
     stats: { MOV: '5"', RES: 5, HER: 6, SALV: '2+', INV: '4+', LID: '6+', OC: 1 },
     distancia: [
-      { nombre: 'Bólter tormenta', rango: '24"', A: 2, HA: '2+', F: 4, FP: 0, D: 1, especial: 'Fuego Rápido 2' },
-      { nombre: 'Combiarma', rango: '24"', A: 1, HA: '3+', F: 4, FP: 0, D: 1, especial: 'Antiinfantería 4+, Heridas Devastadoras, Fuego Rápido 1' },
+      { nombre: 'Bólter tormenta', rango: '24"', A: 2, HP: '2+', F: 4, FP: 0, D: 1, especial: 'Fuego Rápido 2' },
+      { nombre: 'Combiarma', rango: '24"', A: 1, HP: '3+', F: 4, FP: 0, D: 1, especial: 'Antiinfantería 4+, Heridas Devastadoras, Fuego Rápido 1' },
     ],
     combate: [
-      { nombre: 'Arma reliquia', A: 6, HP: '2+', F: 5, FP: -2, D: 2 },
-      { nombre: 'Garras Relámpago dobles', A: 7, HP: '2+', F: 5, FP: -2, D: 1, especial: 'Acoplada' },
-      { nombre: 'Martillo de Trueno', A: 5, HP: '3+', F: 8, FP: -2, D: 2, especial: 'Heridas Devastadoras' },
-      { nombre: 'Puño de energía', A: 5, HP: '2+', F: 8, FP: -2, D: 2 },
-      { nombre: 'Puño Sierra', A: 5, HP: '3+', F: 8, FP: -2, D: 2, especial: 'Antivehículo 3+' },
+      { nombre: 'Arma reliquia', A: 6, HA: '2+', F: 5, FP: -2, D: 2 },
+      { nombre: 'Garras Relámpago dobles', A: 7, HA: '2+', F: 5, FP: -2, D: 1, especial: 'Acoplada' },
+      { nombre: 'Martillo de Trueno', A: 5, HA: '3+', F: 8, FP: -2, D: 2, especial: 'Heridas Devastadoras' },
+      { nombre: 'Puño de energía', A: 5, HA: '2+', F: 8, FP: -2, D: 2 },
+      { nombre: 'Puño Sierra', A: 5, HA: '3+', F: 8, FP: -2, D: 2, especial: 'Antivehículo 3+' },
     ],
     habilidades: [
       {
@@ -79,11 +79,11 @@ export const UNIDADES: Unidad[] = [
     palabrasClave: ['Infantería', 'Línea de Batalla', 'Primaris', 'Imperium', 'Adeptus Astartes'],
     stats: { MOV: '6"', RES: 4, HER: 2, SALV: '3+', INV: '-', LID: '6+', OC: 2 },
     distancia: [
-      { nombre: 'Rifle bólter', rango: '24"', A: 2, HA: '3+', F: 4, FP: -1, D: 1, especial: 'Asalto' },
-      { nombre: 'Pistola bólter', rango: '12"', A: 1, HA: '3+', F: 4, FP: 0, D: 1, especial: 'Pistola' },
+      { nombre: 'Rifle bólter', rango: '24"', A: 2, HP: '3+', F: 4, FP: -1, D: 1, especial: 'Asalto' },
+      { nombre: 'Pistola bólter', rango: '12"', A: 1, HP: '3+', F: 4, FP: 0, D: 1, especial: 'Pistola' },
     ],
     combate: [
-      { nombre: 'Arma de combate', A: 2, HP: '3+', F: 4, FP: 0, D: 1 },
+      { nombre: 'Arma de combate', A: 2, HA: '3+', F: 4, FP: 0, D: 1 },
     ],
     habilidades: [
       {
@@ -105,17 +105,17 @@ export const UNIDADES: Unidad[] = [
     palabrasClave: ['Infantería', 'Personaje', 'Granadas', 'Imperium', 'Tacticus', 'Adeptus Astartes'],
     stats: { MOV: '6"', RES: 4, HER: 4, SALV: '3+', INV: '-', LID: '6+', OC: 1 },
     distancia: [
-      { nombre: 'Pistola bólter', rango: '12"', A: 1, HA: '2+', F: 4, FP: 0, D: 1, especial: 'Pistola' },
-      { nombre: 'Rifle bólter artesanal', rango: '24"', A: 2, HA: '2+', F: 4, FP: -1, D: 2 },
-      { nombre: 'Pistola bólter pesada', rango: '18"', A: 1, HA: '2+', F: 4, FP: -1, D: 1, especial: 'Pistola', opcional: true },
-      { nombre: 'Pistola de plasma — estándar', rango: '12"', A: 1, HA: '2+', F: 7, FP: -2, D: 1, especial: 'Pistola', opcional: true },
-      { nombre: 'Pistola de plasma — sobrecarga', rango: '12"', A: 1, HA: '2+', F: 8, FP: -3, D: 2, especial: 'De Riesgo, Pistola', opcional: true, esAlternativa: true },
-      { nombre: 'Pistola neovolkite', rango: '12"', A: 1, HA: '2+', F: 5, FP: 0, D: 2, especial: 'Heridas Devastadoras, Pistola', opcional: true },
+      { nombre: 'Pistola bólter', rango: '12"', A: 1, HP: '2+', F: 4, FP: 0, D: 1, especial: 'Pistola' },
+      { nombre: 'Rifle bólter artesanal', rango: '24"', A: 2, HP: '2+', F: 4, FP: -1, D: 2 },
+      { nombre: 'Pistola bólter pesada', rango: '18"', A: 1, HP: '2+', F: 4, FP: -1, D: 1, especial: 'Pistola', opcional: true },
+      { nombre: 'Pistola de plasma — estándar', rango: '12"', A: 1, HP: '2+', F: 7, FP: -2, D: 1, especial: 'Pistola', opcional: true },
+      { nombre: 'Pistola de plasma — sobrecarga', rango: '12"', A: 1, HP: '2+', F: 8, FP: -3, D: 2, especial: 'De Riesgo, Pistola', opcional: true, esAlternativa: true },
+      { nombre: 'Pistola neovolkite', rango: '12"', A: 1, HP: '2+', F: 5, FP: 0, D: 2, especial: 'Heridas Devastadoras, Pistola', opcional: true },
     ],
     combate: [
-      { nombre: 'Arma cuerpo a cuerpo', A: 5, HP: '2+', F: 4, FP: 0, D: 1 },
-      { nombre: 'Arma de energía artesanal', A: 5, HP: '2+', F: 5, FP: -2, D: 2, opcional: true },
-      { nombre: 'Puño de energía', A: 4, HP: '2+', F: 8, FP: -2, D: 2, opcional: true },
+      { nombre: 'Arma cuerpo a cuerpo', A: 5, HA: '2+', F: 4, FP: 0, D: 1 },
+      { nombre: 'Arma de energía artesanal', A: 5, HA: '2+', F: 5, FP: -2, D: 2, opcional: true },
+      { nombre: 'Puño de energía', A: 4, HA: '2+', F: 8, FP: -2, D: 2, opcional: true },
     ],
     habilidades: [
       {
@@ -141,16 +141,16 @@ export const UNIDADES: Unidad[] = [
     palabrasClave: ['Infantería', 'Línea de Batalla', 'Granadas', 'Imperium', 'Tacticus', 'Adeptus Astartes'],
     stats: { MOV: '6"', RES: 4, HER: 2, SALV: '3+', INV: '-', LID: '6+', OC: 2 },
     distancia: [
-      { nombre: 'Pistola bólter pesada', rango: '18"', A: 1, HA: '3+', F: 4, FP: -1, D: 1, especial: 'Pistola' },
-      { nombre: 'Pistola de plasma — estándar', rango: '12"', A: 1, HA: '3+', F: 7, FP: -2, D: 1, especial: 'Pistola', opcional: true },
-      { nombre: 'Pistola de plasma — sobrecarga', rango: '12"', A: 1, HA: '3+', F: 8, FP: -3, D: 2, especial: 'De Riesgo, Pistola', opcional: true, esAlternativa: true },
-      { nombre: 'Pistola lanzallamas', rango: '12"', A: '1D6', HA: 'N/A', F: 3, FP: 0, D: 1, especial: 'Ignora Cobertura, Pistola, Ráfaga', opcional: true },
+      { nombre: 'Pistola bólter pesada', rango: '18"', A: 1, HP: '3+', F: 4, FP: -1, D: 1, especial: 'Pistola' },
+      { nombre: 'Pistola de plasma — estándar', rango: '12"', A: 1, HP: '3+', F: 7, FP: -2, D: 1, especial: 'Pistola', opcional: true },
+      { nombre: 'Pistola de plasma — sobrecarga', rango: '12"', A: 1, HP: '3+', F: 8, FP: -3, D: 2, especial: 'De Riesgo, Pistola', opcional: true, esAlternativa: true },
+      { nombre: 'Pistola lanzallamas', rango: '12"', A: '1D6', HP: 'N/A', F: 3, FP: 0, D: 1, especial: 'Ignora Cobertura, Pistola, Ráfaga', opcional: true },
     ],
     combate: [
-      { nombre: 'Espada sierra Astartes', A: 4, HP: '3+', F: 4, FP: -1, D: 1 },
-      { nombre: 'Arma de energía', A: 4, HP: '3+', F: 5, FP: -2, D: 1, opcional: true },
-      { nombre: 'Martillo de Trueno', A: 3, HP: '4+', F: 8, FP: -2, D: 2, especial: 'Heridas Devastadoras', opcional: true },
-      { nombre: 'Puño de energía', A: 3, HP: '3+', F: 8, FP: -2, D: 2, opcional: true },
+      { nombre: 'Espada sierra Astartes', A: 4, HA: '3+', F: 4, FP: -1, D: 1 },
+      { nombre: 'Arma de energía', A: 4, HA: '3+', F: 5, FP: -2, D: 1, opcional: true },
+      { nombre: 'Martillo de Trueno', A: 3, HA: '4+', F: 8, FP: -2, D: 2, especial: 'Heridas Devastadoras', opcional: true },
+      { nombre: 'Puño de energía', A: 3, HA: '3+', F: 8, FP: -2, D: 2, opcional: true },
     ],
     habilidades: [
       {
@@ -172,12 +172,12 @@ export const UNIDADES: Unidad[] = [
     palabrasClave: ['Infantería', 'Granadas', 'Imperium', 'Gravis', 'Adeptus Astartes'],
     stats: { MOV: '5"', RES: 6, HER: 3, SALV: '3+', INV: '-', LID: '6+', OC: 1 },
     distancia: [
-      { nombre: 'Rifle de fusión', rango: '18"', A: 1, HA: '3+', F: 9, FP: -4, D: '1D6', especial: 'Pesada, Fusión 2' },
-      { nombre: 'Pistola bólter', rango: '12"', A: 1, HA: '3+', F: 4, FP: 0, D: 1, especial: 'Pistola' },
-      { nombre: 'Cañón de fusión', rango: '18"', A: 2, HA: '4+', F: 9, FP: -4, D: '1D6', especial: 'Pesada, Fusión 2', opcional: true, esAlternativa: true },
+      { nombre: 'Rifle de fusión', rango: '18"', A: 1, HP: '3+', F: 9, FP: -4, D: '1D6', especial: 'Pesada, Fusión 2' },
+      { nombre: 'Pistola bólter', rango: '12"', A: 1, HP: '3+', F: 4, FP: 0, D: 1, especial: 'Pistola' },
+      { nombre: 'Cañón de fusión', rango: '18"', A: 2, HP: '4+', F: 9, FP: -4, D: '1D6', especial: 'Pesada, Fusión 2', opcional: true, esAlternativa: true },
     ],
     combate: [
-      { nombre: 'Arma cuerpo a cuerpo', A: 3, HP: '3+', F: 4, FP: 0, D: 1 },
+      { nombre: 'Arma cuerpo a cuerpo', A: 3, HA: '3+', F: 4, FP: 0, D: 1 },
     ],
     habilidades: [
       {
@@ -195,16 +195,16 @@ export const UNIDADES: Unidad[] = [
     palabrasClave: ['Infantería', 'Imperium', 'Exterminador', 'Adeptus Astartes'],
     stats: { MOV: '5"', RES: 5, HER: 3, SALV: '2+', INV: '4+', LID: '6+', OC: 1 },
     distancia: [
-      { nombre: 'Bólter tormenta', rango: '24"', A: 2, HA: '3+', F: 4, FP: 0, D: 1, especial: 'Fuego Rápido 2' },
-      { nombre: 'Cañón de asalto', rango: '24"', A: 6, HA: '3+', F: 6, FP: 0, D: 1, especial: 'Heridas Devastadoras', opcional: true },
-      { nombre: 'Lanzallamas pesado', rango: '12"', A: '1D6', HA: 'N/A', F: 5, FP: -1, D: 1, especial: 'Ignora Cobertura, Ráfaga', opcional: true },
-      { nombre: 'Lanzamisiles Ciclón — frag', rango: '36"', A: '2D6', HA: '3+', F: 4, FP: 0, D: 1, especial: 'Área', opcional: true },
-      { nombre: 'Lanzamisiles Ciclón — perforante', rango: '36"', A: 2, HA: '3+', F: 9, FP: -2, D: '1D6', opcional: true, esAlternativa: true },
+      { nombre: 'Bólter tormenta', rango: '24"', A: 2, HP: '3+', F: 4, FP: 0, D: 1, especial: 'Fuego Rápido 2' },
+      { nombre: 'Cañón de asalto', rango: '24"', A: 6, HP: '3+', F: 6, FP: 0, D: 1, especial: 'Heridas Devastadoras', opcional: true },
+      { nombre: 'Lanzallamas pesado', rango: '12"', A: '1D6', HP: 'N/A', F: 5, FP: -1, D: 1, especial: 'Ignora Cobertura, Ráfaga', opcional: true },
+      { nombre: 'Lanzamisiles Ciclón — frag', rango: '36"', A: '2D6', HP: '3+', F: 4, FP: 0, D: 1, especial: 'Área', opcional: true },
+      { nombre: 'Lanzamisiles Ciclón — perforante', rango: '36"', A: 2, HP: '3+', F: 9, FP: -2, D: '1D6', opcional: true, esAlternativa: true },
     ],
     combate: [
-      { nombre: 'Arma de energía', A: 4, HP: '3+', F: 5, FP: -2, D: 1 },
-      { nombre: 'Puño de energía', A: 3, HP: '3+', F: 8, FP: -2, D: 2 },
-      { nombre: 'Puño sierra', A: 3, HP: '4+', F: 8, FP: -2, D: 2, especial: 'Antivehículo 3+', opcional: true },
+      { nombre: 'Arma de energía', A: 4, HA: '3+', F: 5, FP: -2, D: 1 },
+      { nombre: 'Puño de energía', A: 3, HA: '3+', F: 8, FP: -2, D: 2 },
+      { nombre: 'Puño sierra', A: 3, HA: '4+', F: 8, FP: -2, D: 2, especial: 'Antivehículo 3+', opcional: true },
     ],
     habilidades: [
       {
@@ -226,13 +226,13 @@ export const UNIDADES: Unidad[] = [
     palabrasClave: ['Montada', 'Granadas', 'Imperium', 'Adeptus Astartes'],
     stats: { MOV: '12"', RES: 5, HER: 8, SALV: '3+', INV: '-', LID: '6+', OC: 2 },
     distancia: [
-      { nombre: 'Cañón gatling de campaña', rango: '24"', A: 8, HA: '3+', F: 5, FP: 0, D: 1, especial: 'Heridas Devastadoras' },
-      { nombre: 'Cañón de fusión', rango: '18"', A: 2, HA: '3+', F: 9, FP: -4, D: '1D6', especial: 'Fusión 2', opcional: true },
-      { nombre: 'Pistola bólter pesada', rango: '18"', A: 1, HA: '3+', F: 4, FP: -1, D: 1, especial: 'Pistola' },
-      { nombre: 'Rifle bólter doble', rango: '24"', A: 2, HA: '3+', F: 4, FP: -1, D: 1, especial: 'Acoplada' },
+      { nombre: 'Cañón gatling de campaña', rango: '24"', A: 8, HP: '3+', F: 5, FP: 0, D: 1, especial: 'Heridas Devastadoras' },
+      { nombre: 'Cañón de fusión', rango: '18"', A: 2, HP: '3+', F: 9, FP: -4, D: '1D6', especial: 'Fusión 2', opcional: true },
+      { nombre: 'Pistola bólter pesada', rango: '18"', A: 1, HP: '3+', F: 4, FP: -1, D: 1, especial: 'Pistola' },
+      { nombre: 'Rifle bólter doble', rango: '24"', A: 2, HP: '3+', F: 4, FP: -1, D: 1, especial: 'Acoplada' },
     ],
     combate: [
-      { nombre: 'Arma cuerpo a cuerpo', A: 5, HP: '3+', F: 4, FP: 0, D: 1 },
+      { nombre: 'Arma cuerpo a cuerpo', A: 5, HA: '3+', F: 4, FP: 0, D: 1 },
     ],
     habilidades: [
       {
@@ -250,11 +250,11 @@ export const UNIDADES: Unidad[] = [
     palabrasClave: ['Artillería', 'Vehículo', 'Imperium', 'Adeptus Astartes'],
     stats: { MOV: '3"', RES: 6, HER: 6, SALV: '2+', INV: '-', LID: '6+', OC: 2 },
     distancia: [
-      { nombre: 'Espolón láser doble', rango: '36"', A: 2, HA: '2+', F: 10, FP: -3, D: '1D6', especial: 'Acoplada' },
-      { nombre: 'Cañón automático acelerador doble', rango: '48"', A: 3, HA: '2+', F: 10, FP: -1, D: 3, especial: 'Acoplada', opcional: true },
+      { nombre: 'Espolón láser doble', rango: '36"', A: 2, HP: '2+', F: 10, FP: -3, D: '1D6', especial: 'Acoplada' },
+      { nombre: 'Cañón automático acelerador doble', rango: '48"', A: 3, HP: '2+', F: 10, FP: -1, D: 3, especial: 'Acoplada', opcional: true },
     ],
     combate: [
-      { nombre: 'Arma cuerpo a cuerpo', A: 3, HP: '3+', F: 4, FP: 0, D: 1 },
+      { nombre: 'Arma cuerpo a cuerpo', A: 3, HA: '3+', F: 4, FP: 0, D: 1 },
     ],
     habilidades: [
       {
@@ -273,11 +273,11 @@ export const UNIDADES: Unidad[] = [
     palabrasClave: ['Infantería', 'Primaris', 'Imperium', 'Adeptus Astartes'],
     stats: { MOV: '6"', RES: 4, HER: 2, SALV: '3+', INV: '-', LID: '6+', OC: 1 },
     distancia: [
-      { nombre: 'Incinerador de plasma (estándar)', rango: '30"', A: 2, HA: '3+', F: 7, FP: -3, D: 1, especial: '' },
-      { nombre: 'Incinerador de plasma (sobrecarga)', rango: '30"', A: 2, HA: '3+', F: 8, FP: -4, D: 2, especial: 'Peligroso' },
+      { nombre: 'Incinerador de plasma (estándar)', rango: '30"', A: 2, HP: '3+', F: 7, FP: -3, D: 1, especial: '' },
+      { nombre: 'Incinerador de plasma (sobrecarga)', rango: '30"', A: 2, HP: '3+', F: 8, FP: -4, D: 2, especial: 'Peligroso' },
     ],
     combate: [
-      { nombre: 'Arma de combate', A: 1, HP: '3+', F: 4, FP: 0, D: 1 },
+      { nombre: 'Arma de combate', A: 1, HA: '3+', F: 4, FP: 0, D: 1 },
     ],
     habilidades: [
       {

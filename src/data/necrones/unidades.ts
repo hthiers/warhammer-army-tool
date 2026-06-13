@@ -9,11 +9,11 @@ export const UNIDADES: Unidad[] = [
     palabrasClave: ['Infantería', 'Línea de Batalla', 'Guerreros Necrones', 'Necrones'],
     stats: { MOV: '5"', RES: 4, HER: 1, SALV: '4+', INV: '-', LID: '7+', OC: 2 },
     distancia: [
-      { nombre: 'Rifle gauss', rango: '24"', A: 1, HA: '4+', F: 4, FP: 0, D: 1, especial: 'Impactos Letales, Fuego Rápido 1' },
-      { nombre: 'Segador gauss', rango: '12"', A: 2, HA: '4+', F: 5, FP: -1, D: 1, especial: 'Impactos Letales', opcional: true, esAlternativa: true },
+      { nombre: 'Rifle gauss', rango: '24"', A: 1, HP: '4+', F: 4, FP: 0, D: 1, especial: 'Impactos Letales, Fuego Rápido 1' },
+      { nombre: 'Segador gauss', rango: '12"', A: 2, HP: '4+', F: 5, FP: -1, D: 1, especial: 'Impactos Letales', opcional: true, esAlternativa: true },
     ],
     combate: [
-      { nombre: 'Arma cuerpo a cuerpo', A: 1, HP: '4+', F: 4, FP: 0, D: 1 },
+      { nombre: 'Arma cuerpo a cuerpo', A: 1, HA: '4+', F: 4, FP: 0, D: 1 },
     ],
     habilidades: [
       {
@@ -32,8 +32,8 @@ export const UNIDADES: Unidad[] = [
     stats: { MOV: '8"', RES: 5, HER: 3, SALV: '3+', INV: '-', LID: '7+', OC: 1 },
     distancia: [],
     combate: [
-      { nombre: 'Guadaña Skorpekh (hoja demoledora)', A: 3, HP: '3+', F: 7, FP: -2, D: 2 },
-      { nombre: 'Guadaña Skorpekh (hoja rebanadora)', A: 4, HP: '3+', F: 5, FP: -2, D: 1 },
+      { nombre: 'Guadaña Skorpekh (hoja demoledora)', A: 3, HA: '3+', F: 7, FP: -2, D: 2 },
+      { nombre: 'Guadaña Skorpekh (hoja rebanadora)', A: 4, HA: '3+', F: 5, FP: -2, D: 1 },
     ],
     habilidades: [
       {
@@ -55,10 +55,10 @@ export const UNIDADES: Unidad[] = [
     palabrasClave: ['Infantería', 'Personaje', 'Criptecnólogo', 'Plasmante', 'Necrones'],
     stats: { MOV: '5"', RES: 4, HER: 4, SALV: '4+', INV: '-', LID: '6+', OC: 1 },
     distancia: [
-      { nombre: 'Lanza plásmica', rango: '18"', A: 3, HA: '4+', F: 7, FP: -3, D: 2 },
+      { nombre: 'Lanza plásmica', rango: '18"', A: 3, HP: '4+', F: 7, FP: -3, D: 2 },
     ],
     combate: [
-      { nombre: 'Lanza plásmica', A: 2, HP: '4+', F: 7, FP: -3, D: 2 },
+      { nombre: 'Lanza plásmica', A: 2, HA: '4+', F: 7, FP: -3, D: 2 },
     ],
     habilidades: [
       {
@@ -80,10 +80,10 @@ export const UNIDADES: Unidad[] = [
     palabrasClave: ['Infantería', 'Criptosiervos', 'Necrones'],
     stats: { MOV: '5"', RES: 4, HER: 2, SALV: '3+', INV: '-', LID: '8+', OC: 1 },
     distancia: [
-      { nombre: 'Ojo escudriñador', rango: '6"', A: 2, HA: '4+', F: 5, FP: -1, D: 1 },
+      { nombre: 'Ojo escudriñador', rango: '6"', A: 2, HP: '4+', F: 5, FP: -1, D: 1 },
     ],
     combate: [
-      { nombre: 'Miembros guadaña', A: 4, HP: '4+', F: 5, FP: -1, D: 1 },
+      { nombre: 'Miembros guadaña', A: 4, HA: '4+', F: 5, FP: -1, D: 1 },
     ],
     habilidades: [
       {
@@ -105,12 +105,12 @@ export const UNIDADES: Unidad[] = [
     palabrasClave: ['Infantería', 'Volar', 'Pretorianos de la Triarca', 'Necrones'],
     stats: { MOV: '9"', RES: 5, HER: 2, SALV: '3+', INV: '-', LID: '7+', OC: 1 },
     distancia: [
-      { nombre: 'Vara del pacto', rango: '12"', A: 1, HA: '3+', F: 5, FP: -2, D: 2 },
-      { nombre: 'Lanzapartículas', rango: '12"', A: 3, HA: '2+', F: 5, FP: 0, D: 1, especial: 'Heridas Devastadoras, Pistola', opcional: true, esAlternativa: true },
+      { nombre: 'Vara del pacto', rango: '12"', A: 1, HP: '3+', F: 5, FP: -2, D: 2 },
+      { nombre: 'Lanzapartículas', rango: '12"', A: 3, HP: '2+', F: 5, FP: 0, D: 1, especial: 'Heridas Devastadoras, Pistola', opcional: true, esAlternativa: true },
     ],
     combate: [
-      { nombre: 'Vara del pacto', A: 3, HP: '3+', F: 5, FP: -2, D: 2 },
-      { nombre: 'Cuchilla de vacío', A: 4, HP: '3+', F: 5, FP: -2, D: 1, opcional: true, esAlternativa: true },
+      { nombre: 'Vara del pacto', A: 3, HA: '3+', F: 5, FP: -2, D: 2 },
+      { nombre: 'Cuchilla de vacío', A: 4, HA: '3+', F: 5, FP: -2, D: 1, opcional: true, esAlternativa: true },
     ],
     habilidades: [
       {
@@ -132,10 +132,10 @@ export const UNIDADES: Unidad[] = [
     palabrasClave: ['Vehículo', 'Bípode', 'Canóptico', 'Reanimador', 'Necrones'],
     stats: { MOV: '7"', RES: 6, HER: 6, SALV: '3+', INV: '-', LID: '7+', OC: 3 },
     distancia: [
-      { nombre: 'Rayo atomizador', rango: '12"', A: 3, HA: '4+', F: 6, FP: -2, D: 1 },
+      { nombre: 'Rayo atomizador', rango: '12"', A: 3, HP: '4+', F: 6, FP: -2, D: 1 },
     ],
     combate: [
-      { nombre: 'Garras de reanimador', A: 4, HP: '4+', F: 5, FP: 0, D: 1 },
+      { nombre: 'Garras de reanimador', A: 4, HA: '4+', F: 5, FP: 0, D: 1 },
     ],
     habilidades: [
       {
@@ -157,11 +157,11 @@ export const UNIDADES: Unidad[] = [
     palabrasClave: ['Montada', 'Volar', 'Destructores Lokhust Pesados', 'Necrones'],
     stats: { MOV: '7"', RES: 6, HER: 4, SALV: '3+', INV: '-', LID: '7+', OC: 2 },
     distancia: [
-      { nombre: 'Destructor gauss', rango: '48"', A: 1, HA: '3+', F: 14, FP: -4, D: 6, especial: 'Pesada, Impactos Letales' },
-      { nombre: 'Exterminador emítico', rango: '36"', A: 6, HA: '3+', F: 6, FP: -1, D: 1, especial: 'Fuego Rápido 6, Golpes Sostenidos 1, Pesada', opcional: true, esAlternativa: true },
+      { nombre: 'Destructor gauss', rango: '48"', A: 1, HP: '3+', F: 14, FP: -4, D: 6, especial: 'Pesada, Impactos Letales' },
+      { nombre: 'Exterminador emítico', rango: '36"', A: 6, HP: '3+', F: 6, FP: -1, D: 1, especial: 'Fuego Rápido 6, Golpes Sostenidos 1, Pesada', opcional: true, esAlternativa: true },
     ],
     combate: [
-      { nombre: 'Arma cuerpo a cuerpo', A: 2, HP: '3+', F: 4, FP: 0, D: 1 },
+      { nombre: 'Arma cuerpo a cuerpo', A: 2, HA: '3+', F: 4, FP: 0, D: 1 },
     ],
     habilidades: [
       {
@@ -180,7 +180,7 @@ export const UNIDADES: Unidad[] = [
     stats: { MOV: '9"', RES: 2, HER: 4, SALV: '6+', INV: '-', LID: '8+', OC: 0 },
     distancia: [],
     combate: [
-      { nombre: 'Mandíbulas devoradoras', A: 6, HP: '5+', F: 2, FP: 0, D: 1, especial: 'Impactos Letales' },
+      { nombre: 'Mandíbulas devoradoras', A: 6, HA: '5+', F: 2, FP: 0, D: 1, especial: 'Impactos Letales' },
     ],
     habilidades: [
       {
@@ -206,11 +206,11 @@ export const UNIDADES: Unidad[] = [
     palabrasClave: ['Infantería', 'Guardia Real', 'Necrones'],
     stats: { MOV: '5"', RES: 5, HER: 3, SALV: '2+', INV: '4+', LID: '7+', OC: 2 },
     distancia: [
-      { nombre: 'Escudo de dispersión', rango: '12"', A: 1, HA: '2+', F: 5, FP: -2, D: 2, especial: 'Pistola' },
+      { nombre: 'Escudo de dispersión', rango: '12"', A: 1, HP: '2+', F: 5, FP: -2, D: 2, especial: 'Pistola' },
     ],
     combate: [
-      { nombre: 'Espada hiper-fase', A: 3, HP: '2+', F: 6, FP: -3, D: 2 },
-      { nombre: 'Guadaña hiper-fase', A: 3, HP: '2+', F: 7, FP: -3, D: 2 },
+      { nombre: 'Espada hiper-fase', A: 3, HA: '2+', F: 6, FP: -3, D: 2 },
+      { nombre: 'Guadaña hiper-fase', A: 3, HA: '2+', F: 7, FP: -3, D: 2 },
     ],
     habilidades: [
       {

@@ -4,8 +4,7 @@ import { FACCIONES, FACCIONES_MAP } from './data/facciones'
 import { Topbar } from './components/Topbar/Topbar'
 import { Sidebar } from './components/Sidebar/Sidebar'
 import { DataSheet } from './components/DataSheet/DataSheet'
-import { DoctrineList } from './components/DoctrineList/DoctrineList'
-import { StratagemList } from './components/StratagemList/StratagemList'
+import { DetachmentView } from './components/DetachmentView/DetachmentView'
 import { FactionPicker } from './components/FactionPicker/FactionPicker'
 import { ReglasModal } from './components/ReglasModal/ReglasModal'
 import { FaccionRulesList } from './components/FaccionRulesList/FaccionRulesList'
@@ -52,9 +51,17 @@ export default function App() {
   const unidad = unidadesActivas.find(u => u.id === unId) ?? unidadesActivas[0]
   const regla = faccion.reglas[destId]
   const estratagemas = faccion.estratagemas[destId] ?? []
+  const mejoras = faccion.mejoras[destId] ?? []
   const tieneGranadas = unidad.palabrasClave.includes('Granadas')
+  const tieneMonstruoVehiculo = unidad.palabrasClave.some(k => k === 'Monstruo' || k === 'Vehículo')
+  const tieneHumo = unidad.palabrasClave.includes('Humo')
   const estratagemasUnidad = estratagemas.filter(s => {
-    if (s.etiqueta === 'Universal') return s.id !== 'granada' || tieneGranadas
+    if (s.etiqueta === 'Universal') {
+      if (s.id === 'explosivos') return tieneGranadas
+      if (s.id === 'impacto-aplastante') return tieneMonstruoVehiculo
+      if (s.id === 'pantalla-de-humo') return tieneHumo
+      return true
+    }
     return unidad.estratagemasRelacionadas.includes(s.id)
   })
 
@@ -97,17 +104,10 @@ export default function App() {
               Fichas
             </button>
             <button
-              className={`${styles.tab} ${pestana === 'doctrinas' ? styles.tabActive : ''}`}
-              onClick={() => setPestana('doctrinas')}
+              className={`${styles.tab} ${pestana === 'destacamento' ? styles.tabActive : ''}`}
+              onClick={() => setPestana('destacamento')}
             >
               Destacamento
-            </button>
-            <button
-              className={`${styles.tab} ${pestana === 'estratagemas' ? styles.tabActive : ''}`}
-              onClick={() => setPestana('estratagemas')}
-            >
-              Estratagemas
-              <span className={styles.count}>{estratagemas.length}</span>
             </button>
             <button
               className={`${styles.tab} ${pestana === 'faccion' ? styles.tabActive : ''}`}
@@ -128,11 +128,12 @@ export default function App() {
                 onToggleHabilidades={() => setMostrarHabilidades(v => !v)}
               />
             )}
-            {pestana === 'doctrinas' && (
-              <DoctrineList regla={regla} />
-            )}
-            {pestana === 'estratagemas' && (
-              <StratagemList estratagemas={estratagemas} />
+            {pestana === 'destacamento' && (
+              <DetachmentView
+                regla={regla}
+                estratagemas={estratagemas}
+                mejoras={mejoras}
+              />
             )}
             {pestana === 'faccion' && (
               <FaccionRulesList reglas={faccion.reglasFaccion} faccionNombre={faccion.nombre} />

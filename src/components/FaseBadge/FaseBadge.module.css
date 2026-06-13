@@ -2,7 +2,7 @@
   display: inline-flex;
   align-items: center;
   gap: 4px;
-  font-size: 10px;
+  font-size: 16px;
   font-weight: 500;
   padding: 2px 7px;
   border-radius: 10px;
@@ -10,7 +10,7 @@
 }
 
 .icono {
-  font-size: 10px;
+  font-size: 16px;
   line-height: 1;
 }
 

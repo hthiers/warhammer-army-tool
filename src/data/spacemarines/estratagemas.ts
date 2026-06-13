@@ -351,7 +351,8 @@ export const ESTRATAGEMAS: Record<string, Estratagema[]> = {
       pm: 1,
       cuando: 'Fase de mando',
       blanco: '1 unidad ADEPTUS ASTARTES',
-      efecto: 'Elige una unidad enemiga a 18" o menos visible para tu unidad. Esa unidad hace un chequeo de acobardamiento con -1. Si falla: queda contenida hasta el inicio de tu siguiente turno (resta 1 a tiradas para impactar). Una vez por ronda de batalla.',
+      efecto: 'Elige una unidad enemiga a 18" o menos visible para tu unidad. Esa unidad hace un chequeo de acobardamiento con -1. Si falla: queda contenida hasta el inicio de tu siguiente turno (resta 1 a tiradas para impactar).',
+      restricciones: 'Una vez por ronda de batalla.',
     },
     {
       id: 'decapitacion-tactica',
@@ -417,7 +418,8 @@ export const ESTRATAGEMAS: Record<string, Estratagema[]> = {
       pm: 1,
       cuando: 'Fase de carga o fase de combate',
       blanco: '1 unidad ADEPTUS ASTARTES que no haya declarado cargas ni se haya elegido para combatir en esta fase',
-      efecto: 'Hasta el final del turno: +2 a tiradas de carga de tu unidad y +1 Ataques a las armas de combate de miniaturas de tu unidad. Una vez por turno.',
+      efecto: 'Hasta el final del turno: +2 a tiradas de carga de tu unidad y +1 Ataques a las armas de combate de miniaturas de tu unidad.',
+      restricciones: 'Una vez por turno.',
     },
     {
       id: 'luchamos-hasta-el-final',

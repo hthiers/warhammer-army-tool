@@ -36,6 +36,7 @@ export function AbilitiesPanel({ habilidades, estratagemas }: Props) {
           </div>
           <div className={styles.fase}><FaseBadge fase={s.cuando} /></div>
           <p className={styles.efecto}>{s.efecto}</p>
+          {s.restricciones && <p className={styles.restricciones}>{s.restricciones}</p>}
           {s.etiqueta && <span className={styles.etiqueta}>{s.etiqueta}</span>}
         </div>
       ))}

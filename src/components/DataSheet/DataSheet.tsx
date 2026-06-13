@@ -66,7 +66,7 @@ export function DataSheet({ unidad, faccionId, estratagemasRelacionadas, mostrar
               <thead>
                 <tr>
                   <th>Arma</th><th>Rango</th><th>A</th>
-                  <th>HA</th><th>F</th><th>FP</th><th>D</th>
+                  <th>HP</th><th>F</th><th>FP</th><th>D</th>
                 </tr>
               </thead>
               <tbody>
@@ -86,7 +86,7 @@ export function DataSheet({ unidad, faccionId, estratagemasRelacionadas, mostrar
                     </td>
                     <td>{w.rango}</td>
                     <td>{w.A}</td>
-                    <td>{w.HA}</td>
+                    <td>{w.HP}</td>
                     <td>{w.F}</td>
                     <td>{w.FP}</td>
                     <td>{w.D}</td>
@@ -105,7 +105,7 @@ export function DataSheet({ unidad, faccionId, estratagemasRelacionadas, mostrar
           <table className={styles.table}>
             <thead>
               <tr>
-                <th>Arma</th><th>A</th><th>HP</th>
+                <th>Arma</th><th>A</th><th>HA</th>
                 <th>F</th><th>FP</th><th>D</th>
               </tr>
             </thead>
@@ -125,7 +125,7 @@ export function DataSheet({ unidad, faccionId, estratagemasRelacionadas, mostrar
                     )}
                   </td>
                   <td>{w.A}</td>
-                  <td>{w.HP}</td>
+                  <td>{w.HA}</td>
                   <td>{w.F}</td>
                   <td>{w.FP}</td>
                   <td>{w.D}</td>

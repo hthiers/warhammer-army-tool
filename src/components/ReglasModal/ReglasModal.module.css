@@ -32,7 +32,7 @@
   border: none;
   background: var(--bg);
   color: var(--text-secondary);
-  font-size: 11px;
+  font-size: 17px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -45,7 +45,7 @@
 }
 
 .titulo {
-  font-size: 15px;
+  font-size: 17px;
   font-weight: 700;
   color: var(--text);
   margin: 0 0 20px;
@@ -60,7 +60,7 @@
 }
 
 .seccionTitulo {
-  font-size: 11px;
+  font-size: 17px;
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.06em;
@@ -72,12 +72,12 @@
 .tabla {
   width: 100%;
   border-collapse: collapse;
-  font-size: 13px;
+  font-size: 17px;
 }
 
 .tabla th {
   text-align: left;
-  font-size: 10px;
+  font-size: 16px;
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.04em;
@@ -99,7 +99,7 @@
 .tirada {
   font-weight: 700;
   color: var(--text) !important;
-  font-size: 14px;
+  font-size: 16px;
 }
 
 /* Listas de reglas */
@@ -113,7 +113,7 @@
 }
 
 .lista li {
-  font-size: 12px;
+  font-size: 16px;
   color: var(--text-secondary);
   line-height: 1.5;
   padding-left: 12px;
