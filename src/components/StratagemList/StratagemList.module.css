@@ -59,6 +59,13 @@
   color: #27500A;
 }
 
+.cuando {
+  font-size: 13px;
+  color: var(--text-tertiary);
+  line-height: 1.5;
+  margin-bottom: 6px;
+}
+
 .efecto {
   font-size: 16px;
   color: var(--text-secondary);
@@ -66,14 +73,14 @@
 }
 
 .blanco {
-  font-size: 19px;
+  font-size: 16px;
   color: var(--text-tertiary);
   font-style: italic;
   margin-top: 6px;
 }
 
 .restricciones {
-  font-size: 19px;
+  font-size: 16px;
   font-weight: 500;
   color: var(--color-gold-dark);
   margin-top: 6px;

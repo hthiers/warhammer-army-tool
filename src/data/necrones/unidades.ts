@@ -67,7 +67,7 @@ export const UNIDADES: Unidad[] = [
       },
       {
         nombre: 'Relámpago viviente',
-        desc: 'En tu fase de disparo, elige 1 unidad enemiga a 18" o menos de esta miniatura y visible para ella, y tira 1D6 por cada miniatura de esa unidad enemiga: por cada resultado de 6, esa unidad sufre 1 herida mortal.',
+        desc: 'En tu fase de disparo, elige 1 unidad enemiga visible para esta miniatura y a 18" o menos de ella (salvo unidades con la habilidad Agente solitario que no formen parte de una unidad adjunta y estén a más de 12" de esta miniatura) y tira cuatro D6: esa unidad enemiga sufre 1 herida mortal por cada 4+.',
       },
     ],
     estratagemasRelacionadas: ['reanudacionMejorada', 'protocoloInmortal'],
