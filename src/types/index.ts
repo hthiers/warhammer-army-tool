@@ -42,6 +42,11 @@ export interface Habilidad {
   desc: string
 }
 
+export interface Adjunta {
+  rol: 'Líder' | 'Apoyo'
+  unidades: string[]
+}
+
 export interface Unidad {
   id: string
   nombre: string
@@ -54,6 +59,7 @@ export interface Unidad {
   combate: ArmaCombate[]
   habilidades: Habilidad[]
   estratagemasRelacionadas: string[]
+  adjunta?: Adjunta
 }
 
 // ─── Estratagema ──────────────────────────────────────────────────────────────
@@ -75,6 +81,7 @@ export interface Estratagema {
 export interface Destacamento {
   id: string
   nombre: string
+  dp: number
 }
 
 export interface ReglaDestacamento {

@@ -4,7 +4,7 @@ export const UNIDADES: Unidad[] = [
   {
     id: 'guerreros',
     nombre: 'Guerreros Necrones',
-    pts: 90,
+    pts: 80,
     color: '#1A6B3A',
     palabrasClave: ['Infantería', 'Línea de Batalla', 'Guerreros Necrones', 'Necrones'],
     stats: { MOV: '5"', RES: 4, HER: 1, SALV: '4+', INV: '-', LID: '7+', OC: 2 },
@@ -26,7 +26,7 @@ export const UNIDADES: Unidad[] = [
   {
     id: 'skorpekh',
     nombre: 'Destructores Skorpekh',
-    pts: 95,
+    pts: 85,
     color: '#4A9B5F',
     palabrasClave: ['Infantería', 'Skorpekh', 'Necrones'],
     stats: { MOV: '8"', RES: 5, HER: 3, SALV: '3+', INV: '-', LID: '7+', OC: 1 },
@@ -50,7 +50,7 @@ export const UNIDADES: Unidad[] = [
   {
     id: 'plasmante',
     nombre: 'Plasmante',
-    pts: 60,
+    pts: 55,
     color: '#6A2A8A',
     palabrasClave: ['Infantería', 'Personaje', 'Criptecnólogo', 'Plasmante', 'Necrones'],
     stats: { MOV: '5"', RES: 4, HER: 4, SALV: '4+', INV: '-', LID: '6+', OC: 1 },
@@ -71,11 +71,15 @@ export const UNIDADES: Unidad[] = [
       },
     ],
     estratagemasRelacionadas: ['reanudacionMejorada', 'protocoloInmortal'],
+    adjunta: {
+      rol: 'Apoyo',
+      unidades: ['Guerreros Necrones', 'Inmortales'],
+    },
   },
   {
     id: 'criptosiervos',
     nombre: 'Criptosiervos',
-    pts: 35,
+    pts: 60,
     color: '#2A8A6A',
     palabrasClave: ['Infantería', 'Criptosiervos', 'Necrones'],
     stats: { MOV: '5"', RES: 4, HER: 2, SALV: '3+', INV: '-', LID: '8+', OC: 1 },
@@ -100,7 +104,7 @@ export const UNIDADES: Unidad[] = [
   {
     id: 'pretorianos',
     nombre: 'Pretorianos de la Triarca',
-    pts: 85,
+    pts: 80,
     color: '#4A7A5A',
     palabrasClave: ['Infantería', 'Volar', 'Pretorianos de la Triarca', 'Necrones'],
     stats: { MOV: '9"', RES: 5, HER: 2, SALV: '3+', INV: '-', LID: '7+', OC: 1 },
@@ -127,7 +131,7 @@ export const UNIDADES: Unidad[] = [
   {
     id: 'reanimadorCanoptico',
     nombre: 'Reanimador Canóptico',
-    pts: 75,
+    pts: 70,
     color: '#2A7A5A',
     palabrasClave: ['Vehículo', 'Bípode', 'Canóptico', 'Reanimador', 'Necrones'],
     stats: { MOV: '7"', RES: 6, HER: 6, SALV: '3+', INV: '-', LID: '7+', OC: 3 },
@@ -152,7 +156,7 @@ export const UNIDADES: Unidad[] = [
   {
     id: 'lokhustPesados',
     nombre: 'Destructores Lokhust Pesados',
-    pts: 65,
+    pts: 50,
     color: '#1A6B3A',
     palabrasClave: ['Montada', 'Volar', 'Destructores Lokhust Pesados', 'Necrones'],
     stats: { MOV: '7"', RES: 6, HER: 4, SALV: '3+', INV: '-', LID: '7+', OC: 2 },
@@ -174,7 +178,7 @@ export const UNIDADES: Unidad[] = [
   {
     id: 'enjambreEscarabeo',
     nombre: 'Enjambres Canópticos Escarabeo',
-    pts: 50,
+    pts: 40,
     color: '#3A7A3A',
     palabrasClave: ['Enjambre', 'Volar', 'Canóptico', 'Enjambres escarabeo', 'Necrones'],
     stats: { MOV: '9"', RES: 2, HER: 4, SALV: '6+', INV: '-', LID: '8+', OC: 0 },
@@ -201,7 +205,7 @@ export const UNIDADES: Unidad[] = [
   {
     id: 'guardiaReal',
     nombre: 'Guardia Real',
-    pts: 85,
+    pts: 50,
     color: '#8B6914',
     palabrasClave: ['Infantería', 'Guardia Real', 'Necrones'],
     stats: { MOV: '5"', RES: 5, HER: 3, SALV: '2+', INV: '4+', LID: '7+', OC: 2 },
@@ -223,5 +227,9 @@ export const UNIDADES: Unidad[] = [
       },
     ],
     estratagemasRelacionadas: ['guardiaInviolable', 'protocoloInmortal', 'descargaGauss'],
+    adjunta: {
+      rol: 'Líder',
+      unidades: ['Guerreros Necrones', 'Inmortales'],
+    },
   },
 ]

@@ -16,9 +16,16 @@ function getInitialFaccionId(): string | null {
   return localStorage.getItem(STORAGE_KEY)
 }
 
+function calcularPresupuestoDP(totalPts: number): number {
+  if (totalPts <= 1000) return 2
+  if (totalPts <= 2000) return 3
+  return 4
+}
+
 export default function App() {
   const [faccionId, setFaccionId] = useState<string | null>(getInitialFaccionId)
-  const [destacamento, setDestacamento] = useState<string>('')
+  const [destacamentos, setDestacamentos] = useState<string[]>([])
+  const [destacamentoVista, setDestacamentoVista] = useState<string>('')
   const [unidadId, setUnidadId] = useState<string>('')
   const [pestana, setPestana] = useState<Pestana>('ficha')
   const [mostrarHabilidades, setMostrarHabilidades] = useState(false)
@@ -28,7 +35,8 @@ export default function App() {
     const faccion = FACCIONES_MAP[id]
     localStorage.setItem(STORAGE_KEY, id)
     setFaccionId(id)
-    setDestacamento(faccion.destacamentos[0].id)
+    setDestacamentos([faccion.destacamentos[0].id])
+    setDestacamentoVista(faccion.destacamentos[0].id)
     setUnidadId(faccion.unidades[0].id)
     setPestana('ficha')
     setMostrarHabilidades(false)
@@ -45,17 +53,32 @@ export default function App() {
 
   const faccion = FACCIONES_MAP[faccionId]
   const unidadesActivas = faccion.unidades.filter(u => u.activo !== false)
-  const destId = destacamento || faccion.destacamentos[0].id
-  const unId = unidadId || unidadesActivas[0].id
 
+  const destActivos = destacamentos.length > 0 ? destacamentos : [faccion.destacamentos[0].id]
+  const vistaId = destActivos.includes(destacamentoVista) ? destacamentoVista : destActivos[0]
+
+  const totalPts = unidadesActivas.reduce((sum, u) => sum + u.pts, 0)
+  const presupuestoDP = calcularPresupuestoDP(totalPts)
+  const dpUsados = destacamentos.reduce((sum, id) => {
+    const d = faccion.destacamentos.find(x => x.id === id)
+    return sum + (d?.dp ?? 0)
+  }, 0)
+
+  const unId = unidadId || unidadesActivas[0].id
   const unidad = unidadesActivas.find(u => u.id === unId) ?? unidadesActivas[0]
-  const regla = faccion.reglas[destId]
-  const estratagemas = faccion.estratagemas[destId] ?? []
-  const mejoras = faccion.mejoras[destId] ?? []
+
+  // Estratagemas de todos los destacamentos activos (para la ficha de unidad)
+  const estratagemasAll = destActivos.flatMap(id => faccion.estratagemas[id] ?? [])
+
+  // Datos del destacamento en vista (para la pestaña Destacamento)
+  const regla = faccion.reglas[vistaId]
+  const estratagemasVista = faccion.estratagemas[vistaId] ?? []
+  const mejorasVista = faccion.mejoras[vistaId] ?? []
+
   const tieneGranadas = unidad.palabrasClave.includes('Granadas')
   const tieneMonstruoVehiculo = unidad.palabrasClave.some(k => k === 'Monstruo' || k === 'Vehículo')
   const tieneHumo = unidad.palabrasClave.includes('Humo')
-  const estratagemasUnidad = estratagemas.filter(s => {
+  const estratagemasUnidad = estratagemasAll.filter(s => {
     if (s.etiqueta === 'Universal') {
       if (s.id === 'explosivos') return tieneGranadas
       if (s.id === 'impacto-aplastante') return tieneMonstruoVehiculo
@@ -71,8 +94,17 @@ export default function App() {
     setPestana('ficha')
   }
 
-  function handleCambiarDestacamento(id: string) {
-    setDestacamento(id)
+  function handleAgregarDestacamento(id: string) {
+    setDestacamentos(prev => [...prev, id])
+    setMostrarHabilidades(false)
+  }
+
+  function handleQuitarDestacamento(id: string) {
+    setDestacamentos(prev => prev.filter(x => x !== id))
+    if (destacamentoVista === id) {
+      const remaining = destActivos.filter(x => x !== id)
+      setDestacamentoVista(remaining[0] ?? destActivos[0])
+    }
     setMostrarHabilidades(false)
   }
 
@@ -81,8 +113,11 @@ export default function App() {
       <Topbar
         faccion={faccion}
         destacamentos={faccion.destacamentos}
-        destacamentoActual={destId}
-        onCambiarDestacamento={handleCambiarDestacamento}
+        destacamentosSeleccionados={destacamentos}
+        presupuestoDP={presupuestoDP}
+        dpUsados={dpUsados}
+        onAgregarDestacamento={handleAgregarDestacamento}
+        onQuitarDestacamento={handleQuitarDestacamento}
         onCambiarFaccion={handleCambiarFaccion}
         onAbrirReglas={() => setMostrarReglas(true)}
       />
@@ -129,11 +164,29 @@ export default function App() {
               />
             )}
             {pestana === 'destacamento' && (
-              <DetachmentView
-                regla={regla}
-                estratagemas={estratagemas}
-                mejoras={mejoras}
-              />
+              <>
+                {destActivos.length > 1 && (
+                  <div className={styles.vistaSelector}>
+                    {destActivos.map(id => {
+                      const d = faccion.destacamentos.find(x => x.id === id)!
+                      return (
+                        <button
+                          key={id}
+                          className={`${styles.vistaBtn} ${id === vistaId ? styles.vistaBtnActive : ''}`}
+                          onClick={() => setDestacamentoVista(id)}
+                        >
+                          {d.nombre}
+                        </button>
+                      )
+                    })}
+                  </div>
+                )}
+                <DetachmentView
+                  regla={regla}
+                  estratagemas={estratagemasVista}
+                  mejoras={mejorasVista}
+                />
+              </>
             )}
             {pestana === 'faccion' && (
               <FaccionRulesList reglas={faccion.reglasFaccion} faccionNombre={faccion.nombre} />

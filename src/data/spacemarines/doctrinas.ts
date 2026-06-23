@@ -1,14 +1,16 @@
 import type { Destacamento, ReglaDestacamento, Mejora } from '../../types'
 
 export const DESTACAMENTOS: Destacamento[] = [
-  { id: 'centinelas-ceramita', nombre: 'Centinelas de Ceramita' },
-  { id: 'filo-ultramar', nombre: 'Filo de Ultramar' },
-  { id: 'buscadores-padre-forjador', nombre: 'Buscadores del Padre Forjador' },
-  { id: 'escudo-emperador', nombre: 'Escudo del Emperador' },
-  { id: 'espolon-marca-sombria', nombre: 'Espolón de la Marca Sombría' },
-  { id: 'contingente-bastion', nombre: 'Contingente Bastión' },
-  { id: 'fuerza-asalto-orbital', nombre: 'Fuerza de Asalto Orbital' },
-  { id: 'fuerza-recuperacion', nombre: 'Fuerza de Recuperación' },
+  { id: 'centinelas-ceramita', nombre: 'Centinelas de Ceramita', dp: 3 },
+  { id: 'filo-ultramar', nombre: 'Filo de Ultramar', dp: 3 },
+  { id: 'buscadores-padre-forjador', nombre: 'Buscadores del Padre Forjador', dp: 2 },
+  { id: 'escudo-emperador', nombre: 'Escudo del Emperador', dp: 2 },
+  { id: 'espolon-marca-sombria', nombre: 'Espolón de la Marca Sombría', dp: 2 },
+  { id: 'contingente-bastion', nombre: 'Contingente Bastión', dp: 2 },
+  { id: 'fuerza-asalto-orbital', nombre: 'Fuerza de Asalto Orbital', dp: 2 },
+  { id: 'fuerza-recuperacion', nombre: 'Fuerza de Recuperación', dp: 2 },
+  { id: 'martillo-avernii', nombre: 'Martillo de Avernii', dp: 2 },
+  { id: 'contingente-punta-lanza', nombre: 'Contingente Punta de Lanza', dp: 2 },
 ]
 
 export const REGLAS_DESTACAMENTO: Record<string, ReglaDestacamento> = {
@@ -69,6 +71,22 @@ export const REGLAS_DESTACAMENTO: Record<string, ReglaDestacamento> = {
     efectos: [
       'Siempre que una miniatura ADEPTUS ASTARTES realice un ataque de combate que tome como blanco una unidad dentro del alcance de un marcador de objetivo: mejora en 1 el FP de ese ataque.',
       'Siempre que un ataque tome como blanco una unidad ADEPTUS ASTARTES de tu ejército, si tu unidad controla un marcador de objetivo al inicio de la fase Y la Fuerza del ataque supera la Resistencia de tu unidad (o la unidad tiene clave TITUS): resta 1 a las tiradas para herir.',
+    ],
+  },
+  'martillo-avernii': {
+    nombre: 'Aniquilación Calculada',
+    efectos: [
+      'Siempre que una miniatura de tu ejército con la habilidad Juramento y órdenes realice un ataque que tome como blanco tu blanco de Juramento y órdenes, puedes repetir las tiradas para herir de 1.',
+      'Recalcular: 1 vez por ronda, tras eliminar tu blanco de Juramento y órdenes, si una miniatura CAANOK VAR de tu ejército está en campo, elige una unidad enemiga visible para esa miniatura. Esa unidad se convierte en el nuevo blanco de Juramento y órdenes.',
+      'Tu ejército puede incluir unidades MANOS DE HIERRO pero no puede incluir unidades ADEPTUS ASTARTES de otros Capítulos.',
+    ],
+  },
+  'contingente-punta-lanza': {
+    nombre: 'Matanza Arrolladora',
+    efectos: [
+      'Las unidades ADEPTUS ASTARTES de tu ejército pueden elegirse para declarar una carga en un turno en el que hayan avanzado o retrocedido.',
+      'Ira del Primer Khan: Al final de la fase de combate, si una unidad SUBODEN KHAN de tu ejército eliminó una o más unidades enemigas durante esta fase y no se encuentra en la zona de amenaza de ninguna unidad enemiga, esa unidad puede hacer un movimiento Normal de hasta 6".',
+      'Tu ejército puede incluir unidades CICATRICES BLANCAS pero no puede incluir unidades ADEPTUS ASTARTES de otros Capítulos.',
     ],
   },
 }
@@ -280,6 +298,58 @@ export const MEJORAS: Record<string, Mejora[]> = {
       nombre: 'Liberatum',
       restriccion: 'ADEPTUS ASTARTES',
       desc: 'Siempre que el portador ataque a una unidad enemiga dentro del alcance de un marcador de objetivo: puede repetir cualquier tirada para impactar y para herir.',
+    },
+  ],
+  'martillo-avernii': [
+    {
+      id: 'spiritus-ferrum',
+      nombre: 'Spiritus Ferrum',
+      restriccion: 'ADEPTUS ASTARTES',
+      desc: '+1 Ataques a las armas de combate del portador. 1 vez por batalla, al inicio de cualquier fase: hasta el final de la fase, también suma 1 Ataques a las armas de combate de otras miniaturas de su unidad.',
+    },
+    {
+      id: 'rugido-medusa',
+      nombre: 'Rugido de Medusa (Aura)',
+      restriccion: 'ADEPTUS ASTARTES',
+      desc: 'Mientras una unidad enemiga (salvo MONSTRUO y VEHÍCULO) esté a 6" o menos del portador: cuando esa unidad falle un chequeo de acobardamiento, una miniatura de esa unidad es eliminada. 1 vez por batalla: en su lugar puedes eliminar 1D3 miniaturas de esa unidad.',
+    },
+    {
+      id: 'laurel-hierro',
+      nombre: 'Laurel de Hierro',
+      restriccion: 'ADEPTUS ASTARTES',
+      desc: '+1 OC al portador. 1 vez por batalla, al inicio de cualquier fase: hasta el final de la fase, también suma 1 OC al resto de miniaturas de su unidad.',
+    },
+    {
+      id: 'fuente-acero',
+      nombre: 'Fuente de Acero',
+      restriccion: 'EXTERMINADOR ADEPTUS ASTARTES',
+      desc: 'Mientras el portador lidere una unidad: en tu fase de mando puedes devolver a esa unidad 1 miniatura Guardaespaldas eliminada.',
+    },
+  ],
+  'contingente-punta-lanza': [
+    {
+      id: 'parangon-punta-lanza',
+      nombre: 'Parangón Punta de Lanza',
+      restriccion: 'ADEPTUS ASTARTES',
+      desc: '+1 Fuerza y +1 FP a las armas de combate del portador. Siempre que el portador termine un movimiento de carga: hasta el final del turno mejora en 2 Fuerza y FP de sus armas de combate en lugar de en 1.',
+    },
+    {
+      id: 'sabiduria-vidente-tormentas',
+      nombre: 'Sabiduría del Vidente de las Tormentas',
+      restriccion: 'ADEPTUS ASTARTES',
+      desc: 'Mientras el portador lidere una unidad: puedes repetir las tiradas de avanzar de esa unidad.',
+    },
+    {
+      id: 'ojo-cazador',
+      nombre: 'Ojo del Cazador',
+      restriccion: 'ADEPTUS ASTARTES',
+      desc: 'Las armas a distancia equipadas a miniaturas de la unidad del portador tienen las habilidades [GOLPES SOSTENIDOS 1] e [IGNORA COBERTURA].',
+    },
+    {
+      id: 'cazador-maestre-chogoriano',
+      nombre: 'Cazador Maestre Chogoriano',
+      restriccion: 'MONTADA ADEPTUS ASTARTES',
+      desc: 'Si la unidad del portador está en reservas estratégicas, a efectos de despliegue en campo trata el número de ronda actual como 1 punto más alto del actual.',
     },
   ],
 }

@@ -1,13 +1,13 @@
 import type { Destacamento, ReglaDestacamento, Mejora } from '../../types'
 
 export const DESTACAMENTOS: Destacamento[] = [
-  { id: 'manoDinastia', nombre: 'Mano de la Dinastía' },
-  { id: 'puntaLanza', nombre: 'Punta de Lanza del Sudario Celestial' },
-  { id: 'armeriaFaeron', nombre: 'Armería del Faerón' },
-  { id: 'arsenalParteestrellas', nombre: 'Arsenal Parteestrellas' },
-  { id: 'conclaveCriptecnologos', nombre: 'Cónclave de Criptecnólogos' },
-  { id: 'legionMaldita', nombre: 'Legión Maldita' },
-  { id: 'panteonAfliccion', nombre: 'Panteón de la Aflicción' },
+  { id: 'manoDinastia', nombre: 'Mano de la Dinastía', dp: 1 },
+  { id: 'puntaLanza', nombre: 'Punta de Lanza del Sudario Celestial', dp: 1 },
+  { id: 'armeriaFaeron', nombre: 'Armería del Faerón', dp: 1 },
+  { id: 'arsenalParteestrellas', nombre: 'Arsenal Parteestrellas', dp: 3 },
+  { id: 'conclaveCriptecnologos', nombre: 'Cónclave de Criptecnólogos', dp: 2 },
+  { id: 'legionMaldita', nombre: 'Legión Maldita', dp: 2 },
+  { id: 'panteonAfliccion', nombre: 'Panteón de la Aflicción', dp: 2 },
 ]
 
 export const REGLAS_DESTACAMENTO: Record<string, ReglaDestacamento> = {

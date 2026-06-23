@@ -48,6 +48,18 @@ export function DataSheet({ unidad, faccionId, estratagemasRelacionadas, mostrar
           </div>
         </div>
 
+        {/* Unidad adjunta */}
+        {unidad.adjunta && (
+          <div className={styles.adjuntaSection}>
+            <span className={`${styles.rolBadge} ${unidad.adjunta.rol === 'Líder' ? styles.rolLider : styles.rolApoyo}`}>
+              {unidad.adjunta.rol === 'Líder' ? '☠ Líder' : '✚ Apoyo'}
+            </span>
+            <span className={styles.adjuntaUnidades}>
+              {unidad.adjunta.unidades.join(' · ')}
+            </span>
+          </div>
+        )}
+
         {/* Estadísticas */}
         <div className={styles.statsRow}>
           {Object.entries(unidad.stats).map(([k, v]) => (

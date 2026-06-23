@@ -89,6 +89,43 @@
   background: var(--color-gold-bg);
 }
 
+/* Unidad adjunta */
+.adjuntaSection {
+  display: flex;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 14px;
+}
+
+.rolBadge {
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  padding: 3px 8px;
+  border-radius: 4px;
+  flex-shrink: 0;
+}
+
+.rolLider {
+  background: rgba(180, 40, 40, 0.15);
+  color: #d9534f;
+  border: 1px solid rgba(180, 40, 40, 0.35);
+}
+
+.rolApoyo {
+  background: rgba(40, 120, 180, 0.15);
+  color: #5b9fd9;
+  border: 1px solid rgba(40, 120, 180, 0.35);
+}
+
+.adjuntaUnidades {
+  font-size: 14px;
+  color: var(--text-secondary);
+  line-height: 1.5;
+}
+
 /* Stats */
 .statsRow {
   display: flex;

@@ -2,40 +2,9 @@ import type { Unidad } from '../../types'
 
 export const UNIDADES: Unidad[] = [
   {
-    id: 'capitan',
-    activo: false,
-    nombre: 'Capitán con Armadura Fobos',
-    pts: 80,
-    color: '#BA7517',
-    palabrasClave: ['Infantería', 'Personaje', 'Fobos', 'Imperium', 'Adeptus Astartes'],
-    stats: { MOV: '6"', RES: 4, HER: 5, SALV: '2+', INV: '4+', LID: '6+', OC: 1 },
-    distancia: [
-      { nombre: 'Pistola bólter', rango: '12"', A: 1, HP: '2+', F: 4, FP: 0, D: 1, especial: 'Pistola' },
-      { nombre: 'Carabina bólter instigador', rango: '24"', A: 4, HP: '2+', F: 4, FP: -1, D: 2, especial: 'Precisión' },
-    ],
-    combate: [
-      { nombre: 'Cuchillo de combate', A: 5, HA: '2+', F: 4, FP: 0, D: 1 },
-    ],
-    habilidades: [
-      {
-        nombre: 'Liderar desde las Sombras',
-        desc: 'Mientras este modelo esté dirigiendo una unidad, los modelos de esa unidad tienen la habilidad Sigilo.',
-      },
-      {
-        nombre: 'Capa de Camuflaje',
-        desc: 'Los ataques a distancia realizados contra la unidad de este modelo sufren un -1 a la tirada de impactar.',
-      },
-      {
-        nombre: 'Anulación de Prioridad de Objetivo',
-        desc: 'Al inicio de la fase de Lucha, selecciona una unidad enemiga a 12". Hasta el final de la fase, los modelos de tu ejército pueden repetir las tiradas de herir contra esa unidad.',
-      },
-    ],
-    estratagemasRelacionadas: ['transhuman', 'honrarCapitulo', 'granadasHumo'],
-  },
-  {
     id: 'capitanExterminador',
     nombre: 'Capitán con Armadura Exterminador',
-    pts: 100,
+    pts: 85,
     color: '#4A6FA5',
     palabrasClave: ['Infantería', 'Personaje', 'Exterminador', 'Imperium', 'Adeptus Astartes'],
     stats: { MOV: '5"', RES: 5, HER: 6, SALV: '2+', INV: '4+', LID: '6+', OC: 1 },
@@ -69,38 +38,21 @@ export const UNIDADES: Unidad[] = [
       },
     ],
     estratagemasRelacionadas: ['transhuman', 'honrarCapitulo', 'armaduraDesden'],
-  },
-  {
-    id: 'intercesores',
-    activo: false,
-    nombre: 'Escuadra de Intercesores',
-    pts: 75,
-    color: '#185FA5',
-    palabrasClave: ['Infantería', 'Línea de Batalla', 'Primaris', 'Imperium', 'Adeptus Astartes'],
-    stats: { MOV: '6"', RES: 4, HER: 2, SALV: '3+', INV: '-', LID: '6+', OC: 2 },
-    distancia: [
-      { nombre: 'Rifle bólter', rango: '24"', A: 2, HP: '3+', F: 4, FP: -1, D: 1, especial: 'Asalto' },
-      { nombre: 'Pistola bólter', rango: '12"', A: 1, HP: '3+', F: 4, FP: 0, D: 1, especial: 'Pistola' },
-    ],
-    combate: [
-      { nombre: 'Arma de combate', A: 2, HA: '3+', F: 4, FP: 0, D: 1 },
-    ],
-    habilidades: [
-      {
-        nombre: 'Objetivo Asegurado',
-        desc: 'Mientras esta unidad esté en el rango de un marcador de objetivo, se considera que controla ese objetivo aunque haya más modelos enemigos que amigos en el rango.',
-      },
-      {
-        nombre: 'Combate de Fuego Rápido',
-        desc: 'Cada vez que un modelo de esta unidad realice un ataque con su Rifle bólter, añade 1 a la tirada de impactar si el objetivo está a la mitad del rango.',
-      },
-    ],
-    estratagemasRelacionadas: ['transhuman', 'honrarCapitulo', 'defensaContraataque', 'armaduraDesden'],
+    adjunta: {
+      rol: 'Líder',
+      unidades: [
+        'Caballeros del Ala de Muerte',
+        'Escuadra de Exterminadores',
+        'Escuadra de Exterminadores de Asalto',
+        'Escuadra de Exterminadores del Ala de Muerte',
+        'Escuadra de Exterminadores Vigías',
+      ],
+    },
   },
   {
     id: 'tenientePrimaris',
     nombre: 'Teniente Primaris',
-    pts: 65,
+    pts: 45,
     color: '#3A5F8A',
     palabrasClave: ['Infantería', 'Personaje', 'Granadas', 'Imperium', 'Tacticus', 'Adeptus Astartes'],
     stats: { MOV: '6"', RES: 4, HER: 4, SALV: '3+', INV: '-', LID: '6+', OC: 1 },
@@ -132,6 +84,25 @@ export const UNIDADES: Unidad[] = [
       },
     ],
     estratagemasRelacionadas: ['transhuman', 'honrarCapitulo', 'armaduraDesden'],
+    adjunta: {
+      rol: 'Apoyo',
+      unidades: [
+        'Camaradas del Círculo Interior',
+        'Comando Decimus',
+        'Comando Fortis',
+        'Escuadra de Cruzados',
+        'Escuadra de Hermanos de Armas',
+        'Escuadra de Intercesores',
+        'Escuadra de Intercesores de Asalto',
+        'Escuadra de Revientainfiernos',
+        'Escuadra de Veteranos de Ferreaguardia',
+        'Escuadra de Veteranos de Retaguardia',
+        'Escuadra Infernus',
+        'Escuadra Táctica',
+        'Héroes de la Compañía',
+        'Veteranos Vigías',
+      ],
+    },
   },
   {
     id: 'intercesorAsalto',
@@ -167,7 +138,7 @@ export const UNIDADES: Unidad[] = [
   {
     id: 'erradicadores',
     nombre: 'Escuadra de Erradicadores',
-    pts: 95,
+    pts: 90,
     color: '#1A5C8A',
     palabrasClave: ['Infantería', 'Granadas', 'Imperium', 'Gravis', 'Adeptus Astartes'],
     stats: { MOV: '5"', RES: 6, HER: 3, SALV: '3+', INV: '-', LID: '6+', OC: 1 },
@@ -190,7 +161,7 @@ export const UNIDADES: Unidad[] = [
   {
     id: 'exterminadores',
     nombre: 'Escuadra de Exterminadores',
-    pts: 200,
+    pts: 160,
     color: '#2A4A7A',
     palabrasClave: ['Infantería', 'Imperium', 'Exterminador', 'Adeptus Astartes'],
     stats: { MOV: '5"', RES: 5, HER: 3, SALV: '2+', INV: '4+', LID: '6+', OC: 1 },
@@ -221,7 +192,7 @@ export const UNIDADES: Unidad[] = [
   {
     id: 'quadInvader',
     nombre: 'Quad Invader',
-    pts: 80,
+    pts: 60,
     color: '#4A7A5A',
     palabrasClave: ['Montada', 'Granadas', 'Imperium', 'Adeptus Astartes'],
     stats: { MOV: '12"', RES: 5, HER: 8, SALV: '3+', INV: '-', LID: '6+', OC: 2 },
@@ -245,7 +216,7 @@ export const UNIDADES: Unidad[] = [
   {
     id: 'firestrike',
     nombre: 'Servotorretas Firestrike',
-    pts: 65,
+    pts: 75,
     color: '#7A3A2A',
     palabrasClave: ['Artillería', 'Vehículo', 'Imperium', 'Adeptus Astartes'],
     stats: { MOV: '3"', RES: 6, HER: 6, SALV: '2+', INV: '-', LID: '6+', OC: 2 },
@@ -263,32 +234,5 @@ export const UNIDADES: Unidad[] = [
       },
     ],
     estratagemasRelacionadas: ['transhuman', 'armaduraDesden'],
-  },
-  {
-    id: 'hellblasters',
-    activo: false,
-    nombre: 'Escuadra Hellblasters',
-    pts: 100,
-    color: '#0F6E56',
-    palabrasClave: ['Infantería', 'Primaris', 'Imperium', 'Adeptus Astartes'],
-    stats: { MOV: '6"', RES: 4, HER: 2, SALV: '3+', INV: '-', LID: '6+', OC: 1 },
-    distancia: [
-      { nombre: 'Incinerador de plasma (estándar)', rango: '30"', A: 2, HP: '3+', F: 7, FP: -3, D: 1, especial: '' },
-      { nombre: 'Incinerador de plasma (sobrecarga)', rango: '30"', A: 2, HP: '3+', F: 8, FP: -4, D: 2, especial: 'Peligroso' },
-    ],
-    combate: [
-      { nombre: 'Arma de combate', A: 1, HA: '3+', F: 4, FP: 0, D: 1 },
-    ],
-    habilidades: [
-      {
-        nombre: 'Precisión Letal',
-        desc: 'Cada vez que un modelo de esta unidad realice un ataque a distancia con un incinerador de plasma, una tirada de impactar no modificada de 6 consigue un impacto adicional.',
-      },
-      {
-        nombre: 'Devastación de Plasma',
-        desc: 'En la Doctrina Devastadora, mejora el FP de los incineradores de plasma en 1.',
-      },
-    ],
-    estratagemasRelacionadas: ['honrarCapitulo', 'fuegoDeSujecion', 'transhuman', 'armaduraDesden'],
   },
 ]

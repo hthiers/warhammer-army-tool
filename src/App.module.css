@@ -70,3 +70,34 @@
   padding: 16px;
   overflow-y: auto;
 }
+
+/* Selector de vista cuando hay múltiples destacamentos */
+.vistaSelector {
+  display: flex;
+  gap: 8px;
+  padding: 0 0 12px;
+  flex-shrink: 0;
+  flex-wrap: wrap;
+}
+
+.vistaBtn {
+  font-size: 14px;
+  padding: 5px 12px;
+  border-radius: var(--radius-sm);
+  border: var(--border);
+  background: var(--bg);
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition: color 0.1s;
+}
+
+.vistaBtn:hover {
+  color: var(--text);
+}
+
+.vistaBtnActive {
+  background: var(--bg-tertiary);
+  color: var(--text);
+  font-weight: 500;
+  border-bottom: 2px solid var(--color-gold);
+}
