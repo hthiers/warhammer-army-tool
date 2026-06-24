@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import type { Pestana } from './types'
 import { FACCIONES, FACCIONES_MAP } from './data/facciones'
 import { Topbar } from './components/Topbar/Topbar'
@@ -11,9 +11,26 @@ import { FaccionRulesList } from './components/FaccionRulesList/FaccionRulesList
 import styles from './App.module.css'
 
 const STORAGE_KEY = 'wh40k-faccion'
+const STORAGE_DEST_PREFIX = 'wh40k-destacamentos'
 
 function getInitialFaccionId(): string | null {
   return localStorage.getItem(STORAGE_KEY)
+}
+
+function getInitialDestacamentos(faccionId: string | null, faccionDestacamentos: { id: string }[]): string[] {
+  if (!faccionId) return []
+  try {
+    const saved = localStorage.getItem(`${STORAGE_DEST_PREFIX}-${faccionId}`)
+    if (saved) {
+      const parsed: string[] = JSON.parse(saved)
+      const validIds = new Set(faccionDestacamentos.map(d => d.id))
+      const valid = parsed.filter(id => validIds.has(id))
+      if (valid.length > 0) return valid
+    }
+  } catch {
+    // ignorar errores de parseo
+  }
+  return []
 }
 
 function calcularPresupuestoDP(totalPts: number): number {
@@ -24,19 +41,31 @@ function calcularPresupuestoDP(totalPts: number): number {
 
 export default function App() {
   const [faccionId, setFaccionId] = useState<string | null>(getInitialFaccionId)
-  const [destacamentos, setDestacamentos] = useState<string[]>([])
+  const initialFaccionId = getInitialFaccionId()
+  const initialFaccion = initialFaccionId ? FACCIONES_MAP[initialFaccionId] : null
+  const [destacamentos, setDestacamentos] = useState<string[]>(() =>
+    getInitialDestacamentos(initialFaccionId, initialFaccion?.destacamentos ?? [])
+  )
   const [destacamentoVista, setDestacamentoVista] = useState<string>('')
   const [unidadId, setUnidadId] = useState<string>('')
   const [pestana, setPestana] = useState<Pestana>('ficha')
   const [mostrarHabilidades, setMostrarHabilidades] = useState(false)
   const [mostrarReglas, setMostrarReglas] = useState(false)
 
+  useEffect(() => {
+    if (faccionId) {
+      localStorage.setItem(`${STORAGE_DEST_PREFIX}-${faccionId}`, JSON.stringify(destacamentos))
+    }
+  }, [faccionId, destacamentos])
+
   function handleSeleccionarFaccion(id: string) {
     const faccion = FACCIONES_MAP[id]
+    const firstDest = faccion.destacamentos[0].id
     localStorage.setItem(STORAGE_KEY, id)
+    localStorage.setItem(`${STORAGE_DEST_PREFIX}-${id}`, JSON.stringify([firstDest]))
     setFaccionId(id)
-    setDestacamentos([faccion.destacamentos[0].id])
-    setDestacamentoVista(faccion.destacamentos[0].id)
+    setDestacamentos([firstDest])
+    setDestacamentoVista(firstDest)
     setUnidadId(faccion.unidades[0].id)
     setPestana('ficha')
     setMostrarHabilidades(false)

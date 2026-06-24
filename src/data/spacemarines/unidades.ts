@@ -214,6 +214,63 @@ export const UNIDADES: Unidad[] = [
     estratagemasRelacionadas: ['transhuman', 'armaduraDesden'],
   },
   {
+    id: 'batidores',
+    nombre: 'Escuadra de Batidores',
+    pts: 70,
+    color: '#3A7A5A',
+    palabrasClave: ['Montada', 'Granadas', 'Imperium', 'Escuadra de Batidores', 'Adeptus Astartes'],
+    stats: { MOV: '12"', RES: 5, HER: 4, SALV: '3+', INV: '-', LID: '6+', OC: 2 },
+    distancia: [
+      { nombre: 'Pistola bólter pesada', rango: '18"', A: 1, HP: '3+', F: 4, FP: -1, D: 1, especial: 'Pistola' },
+      { nombre: 'Rifle bólter doble', rango: '24"', A: 2, HP: '3+', F: 4, FP: -1, D: 1, especial: 'Acoplada' },
+      { nombre: 'Cañón gatling de campaña', rango: '24"', A: 8, HP: '3+', F: 5, FP: 0, D: 1, especial: 'Heridas Devastadoras' },
+      { nombre: 'Cañón de fusión', rango: '18"', A: 2, HP: '3+', F: 9, FP: -4, D: '1D6', especial: 'Fusión 2', opcional: true, esAlternativa: true },
+    ],
+    combate: [
+      { nombre: 'Espada sierra Astartes', A: 4, HA: '3+', F: 4, FP: -1, D: 1 },
+      { nombre: 'Arma cuerpo a cuerpo', A: 5, HA: '3+', F: 4, FP: 0, D: 1 },
+    ],
+    habilidades: [
+      {
+        nombre: 'Turbo',
+        desc: 'Cuando esta unidad avance, no hagas una tirada de avanzar para ella. En su lugar, hasta el final de la fase suma 6" al atributo Movimiento de las miniaturas de esta unidad.',
+      },
+    ],
+    estratagemasRelacionadas: ['transhuman', 'armaduraDesden'],
+  },
+  {
+    id: 'dreadnoughtBallistus',
+    nombre: 'Dreadnought Ballistus',
+    pts: 150,
+    color: '#2A4A6A',
+    palabrasClave: ['Vehículo', 'Bípode', 'Imperium', 'Dreadnought Ballistus', 'Adeptus Astartes'],
+    stats: { MOV: '8"', RES: 10, HER: 12, SALV: '2+', INV: '-', LID: '6+', OC: 4 },
+    distancia: [
+      { nombre: 'Bólter tormenta doble', rango: '24"', A: 2, HP: '3+', F: 4, FP: 0, D: 1, especial: 'Fuego Rápido 2, Acoplada' },
+      { nombre: 'Cañón láser Ballistus', rango: '48"', A: 2, HP: '3+', F: 12, FP: -3, D: '1D6+1' },
+      { nombre: 'Lanzamisiles Ballistus – frag', rango: '48"', A: '2D6', HP: '3+', F: 5, FP: 0, D: 1, especial: 'Área' },
+      { nombre: 'Lanzamisiles Ballistus – perforante', rango: '48"', A: 2, HP: '3+', F: 10, FP: -2, D: '1D6', esAlternativa: true },
+    ],
+    combate: [
+      { nombre: 'Pies blindados', A: 5, HA: '3+', F: 7, FP: 0, D: 1 },
+    ],
+    habilidades: [
+      {
+        nombre: 'Final violento 1D3',
+        desc: 'Habilidad básica de vehículo.',
+      },
+      {
+        nombre: 'Ataque Ballistus',
+        desc: 'Cada vez que esta miniatura realice un ataque a distancia que tome como blanco a una unidad que no esté bajo mitad de efectivos, puedes repetir la tirada para impactar.',
+      },
+      {
+        nombre: 'Daño: 1-4 Heridas restantes',
+        desc: 'Siempre que ataque resta 1 a la tirada para impactar.',
+      },
+    ],
+    estratagemasRelacionadas: ['transhuman', 'armaduraDesden'],
+  },
+  {
     id: 'firestrike',
     nombre: 'Servotorretas Firestrike',
     pts: 75,

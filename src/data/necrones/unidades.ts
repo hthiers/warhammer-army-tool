@@ -203,6 +203,70 @@ export const UNIDADES: Unidad[] = [
     estratagemasRelacionadas: ['reanudacionMejorada', 'protocoloInmortal'],
   },
   {
+    id: 'senorSupremo',
+    nombre: 'Señor Supremo',
+    pts: 90,
+    color: '#7A5A20',
+    palabrasClave: ['Infantería', 'Personaje', 'Noble', 'Señor supremo', 'Necrones'],
+    stats: { MOV: '5"', RES: 5, HER: 6, SALV: '2+', INV: '4+', LID: '6+', OC: 1 },
+    distancia: [
+      { nombre: 'Báculo de luz', rango: '18"', A: 3, HP: '2+', F: 5, FP: -2, D: 1, opcional: true },
+      { nombre: 'Flecha de taquiones', rango: '72"', A: 1, HP: '2+', F: 16, FP: -5, D: '1D6+2', especial: 'Disparo Único' },
+    ],
+    combate: [
+      { nombre: 'Arma de Señor Supremo', A: 4, HA: '2+', F: 9, FP: -3, D: 2, especial: 'Heridas Devastadoras' },
+      { nombre: 'Báculo de luz', A: 4, HA: '2+', F: 5, FP: -2, D: 1, opcional: true, esAlternativa: true },
+      { nombre: 'Guadaña de vacío', A: 3, HA: '3+', F: 12, FP: -3, D: 3, especial: 'Heridas Devastadoras', opcional: true, esAlternativa: true },
+    ],
+    habilidades: [
+      {
+        nombre: 'Mi voluntad será cumplida',
+        desc: 'Una vez por ronda de batalla, puedes tomar como blanco de una estratagema a 1 unidad de tu ejército que tenga esta habilidad por 0PM, incluso si ya has tomado como blanco de esa estratagema a una unidad diferente en esta fase.',
+      },
+      {
+        nombre: 'Resistencia implacable',
+        desc: 'Siempre que se asigne un ataque a esta miniatura, resta 1 al atributo Daño de ese ataque.',
+      },
+      {
+        nombre: 'Orbe de resurrección',
+        desc: 'Mientras el portador lidera una unidad, los Protocolos de reanimación de esa unidad se activan al final de la fase de mando del oponente, además de al final de la tuya.',
+      },
+    ],
+    estratagemasRelacionadas: ['reanudacionMejorada', 'protocoloInmortal'],
+    adjunta: {
+      rol: 'Líder',
+      unidades: ['Guerreros Necrones', 'Inmortales', 'Necroguardia'],
+    },
+  },
+  {
+    id: 'acechanteTriarca',
+    nombre: 'Acechante de la Triarca',
+    pts: 110,
+    color: '#3A6A7A',
+    palabrasClave: ['Vehículo', 'Bípode', 'Acechante de la Triarca', 'Necrones'],
+    stats: { MOV: '9"', RES: 8, HER: 12, SALV: '3+', INV: '4+', LID: '7+', OC: 4 },
+    distancia: [
+      { nombre: 'Rayo de calor – disperso', rango: '12"', A: '2D6', HP: 'N/A', F: 5, FP: -1, D: 1, especial: 'Ignora Cobertura, Ráfaga' },
+      { nombre: 'Rayo de calor – enfocado', rango: '18"', A: 2, HP: '3+', F: 9, FP: -4, D: '1D6', especial: 'Melta 4', esAlternativa: true },
+      { nombre: 'Cañón gauss pesado doble', rango: '24"', A: 3, HP: '3+', F: 8, FP: -2, D: 2, especial: 'Impactos Letales, Acoplada', opcional: true },
+      { nombre: 'Despedazador de partículas', rango: '18"', A: '1D6+6', HP: '2+', F: 7, FP: 0, D: 1, opcional: true, esAlternativa: true },
+    ],
+    combate: [
+      { nombre: 'Extremidades de Acechante', A: 4, HA: '3+', F: 7, FP: -1, D: 3 },
+    ],
+    habilidades: [
+      {
+        nombre: 'Final violento 1D3',
+        desc: 'Habilidad básica de vehículo.',
+      },
+      {
+        nombre: 'Sistema de puntería',
+        desc: 'En tu fase de disparo, siempre que elijas a esta miniatura para disparar, después de resolver sus ataques elige 1 unidad enemiga que haya recibido 1 o más impactos de esos ataques. La unidad elegida no puede beneficiarse de cobertura hasta el final de la fase.',
+      },
+    ],
+    estratagemasRelacionadas: ['reanudacionMejorada', 'protocoloInmortal'],
+  },
+  {
     id: 'guardiaReal',
     nombre: 'Guardia Real',
     pts: 50,
