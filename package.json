@@ -7,18 +7,21 @@
     "dev": "vite",
     "build": "tsc && vite build",
     "build:standalone": "tsc && vite build && echo '\n✓ Archivo listo: dist/index.html'",
-    "preview": "vite preview"
+    "preview": "npm run build && wrangler dev",
+    "deploy": "npm run build && wrangler deploy"
   },
   "dependencies": {
     "react": "^18.3.1",
     "react-dom": "^18.3.1"
   },
   "devDependencies": {
+    "@cloudflare/vite-plugin": "^1.42.2",
     "@types/react": "^18.3.3",
     "@types/react-dom": "^18.3.0",
     "@vitejs/plugin-react": "^5.2.0",
     "typescript": "^5.4.5",
     "vite": "^6.4.3",
-    "vite-plugin-singlefile": "^2.3.3"
+    "vite-plugin-singlefile": "^2.3.3",
+    "wrangler": "^4.104.0"
   }
 }
