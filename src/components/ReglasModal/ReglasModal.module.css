@@ -131,3 +131,100 @@
   color: var(--text);
   font-weight: 600;
 }
+
+/* Lista numerada de pasos (atacar, secuencia) */
+.pasos {
+  margin: 0;
+  padding: 0 0 0 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.pasos li {
+  font-size: 16px;
+  color: var(--text-secondary);
+  line-height: 1.5;
+}
+
+.pasos li strong {
+  color: var(--text);
+  font-weight: 600;
+}
+
+/* Texto auxiliar en línea dentro de un paso */
+.reglaInline {
+  display: block;
+  font-size: 14px;
+  margin-top: 2px;
+  padding-left: 4px;
+}
+
+/* Tabla embebida dentro de un paso */
+.tablaInline {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 15px;
+  margin-top: 6px;
+}
+
+.tablaInline th {
+  text-align: left;
+  font-size: 14px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--text-tertiary);
+  padding: 0 8px 4px 0;
+  border-bottom: var(--border);
+}
+
+.tablaInline td {
+  padding: 4px 8px 4px 0;
+  color: var(--text-secondary);
+  border-bottom: var(--border);
+}
+
+.tablaInline tr:last-child td {
+  border-bottom: none;
+}
+
+/* Subtítulo dentro de una sección */
+.subTitulo {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  margin: 10px 0 6px;
+}
+
+/* Lista de fases del turno */
+.fases {
+  margin: 0;
+  padding: 0 0 0 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.fases li {
+  font-size: 15px;
+  color: var(--text-secondary);
+  line-height: 1.5;
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+}
+
+.faseNom {
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--text);
+}
+
+.faseDesc {
+  font-size: 14px;
+  color: var(--text-secondary);
+  line-height: 1.4;
+}
