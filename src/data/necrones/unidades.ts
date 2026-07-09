@@ -3,6 +3,7 @@ import type { Unidad } from '../../types'
 export const UNIDADES: Unidad[] = [
   {
     id: 'guerreros',
+    rolIA: 'linea',
     nombre: 'Guerreros Necrones',
     pts: 80,
     color: '#1A6B3A',
@@ -25,6 +26,7 @@ export const UNIDADES: Unidad[] = [
   },
   {
     id: 'skorpekh',
+    rolIA: 'asalto',
     nombre: 'Destructores Skorpekh',
     pts: 85,
     color: '#4A9B5F',
@@ -49,6 +51,7 @@ export const UNIDADES: Unidad[] = [
   },
   {
     id: 'plasmante',
+    rolIA: 'disparo',
     nombre: 'Plasmante',
     pts: 55,
     color: '#6A2A8A',
@@ -78,6 +81,7 @@ export const UNIDADES: Unidad[] = [
   },
   {
     id: 'criptosiervos',
+    rolIA: 'soporte',
     nombre: 'Criptosiervos',
     pts: 60,
     color: '#2A8A6A',
@@ -103,6 +107,7 @@ export const UNIDADES: Unidad[] = [
   },
   {
     id: 'pretorianos',
+    rolIA: 'asalto',
     nombre: 'Pretorianos de la Triarca',
     pts: 80,
     color: '#4A7A5A',
@@ -130,6 +135,7 @@ export const UNIDADES: Unidad[] = [
   },
   {
     id: 'reanimadorCanoptico',
+    rolIA: 'soporte',
     nombre: 'Reanimador Canóptico',
     pts: 70,
     color: '#2A7A5A',
@@ -155,6 +161,7 @@ export const UNIDADES: Unidad[] = [
   },
   {
     id: 'lokhustPesados',
+    rolIA: 'disparo',
     nombre: 'Destructores Lokhust Pesados',
     pts: 50,
     color: '#1A6B3A',
@@ -177,6 +184,7 @@ export const UNIDADES: Unidad[] = [
   },
   {
     id: 'enjambreEscarabeo',
+    rolIA: 'soporte',
     nombre: 'Enjambres Canópticos Escarabeo',
     pts: 40,
     color: '#3A7A3A',
@@ -204,6 +212,7 @@ export const UNIDADES: Unidad[] = [
   },
   {
     id: 'senorSupremo',
+    rolIA: 'mando',
     nombre: 'Señor Supremo',
     pts: 90,
     color: '#7A5A20',
@@ -240,6 +249,7 @@ export const UNIDADES: Unidad[] = [
   },
   {
     id: 'acechanteTriarca',
+    rolIA: 'mando',
     nombre: 'Acechante de la Triarca',
     pts: 110,
     color: '#3A6A7A',
@@ -268,6 +278,7 @@ export const UNIDADES: Unidad[] = [
   },
   {
     id: 'guardiaReal',
+    rolIA: 'linea',
     nombre: 'Guardia Real',
     pts: 50,
     color: '#8B6914',

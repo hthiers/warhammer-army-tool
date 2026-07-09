@@ -7,14 +7,33 @@ import { DataSheet } from './components/DataSheet/DataSheet'
 import { DetachmentView } from './components/DetachmentView/DetachmentView'
 import { FactionPicker } from './components/FactionPicker/FactionPicker'
 import { ReglasModal } from './components/ReglasModal/ReglasModal'
+import { DiceRollerModal } from './components/DiceRollerModal/DiceRollerModal'
 import { FaccionRulesList } from './components/FaccionRulesList/FaccionRulesList'
+import { MisionesView } from './components/MisionesView/MisionesView'
 import styles from './App.module.css'
 
 const STORAGE_KEY = 'wh40k-faccion'
 const STORAGE_DEST_PREFIX = 'wh40k-destacamentos'
+const STORAGE_THEME_KEY = 'wh40k-theme'
+
+type Tema = 'light' | 'dark'
+
+function getInitialTema(): Tema {
+  const saved = localStorage.getItem(STORAGE_THEME_KEY)
+  if (saved === 'light' || saved === 'dark') return saved
+  return window.matchMedia?.('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'
+}
 
 function getInitialFaccionId(): string | null {
-  return localStorage.getItem(STORAGE_KEY)
+  const dePestana = sessionStorage.getItem(STORAGE_KEY)
+  if (dePestana) return dePestana
+
+  // Pestaña nueva: toma la última facción usada globalmente como sugerencia
+  // inicial, pero a partir de ahora esta pestaña queda fijada a la suya propia
+  // y no se ve afectada por cambios de facción en otras pestañas.
+  const global = localStorage.getItem(STORAGE_KEY)
+  if (global) sessionStorage.setItem(STORAGE_KEY, global)
+  return global
 }
 
 function getInitialDestacamentos(faccionId: string | null, faccionDestacamentos: { id: string }[]): string[] {
@@ -51,6 +70,9 @@ export default function App() {
   const [pestana, setPestana] = useState<Pestana>('ficha')
   const [mostrarHabilidades, setMostrarHabilidades] = useState(false)
   const [mostrarReglas, setMostrarReglas] = useState(false)
+  const [mostrarDados, setMostrarDados] = useState(false)
+  const [tema, setTema] = useState<Tema>(getInitialTema)
+  const [vistaMisiones, setVistaMisiones] = useState(false)
 
   useEffect(() => {
     if (faccionId) {
@@ -58,14 +80,24 @@ export default function App() {
     }
   }, [faccionId, destacamentos])
 
+  useEffect(() => {
+    document.documentElement.setAttribute('data-theme', tema)
+    localStorage.setItem(STORAGE_THEME_KEY, tema)
+  }, [tema])
+
+  function handleToggleTema() {
+    setTema(t => (t === 'dark' ? 'light' : 'dark'))
+  }
+
   function handleSeleccionarFaccion(id: string) {
     const faccion = FACCIONES_MAP[id]
-    const firstDest = faccion.destacamentos[0].id
+    const destGuardados = getInitialDestacamentos(id, faccion.destacamentos)
+    const destIniciales = destGuardados.length > 0 ? destGuardados : [faccion.destacamentos[0].id]
     localStorage.setItem(STORAGE_KEY, id)
-    localStorage.setItem(`${STORAGE_DEST_PREFIX}-${id}`, JSON.stringify([firstDest]))
+    sessionStorage.setItem(STORAGE_KEY, id)
     setFaccionId(id)
-    setDestacamentos([firstDest])
-    setDestacamentoVista(firstDest)
+    setDestacamentos(destIniciales)
+    setDestacamentoVista(destIniciales[0])
     setUnidadId(faccion.unidades[0].id)
     setPestana('ficha')
     setMostrarHabilidades(false)
@@ -73,6 +105,7 @@ export default function App() {
 
   function handleCambiarFaccion() {
     localStorage.removeItem(STORAGE_KEY)
+    sessionStorage.removeItem(STORAGE_KEY)
     setFaccionId(null)
   }
 
@@ -149,9 +182,20 @@ export default function App() {
         onQuitarDestacamento={handleQuitarDestacamento}
         onCambiarFaccion={handleCambiarFaccion}
         onAbrirReglas={() => setMostrarReglas(true)}
+        onAbrirDados={() => setMostrarDados(true)}
+        tema={tema}
+        onToggleTema={handleToggleTema}
+        vistaMisiones={vistaMisiones}
+        onToggleVistaMisiones={() => setVistaMisiones(v => !v)}
       />
       {mostrarReglas && <ReglasModal onClose={() => setMostrarReglas(false)} />}
+      {mostrarDados && <DiceRollerModal onClose={() => setMostrarDados(false)} />}
 
+      {vistaMisiones ? (
+        <div className={styles.body}>
+          <MisionesView />
+        </div>
+      ) : (
       <div className={styles.body}>
         <Sidebar
           unidades={unidadesActivas}
@@ -223,6 +267,7 @@ export default function App() {
           </div>
         </div>
       </div>
+      )}
     </div>
   )
 }

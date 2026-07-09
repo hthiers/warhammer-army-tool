@@ -47,12 +47,15 @@ export interface Adjunta {
   unidades: string[]
 }
 
+export type RolIA = 'asalto' | 'disparo' | 'linea' | 'soporte' | 'mando'
+
 export interface Unidad {
   id: string
   nombre: string
   pts: number
   color: string
   activo?: boolean
+  rolIA?: RolIA
   palabrasClave: string[]
   stats: Stats
   distancia: ArmaDistancia[]

@@ -1,0 +1,482 @@
+.wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  max-width: 1080px;
+}
+
+.label {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text-tertiary);
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+
+.panelSuperior {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.rondaBox {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.rondaControl {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.turnoBox {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.turnoControl {
+  display: flex;
+  gap: 6px;
+}
+
+.turnoBtn {
+  font-size: 14px;
+  font-weight: 500;
+  padding: 6px 12px;
+  border-radius: var(--radius-sm);
+  border: var(--border);
+  background: var(--bg);
+  color: var(--text-secondary);
+  cursor: pointer;
+}
+
+.turnoBtn:hover {
+  background: var(--bg-tertiary);
+  color: var(--text);
+}
+
+.turnoBtnActivo {
+  background: var(--color-gold);
+  border-color: var(--color-gold);
+  color: #fff;
+}
+
+.rondaBtn {
+  width: 30px;
+  height: 30px;
+  font-size: 18px;
+  line-height: 1;
+  border-radius: var(--radius-sm);
+  border: var(--border);
+  background: var(--bg);
+  color: var(--text);
+  cursor: pointer;
+}
+
+.rondaBtn:hover:not(:disabled) {
+  background: var(--bg-tertiary);
+}
+
+.rondaBtn:disabled {
+  color: var(--text-tertiary);
+  cursor: not-allowed;
+}
+
+.rondaValor {
+  font-size: 24px;
+  font-weight: 700;
+  color: var(--text);
+  min-width: 20px;
+  text-align: center;
+}
+
+.reiniciar {
+  font-size: 14px;
+  color: var(--text-tertiary);
+  background: none;
+  border: var(--border);
+  border-radius: var(--radius-sm);
+  padding: 6px 10px;
+  cursor: pointer;
+}
+
+.reiniciar:hover {
+  color: var(--text-secondary);
+  background: var(--bg-tertiary);
+}
+
+.columnas {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+  gap: 20px;
+  align-items: start;
+}
+
+.columna {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  padding: 16px;
+  border-radius: var(--radius-lg);
+  border: var(--border);
+  background: var(--bg-secondary);
+}
+
+.columnaActiva {
+  border: 1.5px solid var(--color-gold);
+}
+
+.columnaTitulo {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 17px;
+  font-weight: 700;
+  color: var(--text);
+}
+
+.turnoIndicador {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--color-gold-dark);
+}
+
+.contadores {
+  display: flex;
+  gap: 10px;
+}
+
+.primaria {
+  border-radius: var(--radius-lg);
+  border: var(--border);
+  background: var(--bg);
+  overflow: hidden;
+}
+
+.primariaHeader {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 12px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  text-align: left;
+}
+
+.primariaHeader:hover {
+  background: var(--bg-tertiary);
+}
+
+.primariaPostura {
+  flex-shrink: 0;
+  font-size: 11px;
+  font-weight: 700;
+  padding: 2px 8px;
+  border-radius: 10px;
+  background: color-mix(in srgb, var(--postura-color, var(--color-gold)) 18%, transparent);
+  color: var(--postura-color, var(--color-gold-dark));
+  white-space: nowrap;
+}
+
+.primariaNombre {
+  flex: 1;
+  min-width: 0;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.primariaToggle {
+  flex-shrink: 0;
+  color: var(--text-tertiary);
+  font-size: 12px;
+}
+
+.marcador {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 12px 14px;
+  border-radius: var(--radius-lg);
+  border: var(--border);
+  background: var(--bg);
+}
+
+.pvValor {
+  font-size: 28px;
+  font-weight: 700;
+  color: var(--color-gold-dark);
+}
+
+.botones {
+  display: flex;
+  gap: 6px;
+}
+
+.botones button {
+  flex: 1;
+  font-size: 14px;
+  font-weight: 500;
+  padding: 5px 0;
+  border-radius: var(--radius-sm);
+  border: var(--border);
+  background: var(--bg-tertiary);
+  color: var(--text-secondary);
+  cursor: pointer;
+}
+
+.botones button:hover {
+  background: var(--bg-secondary);
+  color: var(--text);
+}
+
+.rolResumen {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 8px 12px;
+  border-radius: var(--radius-md);
+  background: var(--bg-tertiary);
+  font-size: 13px;
+  color: var(--text-secondary);
+}
+
+.secundariasSection {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.secundariasHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.headerAcciones {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.secundariasTitulo {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text);
+}
+
+.secundariasCount {
+  font-weight: 400;
+  color: var(--text-tertiary);
+}
+
+.ayuda {
+  font-size: 13px;
+  color: var(--text-tertiary);
+  line-height: 1.5;
+}
+
+.tipoElegir {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.tipoOpciones {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-top: 6px;
+}
+
+.tipoBtn {
+  flex: 1;
+  min-width: 220px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  text-align: left;
+  padding: 12px 14px;
+  border-radius: var(--radius-lg);
+  border: var(--border);
+  background: var(--bg);
+  cursor: pointer;
+}
+
+.tipoBtn:hover {
+  border-color: var(--color-gold);
+  background: var(--bg-tertiary);
+}
+
+.tipoBtn strong {
+  font-size: 15px;
+  color: var(--text);
+}
+
+.tipoBtn span {
+  font-size: 13px;
+  color: var(--text-secondary);
+  line-height: 1.4;
+}
+
+.cambiarModo {
+  font-size: 12px;
+  color: var(--text-tertiary);
+  background: none;
+  border: var(--border);
+  border-radius: var(--radius-sm);
+  padding: 4px 8px;
+  cursor: pointer;
+}
+
+.cambiarModo:hover {
+  color: var(--text-secondary);
+  background: var(--bg-tertiary);
+}
+
+.mazoInfo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 13px;
+  color: var(--text-tertiary);
+}
+
+.robarBtn {
+  font-size: 13px;
+  font-weight: 500;
+  padding: 5px 10px;
+  border-radius: var(--radius-sm);
+  border: var(--border);
+  background: var(--color-gold-bg);
+  color: var(--color-gold-dark);
+  cursor: pointer;
+}
+
+.robarBtn:hover {
+  background: var(--color-gold-light);
+}
+
+.subtitulo {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  margin-bottom: 6px;
+}
+
+.manoItem {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 8px 10px;
+  border-radius: var(--radius-md);
+  border: var(--border);
+  background: var(--bg);
+  margin-bottom: 6px;
+}
+
+.manoNombre {
+  font-size: 14px;
+  color: var(--text);
+}
+
+.manoAcciones {
+  display: flex;
+  gap: 6px;
+  flex-shrink: 0;
+}
+
+.activarBtn {
+  font-size: 12px;
+  font-weight: 600;
+  padding: 4px 10px;
+  border-radius: var(--radius-sm);
+  border: var(--border);
+  background: var(--color-gold-bg);
+  color: var(--color-gold-dark);
+  cursor: pointer;
+}
+
+.activarBtn:hover:not(:disabled) {
+  background: var(--color-gold-light);
+}
+
+.activarBtn:disabled {
+  color: var(--text-tertiary);
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+.descartarBtn {
+  font-size: 12px;
+  padding: 4px 10px;
+  border-radius: var(--radius-sm);
+  border: var(--border);
+  background: none;
+  color: var(--text-tertiary);
+  cursor: pointer;
+}
+
+.descartarBtn:hover {
+  color: var(--text-secondary);
+  background: var(--bg-tertiary);
+}
+
+.addSelect {
+  font-size: 14px;
+  padding: 4px 8px;
+  border-radius: var(--radius-sm);
+  border: var(--border);
+  background: var(--bg);
+  color: var(--text-secondary);
+  cursor: pointer;
+}
+
+.addSelect:focus {
+  outline: 2px solid var(--color-gold);
+  outline-offset: 1px;
+}
+
+.empty {
+  font-size: 14px;
+  color: var(--text-tertiary);
+}
+
+.secundariaItem {
+  position: relative;
+}
+
+.quitar {
+  position: absolute;
+  top: 10px;
+  right: 12px;
+  background: none;
+  border: none;
+  font-size: 18px;
+  line-height: 1;
+  color: var(--text-tertiary);
+  cursor: pointer;
+  z-index: 1;
+}
+
+.quitar:hover {
+  color: var(--text);
+}

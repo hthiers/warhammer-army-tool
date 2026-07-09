@@ -11,6 +11,11 @@ interface Props {
   onQuitarDestacamento: (id: string) => void
   onCambiarFaccion: () => void
   onAbrirReglas: () => void
+  onAbrirDados: () => void
+  tema: 'light' | 'dark'
+  onToggleTema: () => void
+  vistaMisiones: boolean
+  onToggleVistaMisiones: () => void
 }
 
 export function Topbar({
@@ -23,6 +28,11 @@ export function Topbar({
   onQuitarDestacamento,
   onCambiarFaccion,
   onAbrirReglas,
+  onAbrirDados,
+  tema,
+  onToggleTema,
+  vistaMisiones,
+  onToggleVistaMisiones,
 }: Props) {
   const disponibles = destacamentos.filter(
     d => !destacamentosSeleccionados.includes(d.id) && d.dp <= presupuestoDP - dpUsados
@@ -52,42 +62,66 @@ export function Topbar({
       </div>
 
       <div className={styles.right}>
+        <button
+          className={styles.temaBtn}
+          onClick={onToggleTema}
+          title={tema === 'dark' ? 'Cambiar a tema claro' : 'Cambiar a tema oscuro'}
+        >
+          {tema === 'dark' ? '☀️' : '🌙'}
+        </button>
+
         <button className={styles.reglasBtn} onClick={onAbrirReglas} title="Referencia rápida de reglas">
           ? Reglas
         </button>
 
-        <span className={`${styles.dpBadge} ${dpClass}`} title="Puntos de Destacamento usados / presupuesto">
-          DP {dpUsados}/{presupuestoDP}
-        </span>
+        <button className={styles.reglasBtn} onClick={onAbrirDados} title="Lanzador de dados">
+          🎲 Dados
+        </button>
 
-        <div className={styles.chips}>
-          {destacamentosSeleccionados.map(id => {
-            const d = destacamentos.find(x => x.id === id)!
-            return (
-              <span key={id} className={styles.chip}>
-                <span className={styles.chipNombre}>{d.nombre}</span>
-                <span className={styles.chipDp}>{d.dp} DP</span>
-                <button
-                  className={styles.chipRemove}
-                  onClick={() => onQuitarDestacamento(id)}
-                  title="Quitar destacamento"
-                >
-                  ×
-                </button>
-              </span>
-            )
-          })}
-        </div>
+        <button
+          className={`${styles.misionesBtn} ${vistaMisiones ? styles.misionesBtnActive : ''}`}
+          onClick={onToggleVistaMisiones}
+          title="Misiones de 11ª edición"
+        >
+          🎯 Misiones
+        </button>
 
-        {disponibles.length > 0 && (
-          <select className={styles.addSelect} onChange={handleAddSelect} defaultValue="">
-            <option value="" disabled>
-              {destacamentosSeleccionados.length === 0 ? 'Elegir destacamento...' : '+ Añadir'}
-            </option>
-            {disponibles.map(d => (
-              <option key={d.id} value={d.id}>{d.nombre} ({d.dp} DP)</option>
-            ))}
-          </select>
+        {!vistaMisiones && (
+          <>
+            <span className={`${styles.dpBadge} ${dpClass}`} title="Puntos de Destacamento usados / presupuesto">
+              DP {dpUsados}/{presupuestoDP}
+            </span>
+
+            <div className={styles.chips}>
+              {destacamentosSeleccionados.map(id => {
+                const d = destacamentos.find(x => x.id === id)!
+                return (
+                  <span key={id} className={styles.chip}>
+                    <span className={styles.chipNombre}>{d.nombre}</span>
+                    <span className={styles.chipDp}>{d.dp} DP</span>
+                    <button
+                      className={styles.chipRemove}
+                      onClick={() => onQuitarDestacamento(id)}
+                      title="Quitar destacamento"
+                    >
+                      ×
+                    </button>
+                  </span>
+                )
+              })}
+            </div>
+
+            {disponibles.length > 0 && (
+              <select className={styles.addSelect} onChange={handleAddSelect} defaultValue="">
+                <option value="" disabled>
+                  {destacamentosSeleccionados.length === 0 ? 'Elegir destacamento...' : '+ Añadir'}
+                </option>
+                {disponibles.map(d => (
+                  <option key={d.id} value={d.id}>{d.nombre} ({d.dp} DP)</option>
+                ))}
+              </select>
+            )}
+          </>
         )}
       </div>
     </header>

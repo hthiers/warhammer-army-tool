@@ -1,0 +1,87 @@
+.wrap {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-height: 0;
+}
+
+.tabs {
+  display: flex;
+  border-bottom: var(--border);
+  padding: 0 16px;
+  background: var(--bg);
+  flex-shrink: 0;
+}
+
+.tab {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 10px 14px;
+  font-size: 16px;
+  font-weight: 400;
+  color: var(--text-secondary);
+  border: none;
+  background: transparent;
+  border-bottom: 2px solid transparent;
+  margin-bottom: -1px;
+  transition: color 0.1s;
+  white-space: nowrap;
+  cursor: pointer;
+}
+
+.tab:hover {
+  color: var(--text);
+}
+
+.tabActive {
+  color: var(--text);
+  font-weight: 500;
+  border-bottom-color: var(--color-gold);
+}
+
+.count {
+  font-size: 13px;
+  padding: 1px 5px;
+  border-radius: 10px;
+  background: var(--bg-tertiary);
+  color: var(--text-tertiary);
+}
+
+.content {
+  flex: 1;
+  padding: 16px;
+  overflow-y: auto;
+}
+
+.mazos {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.mazoGrupo {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.mazoTitulo {
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--mazo-color);
+}
+
+.mazoTituloEn {
+  font-weight: 400;
+  font-style: italic;
+  color: var(--text-tertiary);
+  font-size: 14px;
+}
+
+.listaCartas {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  max-width: 640px;
+}
