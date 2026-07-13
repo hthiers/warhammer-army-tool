@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react'
 import type { Pestana } from './types'
 import { FACCIONES, FACCIONES_MAP } from './data/facciones'
 import { Topbar } from './components/Topbar/Topbar'
+import { DestacamentoBar } from './components/DestacamentoBar/DestacamentoBar'
 import { Sidebar } from './components/Sidebar/Sidebar'
 import { DataSheet } from './components/DataSheet/DataSheet'
 import { DetachmentView } from './components/DetachmentView/DetachmentView'
@@ -15,6 +16,7 @@ import styles from './App.module.css'
 const STORAGE_KEY = 'wh40k-faccion'
 const STORAGE_DEST_PREFIX = 'wh40k-destacamentos'
 const STORAGE_THEME_KEY = 'wh40k-theme'
+const STORAGE_INACTIVAS_PREFIX = 'wh40k-unidades-inactivas'
 
 type Tema = 'light' | 'dark'
 
@@ -52,6 +54,17 @@ function getInitialDestacamentos(faccionId: string | null, faccionDestacamentos:
   return []
 }
 
+function getInitialUnidadesInactivas(faccionId: string | null): Set<string> {
+  if (!faccionId) return new Set()
+  try {
+    const saved = localStorage.getItem(`${STORAGE_INACTIVAS_PREFIX}-${faccionId}`)
+    if (saved) return new Set(JSON.parse(saved))
+  } catch {
+    // ignorar errores de parseo
+  }
+  return new Set()
+}
+
 function calcularPresupuestoDP(totalPts: number): number {
   if (totalPts <= 1000) return 2
   if (totalPts <= 2000) return 3
@@ -67,18 +80,30 @@ export default function App() {
   )
   const [destacamentoVista, setDestacamentoVista] = useState<string>('')
   const [unidadId, setUnidadId] = useState<string>('')
+  const [unidadesInactivas, setUnidadesInactivas] = useState<Set<string>>(() =>
+    getInitialUnidadesInactivas(initialFaccionId)
+  )
   const [pestana, setPestana] = useState<Pestana>('ficha')
   const [mostrarHabilidades, setMostrarHabilidades] = useState(false)
   const [mostrarReglas, setMostrarReglas] = useState(false)
   const [mostrarDados, setMostrarDados] = useState(false)
   const [tema, setTema] = useState<Tema>(getInitialTema)
-  const [vistaMisiones, setVistaMisiones] = useState(false)
+  const [vistaPartida, setVistaPartida] = useState(false)
 
   useEffect(() => {
     if (faccionId) {
       localStorage.setItem(`${STORAGE_DEST_PREFIX}-${faccionId}`, JSON.stringify(destacamentos))
     }
   }, [faccionId, destacamentos])
+
+  useEffect(() => {
+    if (faccionId) {
+      localStorage.setItem(
+        `${STORAGE_INACTIVAS_PREFIX}-${faccionId}`,
+        JSON.stringify([...unidadesInactivas])
+      )
+    }
+  }, [faccionId, unidadesInactivas])
 
   useEffect(() => {
     document.documentElement.setAttribute('data-theme', tema)
@@ -99,8 +124,18 @@ export default function App() {
     setDestacamentos(destIniciales)
     setDestacamentoVista(destIniciales[0])
     setUnidadId(faccion.unidades[0].id)
+    setUnidadesInactivas(getInitialUnidadesInactivas(id))
     setPestana('ficha')
     setMostrarHabilidades(false)
+  }
+
+  function handleToggleActivo(id: string) {
+    setUnidadesInactivas(prev => {
+      const next = new Set(prev)
+      if (next.has(id)) next.delete(id)
+      else next.add(id)
+      return next
+    })
   }
 
   function handleCambiarFaccion() {
@@ -114,20 +149,23 @@ export default function App() {
   }
 
   const faccion = FACCIONES_MAP[faccionId]
-  const unidadesActivas = faccion.unidades.filter(u => u.activo !== false)
+  const unidadesConEstado = faccion.unidades.map(u => ({
+    ...u,
+    activo: !unidadesInactivas.has(u.id),
+  }))
 
   const destActivos = destacamentos.length > 0 ? destacamentos : [faccion.destacamentos[0].id]
   const vistaId = destActivos.includes(destacamentoVista) ? destacamentoVista : destActivos[0]
 
-  const totalPts = unidadesActivas.reduce((sum, u) => sum + u.pts, 0)
+  const totalPts = unidadesConEstado.filter(u => u.activo).reduce((sum, u) => sum + u.pts, 0)
   const presupuestoDP = calcularPresupuestoDP(totalPts)
   const dpUsados = destacamentos.reduce((sum, id) => {
     const d = faccion.destacamentos.find(x => x.id === id)
     return sum + (d?.dp ?? 0)
   }, 0)
 
-  const unId = unidadId || unidadesActivas[0].id
-  const unidad = unidadesActivas.find(u => u.id === unId) ?? unidadesActivas[0]
+  const unId = unidadId || unidadesConEstado[0].id
+  const unidad = unidadesConEstado.find(u => u.id === unId) ?? unidadesConEstado[0]
 
   // Estratagemas de todos los destacamentos activos (para la ficha de unidad)
   const estratagemasAll = destActivos.flatMap(id => faccion.estratagemas[id] ?? [])
@@ -174,36 +212,39 @@ export default function App() {
     <div className={styles.app}>
       <Topbar
         faccion={faccion}
-        destacamentos={faccion.destacamentos}
-        destacamentosSeleccionados={destacamentos}
-        presupuestoDP={presupuestoDP}
-        dpUsados={dpUsados}
-        onAgregarDestacamento={handleAgregarDestacamento}
-        onQuitarDestacamento={handleQuitarDestacamento}
         onCambiarFaccion={handleCambiarFaccion}
         onAbrirReglas={() => setMostrarReglas(true)}
         onAbrirDados={() => setMostrarDados(true)}
         tema={tema}
         onToggleTema={handleToggleTema}
-        vistaMisiones={vistaMisiones}
-        onToggleVistaMisiones={() => setVistaMisiones(v => !v)}
+        vistaPartida={vistaPartida}
+        onToggleVistaPartida={() => setVistaPartida(v => !v)}
       />
       {mostrarReglas && <ReglasModal onClose={() => setMostrarReglas(false)} />}
       {mostrarDados && <DiceRollerModal onClose={() => setMostrarDados(false)} />}
 
-      {vistaMisiones ? (
+      {vistaPartida ? (
         <div className={styles.body}>
           <MisionesView />
         </div>
       ) : (
       <div className={styles.body}>
         <Sidebar
-          unidades={unidadesActivas}
+          unidades={unidadesConEstado}
           unidadActual={unId}
           onSeleccionar={handleSeleccionarUnidad}
+          onToggleActivo={handleToggleActivo}
         />
 
         <div className={styles.main}>
+          <DestacamentoBar
+            destacamentos={faccion.destacamentos}
+            destacamentosSeleccionados={destacamentos}
+            presupuestoDP={presupuestoDP}
+            dpUsados={dpUsados}
+            onAgregarDestacamento={handleAgregarDestacamento}
+            onQuitarDestacamento={handleQuitarDestacamento}
+          />
           <nav className={styles.tabs}>
             <button
               className={`${styles.tab} ${pestana === 'ficha' ? styles.tabActive : ''}`}
