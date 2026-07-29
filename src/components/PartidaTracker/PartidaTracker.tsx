@@ -215,7 +215,7 @@ export function PartidaTracker() {
               className={`${styles.turnoBtn} ${estado.turnoActivo === 'propio' ? styles.turnoBtnActivo : ''}`}
               onClick={() => marcarTurno('propio')}
             >
-              Vos
+              Tú
             </button>
             <button
               className={`${styles.turnoBtn} ${estado.turnoActivo === 'oponente' ? styles.turnoBtnActivo : ''}`}
@@ -235,26 +235,26 @@ export function PartidaTracker() {
           <p className={styles.ayuda}>Se decide antes de elegir las misiones secundarias.</p>
           <div className={styles.tipoOpciones}>
             <button className={styles.tipoBtn} onClick={() => elegirAtacante('propio')}>
-              <strong>Vos sos el Atacante</strong>
+              <strong>Tú eres el Atacante</strong>
               <span>El oponente (IA) queda como Defensor.</span>
             </button>
             <button className={styles.tipoBtn} onClick={() => elegirAtacante('oponente')}>
               <strong>El oponente (IA) es el Atacante</strong>
-              <span>Vos quedás como Defensor.</span>
+              <span>Tú quedas como Defensor.</span>
             </button>
           </div>
         </div>
       ) : (
         <>
           <div className={styles.rolResumen}>
-            <span>Vos: <strong>{NOMBRE_ROL[estado.rolPropio]}</strong> · Oponente: <strong>{NOMBRE_ROL[ROL_OPUESTO[estado.rolPropio]]}</strong></span>
+            <span>Tú: <strong>{NOMBRE_ROL[estado.rolPropio]}</strong> · Oponente: <strong>{NOMBRE_ROL[ROL_OPUESTO[estado.rolPropio]]}</strong></span>
             <button className={styles.cambiarModo} onClick={cambiarRol}>Cambiar</button>
           </div>
 
           <div className={styles.columnas}>
             <div className={`${styles.columna} ${estado.turnoActivo === 'propio' ? styles.columnaActiva : ''}`}>
               <h3 className={styles.columnaTitulo}>
-                Vos {estado.turnoActivo === 'propio' && <span className={styles.turnoIndicador}>● en turno</span>}
+                Tú {estado.turnoActivo === 'propio' && <span className={styles.turnoIndicador}>● en turno</span>}
               </h3>
 
               <MisionPrimariaResumen postura={disposicion.propia} mision={misionPropia} />
@@ -450,7 +450,7 @@ function SeccionSecundarias({
 
           {estado.activas.length === 0 && (
             <p className={styles.empty}>
-              {esIA ? 'Sorteá las 2 secundarias fijas de la IA.' : 'Elegí tus 2 secundarias fijas antes de empezar a jugar.'}
+              {esIA ? 'Sortea las 2 secundarias fijas de la IA.' : 'Elige tus 2 secundarias fijas antes de empezar a jugar.'}
             </p>
           )}
 
@@ -472,8 +472,8 @@ function SeccionSecundarias({
 
           <p className={styles.ayuda}>
             {esIA
-              ? 'Robá la mano de la IA y usá "Activar al azar" para simular su elección.'
-              : 'En tu primera fase de Mando: robá mano y activá 1. En tus fases de Mando siguientes, si tenés menos de 2 activas, volvé a robar y activá otra.'}
+              ? 'Roba la mano de la IA y usa "Activar al azar" para simular su elección.'
+              : 'En tu primera fase de Mando: roba mano y activa 1. En tus fases de Mando siguientes, si tienes menos de 2 activas, vuelve a robar y activa otra.'}
           </p>
 
           <div className={styles.mazoInfo}>

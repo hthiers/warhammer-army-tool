@@ -1,7 +1,7 @@
 import type { Postura, PosturaId } from '../../types/misiones'
 
 export const POSTURAS: Postura[] = [
-  { id: 'hold', mazo: 'take-and-hold', nombre: 'Take and Hold', nombreEs: 'Sostener y Controlar', color: '#2f6b4f' },
+  { id: 'hold', mazo: 'take-and-hold', nombre: 'Take and Hold', nombreEs: 'Ocupar y Mantener', color: '#2f6b4f' },
   { id: 'purge', mazo: 'purge-the-foe', nombre: 'Purge the Foe', nombreEs: 'Purgar al Enemigo', color: '#8a2b2b' },
   { id: 'disruption', mazo: 'disruption', nombre: 'Disruption', nombreEs: 'Disrupción', color: '#1f4f8a' },
   { id: 'recon', mazo: 'reconnaissance', nombre: 'Reconnaissance', nombreEs: 'Reconocimiento', color: '#1f7a82' },

@@ -292,4 +292,102 @@ export const UNIDADES: Unidad[] = [
     ],
     estratagemasRelacionadas: ['transhuman', 'armaduraDesden'],
   },
+  {
+    id: 'bibliotecario',
+    nombre: 'Bibliotecario',
+    pts: 60,
+    activo: false,
+    color: '#1B4B8A',
+    palabrasClave: ['Infantería', 'Personaje', 'Explosivos', 'Psíquico', 'Imperium', 'Tacticus', 'Adeptus Astartes'],
+    stats: { MOV: '6"', RES: 4, HER: 4, SALV: '3+', INV: '4+', LID: '6+', OC: 1 },
+    distancia: [
+      { nombre: 'Pistola bólter', rango: '12"', A: 1, HP: '3+', F: 4, FP: 0, D: 1, especial: 'Pistola' },
+      { nombre: 'Castigo — proyectil brujo', rango: '24"', A: '1D6', HP: '3+', F: 5, FP: -1, D: '1D3', especial: 'Psíquica', esAlternativa: true },
+      { nombre: 'Castigo — proyectil brujo enfocado', rango: '24"', A: '1D6', HP: '3+', F: 6, FP: -2, D: '1D3', especial: 'Heridas Devastadoras, De Riesgo, Psíquica', esAlternativa: true },
+    ],
+    combate: [
+      { nombre: 'Arma de fuerza', A: 4, HA: '3+', F: 6, FP: -1, D: '1D3', especial: 'Psíquica' },
+    ],
+    habilidades: [
+      {
+        nombre: 'Capucha psíquica',
+        desc: 'Esta unidad tiene Ignorar Heridas 4+ contra ataques y habilidades psíquicas.',
+      },
+      {
+        nombre: 'Fortaleza mental',
+        desc: 'Esta unidad tiene salvación invulnerable de 4+.',
+      },
+    ],
+    estratagemasRelacionadas: ['transhuman', 'honrarCapitulo', 'armaduraDesden'],
+    adjunta: {
+      rol: 'Líder',
+      unidades: [
+        'Escuadra de Desolación',
+        'Escuadra de Devastadores',
+        'Escuadra de Intercesores',
+        'Escuadra de Intercesores de Asalto',
+        'Escuadra de Veteranos de Ferreaguardia',
+        'Escuadra Hellblaster',
+        'Escuadra Infernus',
+        'Escuadra Táctica',
+      ],
+    },
+  },
+  {
+    id: 'veteranosVanguardia',
+    nombre: 'Escuadra de Veteranos de Vanguardia',
+    pts: 100,
+    activo: false,
+    color: '#8A5A2A',
+    palabrasClave: ['Infantería', 'Explosivos', 'Mochila de Propulsión', 'Vuelo', 'Imperium', 'Adeptus Astartes'],
+    stats: { MOV: '12"', RES: 4, HER: 2, SALV: '3+', INV: '-', LID: '6+', OC: 1 },
+    distancia: [
+      { nombre: 'Pistola bólter pesada', rango: '18"', A: 1, HP: '3+', F: 4, FP: -1, D: 1, especial: 'Pistola' },
+      { nombre: 'Pistola de plasma — estándar', rango: '12"', A: '1D3', HP: '3+', F: 7, FP: -2, D: 1, especial: 'Pistola', opcional: true },
+      { nombre: 'Pistola de plasma — sobrecarga', rango: '12"', A: 1, HP: '3+', F: 8, FP: -3, D: 2, especial: 'De Riesgo, Pistola', opcional: true, esAlternativa: true },
+    ],
+    combate: [
+      { nombre: 'Arma de energía artesanal', A: 3, HA: '3+', F: 5, FP: -2, D: 2 },
+    ],
+    habilidades: [
+      {
+        nombre: 'Aterrizaje de Asalto',
+        desc: 'Si esta unidad empieza la batalla en Reserva Estratégica, puede desplegarse en cualquier punto del campo de batalla a más de 9" de todas las miniaturas enemigas, en lugar de hacerlo en tu zona de despliegue.',
+      },
+      {
+        nombre: 'Asalto de vanguardia',
+        desc: 'En un turno en el que esta unidad haya realizado un movimiento de carga, las armas cuerpo a cuerpo de esta unidad tienen la habilidad Impactos Letales.',
+      },
+    ],
+    estratagemasRelacionadas: ['transhuman', 'honrarCapitulo', 'armaduraDesden'],
+  },
+  {
+    id: 'landSpeeder',
+    nombre: 'Land Speeder',
+    pts: 95,
+    activo: false,
+    color: '#8A2A2A',
+    palabrasClave: ['Vehículo', 'Vuelo', 'Imperium', 'Adeptus Astartes'],
+    stats: { MOV: '14"', RES: 8, HER: 9, SALV: '3+', INV: '-', LID: '6+', OC: 3 },
+    distancia: [
+      { nombre: 'Lanzallamas pesado', rango: '12"', A: '1D6', HP: 'N/A', F: 5, FP: -1, D: 1, especial: 'Torrente', opcional: true, esAlternativa: true },
+      { nombre: 'Multifusión', rango: '18"', A: 2, HP: '3+', F: 9, FP: -4, D: '1D6', especial: 'Fusión 2' },
+      { nombre: 'Cañón Gatling de Campaña', rango: '24"', A: 8, HP: '3+', F: 5, FP: 0, D: 1, especial: 'Heridas Devastadoras' },
+      { nombre: 'Lanzamisiles Tormenta Furiosa', rango: '48"', A: 1, HP: '3+', F: 12, FP: -3, D: '1D6+1' },
+    ],
+    combate: [
+      { nombre: 'Arma cuerpo a cuerpo', A: 4, HA: '3+', F: 4, FP: 0, D: 1 },
+    ],
+    habilidades: [
+      {
+        nombre: 'Aterrizaje de Asalto',
+        desc: 'Si esta unidad empieza la batalla en Reserva Estratégica, puede desplegarse en cualquier punto del campo de batalla a más de 9" de todas las miniaturas enemigas, en lugar de hacerlo en tu zona de despliegue.',
+      },
+      {
+        nombre: 'Pasada de purga',
+        desc: 'En tu fase de disparo, después de que esta unidad haya disparado, puede realizar un movimiento normal de hasta 1D6". Si lo hace, hasta el final del turno esta unidad no es elegible para declarar una carga.',
+      },
+    ],
+    estratagemasRelacionadas: ['transhuman', 'armaduraDesden'],
+  },
 ]

@@ -149,10 +149,11 @@ export default function App() {
   }
 
   const faccion = FACCIONES_MAP[faccionId]
-  const unidadesConEstado = faccion.unidades.map(u => ({
-    ...u,
-    activo: !unidadesInactivas.has(u.id),
-  }))
+  const unidadesConEstado = faccion.unidades.map(u => {
+    const activoPorDefecto = u.activo !== false
+    const alternado = unidadesInactivas.has(u.id)
+    return { ...u, activo: alternado ? !activoPorDefecto : activoPorDefecto }
+  })
 
   const destActivos = destacamentos.length > 0 ? destacamentos : [faccion.destacamentos[0].id]
   const vistaId = destActivos.includes(destacamentoVista) ? destacamentoVista : destActivos[0]

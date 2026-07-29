@@ -38,7 +38,7 @@ export function DispositionPicker() {
   return (
     <div className={styles.wrap}>
       <p className={styles.intro}>
-        Elegí tu postura y la de tu oponente para saber qué carta de misión primaria te toca jugar.
+        Elige tu postura y la de tu oponente para saber qué carta de misión primaria te toca jugar.
       </p>
 
       <div className={styles.selectors}>
