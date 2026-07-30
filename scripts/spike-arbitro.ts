@@ -29,7 +29,7 @@ const PREGUNTAS = [
   '¿Puede disparar una unidad que Avanzó en la fase de movimiento?',
   'Mis Intercesores están trabados en combate. ¿Pueden disparar sus bólters a la unidad con la que están trabados?',
   '¿Cómo funciona exactamente la regla Gauss de los Necrones?',
-  'Una unidad mía se replegó este turno. ¿Puede cargar después?',
+  'Una unidad mía retrocedió este turno. ¿Puede cargar después?',
   '¿Cuántos PV da controlar tres objetivos en la carta Battlefield Dominance?',
 ]
 
@@ -76,12 +76,12 @@ async function main() {
     process.exit(1)
   }
 
-  const reglasMd = leerReglasMd('rules')
-  const corpus = construirCorpus({ reglasMd, facciones: FACCIONES })
-  const citables = idsCitables(FACCIONES)
+  const fuentes = { reglasMd: leerReglasMd('rules'), facciones: FACCIONES }
+  const corpus = construirCorpus(fuentes)
+  const citables = idsCitables(fuentes)
 
   console.log('─── Corpus ───')
-  console.log(`Archivos de reglas: ${Object.keys(reglasMd).length}`)
+  console.log(`Archivos de reglas: ${Object.keys(fuentes.reglasMd).length}`)
   console.log(`Caracteres:         ${fmt(corpus.length)}`)
   console.log(`Ids citables:       ${fmt(citables.size)}`)
 
