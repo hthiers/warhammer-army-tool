@@ -34,7 +34,7 @@ export const BORDE_DE_ROL: Record<Rol, 'inferior' | 'superior'> = {
 
 export type MarcaEstado =
   | 'empeñada'
-  | 'replegada'
+  | 'retrocedida'
   | 'avanzada'
   | 'ha_disparado'
   | 'ha_cargado'
@@ -43,7 +43,7 @@ export type MarcaEstado =
 
 export const MARCAS_ESTADO: MarcaEstado[] = [
   'empeñada',
-  'replegada',
+  'retrocedida',
   'avanzada',
   'ha_disparado',
   'ha_cargado',

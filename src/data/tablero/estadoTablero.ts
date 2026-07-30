@@ -173,8 +173,9 @@ export function parejasAsimetricas(piezas: PiezaTerreno[]): string[] {
  * v3: 5 objetivos (uno al centro + dos pares simétricos) en vez de 6.
  * v4: tipos de objetivo con nomenclatura oficial (local/central/expansion).
  * v5: el terreno se guarda como PiezaTerreno[] (footprint + ancla + rotación).
+ * v6: marca 'replegada' renombrada a 'retrocedida' (terminología de 11ª).
  */
-const VERSION_TABLERO = 5
+const VERSION_TABLERO = 6
 
 interface EstadoGuardado extends EstadoTablero {
   version?: number

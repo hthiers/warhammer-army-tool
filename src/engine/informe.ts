@@ -4,6 +4,7 @@ import type {
   EstadoTablero,
   InformeTactico,
   ObjetivoInforme,
+  MarcaEstado,
   ParDistancia,
   UnidadEnMesa,
   Terreno,
@@ -31,6 +32,17 @@ const CORTE_DISTANCIA = 36
 
 /** Alcance máximo de una carga (2D6). */
 const CARGA_MAXIMA = 12
+
+/**
+ * Marcas que impiden declarar una carga, según la aptitud del reglamento: una
+ * unidad no es apta si está trabada, o si avanzó o retrocedió en este turno.
+ */
+const IMPIDEN_CARGAR: MarcaEstado[] = ['empeñada', 'avanzada', 'retrocedida']
+
+function puedeDeclararCarga(u: UnidadEnMesa, distanciaAlBlanco: number): boolean {
+  if (distanciaAlBlanco > CARGA_MAXIMA) return false
+  return !u.marcas.some(m => IMPIDEN_CARGAR.includes(m))
+}
 
 export function resolverUnidad(u: UnidadEnMesa): Unidad | undefined {
   return FACCIONES_MAP[u.faccionId]?.unidades.find(x => x.id === u.unidadId)
@@ -138,7 +150,7 @@ function construirAmenazas(
     for (const blanco of enemigos) {
       const d = distancia(atacante, blanco)
       const ldv = lineaDeVision(atacante, blanco, terreno)
-      const puedeCargar = d <= CARGA_MAXIMA && !atacante.marcas.includes('replegada')
+      const puedeCargar = puedeDeclararCarga(atacante, d)
 
       for (const arma of perfil.distancia) {
         const alcance = alcanceArma(arma.rango)

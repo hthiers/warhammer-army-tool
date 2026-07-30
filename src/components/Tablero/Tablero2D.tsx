@@ -52,7 +52,7 @@ const ICONO_OBJETIVO: Record<TipoObjetivo, string> = {
 
 const NOMBRE_MARCA: Record<MarcaEstado, string> = {
   empeñada: 'Empeñada',
-  replegada: 'Replegada',
+  retrocedida: 'Retrocedió',
   avanzada: 'Avanzada',
   ha_disparado: 'Disparó',
   ha_cargado: 'Cargó',
