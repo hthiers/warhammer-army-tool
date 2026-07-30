@@ -9,6 +9,7 @@ import { DetachmentView } from './components/DetachmentView/DetachmentView'
 import { FactionPicker } from './components/FactionPicker/FactionPicker'
 import { ReglasModal } from './components/ReglasModal/ReglasModal'
 import { DiceRollerModal } from './components/DiceRollerModal/DiceRollerModal'
+import { ArbitroModal } from './components/ArbitroModal/ArbitroModal'
 import { FaccionRulesList } from './components/FaccionRulesList/FaccionRulesList'
 import { MisionesView } from './components/MisionesView/MisionesView'
 import styles from './App.module.css'
@@ -87,6 +88,7 @@ export default function App() {
   const [mostrarHabilidades, setMostrarHabilidades] = useState(false)
   const [mostrarReglas, setMostrarReglas] = useState(false)
   const [mostrarDados, setMostrarDados] = useState(false)
+  const [mostrarArbitro, setMostrarArbitro] = useState(false)
   const [tema, setTema] = useState<Tema>(getInitialTema)
   const [vistaPartida, setVistaPartida] = useState(false)
 
@@ -216,6 +218,7 @@ export default function App() {
         onCambiarFaccion={handleCambiarFaccion}
         onAbrirReglas={() => setMostrarReglas(true)}
         onAbrirDados={() => setMostrarDados(true)}
+        onAbrirArbitro={() => setMostrarArbitro(true)}
         tema={tema}
         onToggleTema={handleToggleTema}
         vistaPartida={vistaPartida}
@@ -223,6 +226,7 @@ export default function App() {
       />
       {mostrarReglas && <ReglasModal onClose={() => setMostrarReglas(false)} />}
       {mostrarDados && <DiceRollerModal onClose={() => setMostrarDados(false)} />}
+      {mostrarArbitro && <ArbitroModal onClose={() => setMostrarArbitro(false)} />}
 
       {vistaPartida ? (
         <div className={styles.body}>

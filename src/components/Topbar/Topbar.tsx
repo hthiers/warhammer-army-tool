@@ -6,6 +6,7 @@ interface Props {
   onCambiarFaccion: () => void
   onAbrirReglas: () => void
   onAbrirDados: () => void
+  onAbrirArbitro: () => void
   tema: 'light' | 'dark'
   onToggleTema: () => void
   vistaPartida: boolean
@@ -17,6 +18,7 @@ export function Topbar({
   onCambiarFaccion,
   onAbrirReglas,
   onAbrirDados,
+  onAbrirArbitro,
   tema,
   onToggleTema,
   vistaPartida,
@@ -69,6 +71,14 @@ export function Topbar({
 
         <button className={styles.reglasBtn} onClick={onAbrirDados} title="Lanzador de dados">
           🎲 Dados
+        </button>
+
+        <button
+          className={styles.reglasBtn}
+          onClick={onAbrirArbitro}
+          title="Consultar una duda de reglas al Árbitro"
+        >
+          ⚖️ Árbitro
         </button>
       </div>
     </header>
