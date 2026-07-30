@@ -1,0 +1,592 @@
+.wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+/* ─── Barra superior ─────────────────────────────────────────────────────── */
+
+.barra {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+  padding: 8px 12px;
+  background: var(--bg-secondary);
+  border: var(--border);
+  border-radius: var(--radius-md);
+}
+
+.dato {
+  font-size: 13px;
+  color: var(--text-secondary);
+}
+
+.dato strong {
+  color: var(--text);
+  text-transform: capitalize;
+}
+
+.espaciador {
+  flex: 1;
+}
+
+/* ─── Layout tablero + panel ─────────────────────────────────────────────── */
+
+.tableroYPanel {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 260px;
+  gap: 16px;
+  align-items: start;
+}
+
+@media (max-width: 900px) {
+  .tableroYPanel {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+.mesaWrap {
+  min-width: 0;
+}
+
+/* Mesa oficial de 60 × 44". El viewBox del SVG es 0 0 60 44, así que 1 unidad
+   SVG = 1 pulgada real. La proporción se fija explícitamente para no depender
+   del cálculo de aspecto intrínseco del navegador. */
+.mesa {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 60 / 44;
+  background: var(--bg-tertiary);
+  border-radius: var(--radius-md);
+  touch-action: none;
+  user-select: none;
+}
+
+.ayuda {
+  margin: 6px 2px 0;
+  font-size: 12px;
+  color: var(--text-tertiary);
+  line-height: 1.4;
+}
+
+/* ─── Elementos del SVG ──────────────────────────────────────────────────── */
+
+.borde {
+  stroke: var(--text-tertiary);
+  stroke-width: 0.25;
+}
+
+.rejillaFina {
+  stroke: var(--text-tertiary);
+  stroke-width: 0.05;
+  opacity: 0.35;
+  pointer-events: none;
+}
+
+.rejillaGruesa {
+  stroke: var(--text-tertiary);
+  stroke-width: 0.12;
+  opacity: 0.6;
+  pointer-events: none;
+}
+
+/* Zonas de despliegue: rojo el atacante, azul el defensor, igual que los
+   diagramas oficiales de layout. */
+.zonaPropia,
+.zonaOponente {
+  fill-opacity: 0.14;
+  stroke-width: 0.2;
+  pointer-events: none;
+}
+
+.zonaPropia {
+  fill: #1f4f8a;
+  stroke: #1f4f8a;
+}
+
+.zonaOponente {
+  fill: #8a2b2b;
+  stroke: #8a2b2b;
+}
+
+.lineaCentro {
+  stroke: var(--text-secondary);
+  stroke-width: 0.14;
+  stroke-dasharray: 1.6 1.2;
+  opacity: 0.75;
+  pointer-events: none;
+}
+
+.objetivoIcono {
+  font-size: 1.5px;
+  fill: #fff;
+  text-anchor: middle;
+  pointer-events: none;
+}
+
+/* Denso = verde en los diagramas oficiales, obstruye la línea de visión. */
+.terrenoDenso {
+  fill: #2f6b4f;
+  fill-opacity: 0.4;
+  stroke: #24523c;
+  stroke-width: 0.2;
+}
+
+/* Ligero = amarillo, no obstruye. */
+.terrenoLigero {
+  fill: #a17b14;
+  fill-opacity: 0.3;
+  stroke: #a17b14;
+  stroke-width: 0.15;
+}
+
+.piezaGrupo {
+  cursor: grab;
+}
+
+.piezaSel {
+  stroke: var(--color-gold);
+  stroke-width: 0.4;
+}
+
+.terrenoEtiqueta {
+  font-size: 1.4px;
+  font-weight: 600;
+  fill: var(--text-secondary);
+  text-anchor: middle;
+  paint-order: stroke;
+  stroke: var(--bg);
+  stroke-width: 0.35;
+  pointer-events: none;
+}
+
+.objetivo {
+  fill: var(--color-gold);
+  stroke: var(--bg);
+  stroke-width: 0.2;
+  cursor: grab;
+}
+
+.anilloNeutro,
+.anilloPropio,
+.anilloOponente {
+  fill-opacity: 0.1;
+  stroke-width: 0.15;
+  stroke-dasharray: 0.8 0.6;
+  pointer-events: none;
+}
+
+.anilloNeutro {
+  fill: var(--text-tertiary);
+  stroke: var(--text-tertiary);
+}
+
+.anilloPropio {
+  fill: #2f6b4f;
+  stroke: #2f6b4f;
+}
+
+.anilloOponente {
+  fill: #8a2b2b;
+  stroke: #8a2b2b;
+}
+
+.anilloMovimiento {
+  fill: #1f4f8a;
+  fill-opacity: 0.07;
+  stroke: #1f4f8a;
+  stroke-width: 0.15;
+  stroke-dasharray: 1 0.8;
+  pointer-events: none;
+}
+
+.medicionLdv,
+.medicionSinLdv {
+  stroke-width: 0.12;
+  pointer-events: none;
+}
+
+.medicionLdv {
+  stroke: #1f4f8a;
+  opacity: 0.7;
+}
+
+.medicionSinLdv {
+  stroke: var(--text-tertiary);
+  stroke-dasharray: 0.5 0.5;
+  opacity: 0.5;
+}
+
+.etiquetaMedicion {
+  font-size: 1.3px;
+  fill: var(--text-secondary);
+  text-anchor: middle;
+  paint-order: stroke;
+  stroke: var(--bg);
+  stroke-width: 0.4;
+  pointer-events: none;
+}
+
+.ficha {
+  cursor: grab;
+}
+
+.fichaDestruida {
+  cursor: grab;
+  opacity: 0.3;
+}
+
+.fichaCirculoPropio,
+.fichaCirculoOponente,
+.fichaCirculoSel {
+  stroke-width: 0.3;
+}
+
+.fichaCirculoPropio {
+  stroke: #2f6b4f;
+}
+
+.fichaCirculoOponente {
+  stroke: #8a2b2b;
+}
+
+.fichaCirculoSel {
+  stroke: var(--color-gold);
+  stroke-width: 0.5;
+}
+
+.fichaTexto {
+  font-size: 1.6px;
+  font-weight: 600;
+  fill: #fff;
+  text-anchor: middle;
+  paint-order: stroke;
+  stroke: rgba(0, 0, 0, 0.45);
+  stroke-width: 0.35;
+  pointer-events: none;
+}
+
+/* ─── Panel lateral ──────────────────────────────────────────────────────── */
+
+.panel {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.seccion {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 12px;
+  background: var(--bg-secondary);
+  border: var(--border);
+  border-radius: var(--radius-md);
+}
+
+.seccionTitulo {
+  margin: 0;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text);
+}
+
+.seccionSub {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--text-tertiary);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.meta {
+  margin: 0;
+  font-size: 12px;
+  color: var(--text-secondary);
+  line-height: 1.4;
+}
+
+.metaTenue {
+  margin: 0;
+  font-size: 11px;
+  color: var(--text-tertiary);
+  line-height: 1.4;
+}
+
+.etiqueta {
+  font-size: 11px;
+  font-weight: 500;
+  color: var(--text-tertiary);
+}
+
+.listaProblemas {
+  margin: 0;
+  padding-left: 16px;
+  font-size: 11px;
+  color: #8a2b2b;
+  line-height: 1.5;
+}
+
+.avisoAprox {
+  padding: 1px 5px;
+  font-size: 10px;
+  background: var(--color-gold-bg);
+  color: var(--color-gold-dark);
+  border-radius: 8px;
+  white-space: nowrap;
+}
+
+.vacio {
+  margin: 0;
+  font-size: 12px;
+  color: var(--text-tertiary);
+}
+
+.select {
+  width: 100%;
+  padding: 6px 8px;
+  font-family: var(--font);
+  font-size: 12px;
+  color: var(--text);
+  background: var(--bg);
+  border: var(--border);
+  border-radius: var(--radius-sm);
+}
+
+/* ─── Botones ────────────────────────────────────────────────────────────── */
+
+.btn,
+.btnSutil,
+.btnPeligro {
+  padding: 7px 12px;
+  font-family: var(--font);
+  font-size: 12px;
+  font-weight: 500;
+  border-radius: var(--radius-sm);
+  border: var(--border);
+  cursor: pointer;
+  transition: background 0.15s;
+}
+
+.btn {
+  background: var(--color-gold);
+  color: #fff;
+  border-color: var(--color-gold);
+}
+
+.btn:hover {
+  background: var(--color-gold-dark);
+}
+
+.btnSutil {
+  background: var(--bg);
+  color: var(--text-secondary);
+}
+
+.btnSutil:hover {
+  border: var(--border-hover);
+  color: var(--text);
+}
+
+.btnPeligro {
+  background: var(--bg);
+  color: #8a2b2b;
+}
+
+.btnPeligro:hover {
+  background: #8a2b2b;
+  color: #fff;
+}
+
+.grupoBotones {
+  display: flex;
+  gap: 6px;
+}
+
+.btnBando {
+  flex: 1;
+  padding: 6px;
+  font-family: var(--font);
+  font-size: 12px;
+  color: var(--text-secondary);
+  background: var(--bg);
+  border: var(--border);
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+}
+
+.btnBandoActivo {
+  background: var(--color-gold-bg);
+  border-color: var(--color-gold);
+  color: var(--color-gold-dark);
+  font-weight: 600;
+}
+
+.btnMini {
+  width: 26px;
+  height: 26px;
+  font-size: 15px;
+  line-height: 1;
+  color: var(--text);
+  background: var(--bg);
+  border: var(--border);
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+}
+
+.btnMini:hover {
+  border: var(--border-hover);
+}
+
+.contador {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 12px;
+  color: var(--text-secondary);
+}
+
+.contador strong {
+  min-width: 20px;
+  text-align: center;
+  color: var(--text);
+}
+
+/* ─── Marcas de estado ───────────────────────────────────────────────────── */
+
+.marcas {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+}
+
+.marca {
+  padding: 3px 7px;
+  font-family: var(--font);
+  font-size: 11px;
+  color: var(--text-tertiary);
+  background: var(--bg);
+  border: var(--border);
+  border-radius: 10px;
+  cursor: pointer;
+}
+
+.marcaActiva {
+  background: var(--color-gold-bg);
+  border-color: var(--color-gold);
+  color: var(--color-gold-dark);
+  font-weight: 500;
+}
+
+/* ─── Listas ─────────────────────────────────────────────────────────────── */
+
+.listaDistancias {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.filaDistancia,
+.filaObjetivo {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  font-size: 11px;
+  color: var(--text-secondary);
+}
+
+.conLdv {
+  color: #1f4f8a;
+  white-space: nowrap;
+}
+
+.sinLdv {
+  color: var(--text-tertiary);
+  white-space: nowrap;
+}
+
+.ocs {
+  margin-left: auto;
+  font-variant-numeric: tabular-nums;
+  color: var(--text-tertiary);
+}
+
+.badgePropio,
+.badgeOponente,
+.badgeNeutro {
+  padding: 1px 6px;
+  font-size: 10px;
+  border-radius: 8px;
+  min-width: 58px;
+  text-align: center;
+}
+
+.badgePropio {
+  background: #e0f0e8;
+  color: #2f6b4f;
+}
+
+.badgeOponente {
+  background: #f8e3e3;
+  color: #8a2b2b;
+}
+
+.badgeNeutro {
+  background: var(--bg-tertiary);
+  color: var(--text-tertiary);
+}
+
+@media (prefers-color-scheme: dark) {
+  .badgePropio {
+    background: #123024;
+    color: #6fc79b;
+  }
+  .badgeOponente {
+    background: #3a1010;
+    color: #e08a8a;
+  }
+}
+
+/* ─── Resumen de verificación ────────────────────────────────────────────── */
+
+.resumen {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 12px;
+  background: var(--bg-secondary);
+  border: var(--border);
+  border-radius: var(--radius-md);
+}
+
+.exportArea {
+  width: 100%;
+  padding: 8px;
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 11px;
+  line-height: 1.5;
+  color: var(--text);
+  background: var(--bg);
+  border: var(--border);
+  border-radius: var(--radius-sm);
+  resize: vertical;
+  white-space: pre;
+}
+
+.listaResumen {
+  margin: 0;
+  padding-left: 18px;
+  font-size: 12px;
+  color: var(--text-secondary);
+  line-height: 1.6;
+  columns: 2;
+}
+
+@media (max-width: 640px) {
+  .listaResumen {
+    columns: 1;
+  }
+}

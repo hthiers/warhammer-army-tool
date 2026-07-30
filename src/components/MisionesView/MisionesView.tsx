@@ -4,12 +4,13 @@ import { DispositionPicker } from '../DispositionPicker/DispositionPicker'
 import { PartidaTracker } from '../PartidaTracker/PartidaTracker'
 import { MissionCard } from '../MissionCard/MissionCard'
 import { AIOpponent } from '../AIOpponent/AIOpponent'
+import { Tablero2D } from '../Tablero/Tablero2D'
 import { MISIONES_PRIMARIAS } from '../../data/misiones/primarias'
 import { MISIONES_SECUNDARIAS } from '../../data/misiones/secundarias'
 import { POSTURAS } from '../../data/misiones/disposicionFuerza'
 import styles from './MisionesView.module.css'
 
-type SubVista = 'partida' | 'disposicion' | 'primarias' | 'secundarias' | 'ia'
+type SubVista = 'partida' | 'tablero' | 'disposicion' | 'primarias' | 'secundarias' | 'ia'
 
 export function MisionesView() {
   const [subVista, setSubVista] = useState<SubVista>('partida')
@@ -22,6 +23,12 @@ export function MisionesView() {
           onClick={() => setSubVista('partida')}
         >
           Partida
+        </button>
+        <button
+          className={`${styles.tab} ${subVista === 'tablero' ? styles.tabActive : ''}`}
+          onClick={() => setSubVista('tablero')}
+        >
+          Tablero
         </button>
         <button
           className={`${styles.tab} ${subVista === 'disposicion' ? styles.tabActive : ''}`}
@@ -52,6 +59,8 @@ export function MisionesView() {
 
       <div className={styles.content}>
         {subVista === 'partida' && <PartidaTracker />}
+
+        {subVista === 'tablero' && <Tablero2D />}
 
         {subVista === 'disposicion' && <DispositionPicker />}
 
