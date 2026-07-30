@@ -1,5 +1,12 @@
-import { ALIAS_REGLAS as ALIAS, REGLAS_ESPECIALES } from '../src/data/reglas'
+import { readFileSync } from 'node:fs'
+import {
+  ALIAS_REGLAS as ALIAS,
+  HABILIDADES_UNIDAD,
+  REGLAS_ESPECIALES,
+} from '../src/data/reglas'
 import { FACCIONES } from '../src/data/facciones'
+
+const RUTA_MD = 'rules/05-habilidades.md'
 
 // ─── Coherencia entre reglas y armas ──────────────────────────────────────────
 //
@@ -80,8 +87,45 @@ if (sinUsar.length > 0) {
   for (const d of sinUsar) console.log(`  - ${d}`)
 }
 
-if (sinDefinir.length === 0 && sinUsar.length === 0) {
-  console.log('\n✓ Reglas y armas coherentes en ambas direcciones')
+// ─── Coherencia con rules/05-habilidades.md ───────────────────────────────────
+//
+// El .md es la autoridad —lo que lee el Árbitro— y reglas.ts es el texto corto de
+// la UI más el índice de nombres citables. Si divergen, el asistente citaría un
+// nombre que la biblioteca de reglas no documenta, o al revés.
+
+const md = readFileSync(RUTA_MD, 'utf8')
+
+/** Nombre de la habilidad en un título del .md, sin corchetes ni parámetro. */
+function nombresEnMd(): Set<string> {
+  const nombres = new Set<string>()
+  for (const m of md.matchAll(/^## (.+?)\s*\(\d{2}\.\d{2}\)\s*$/gm)) {
+    nombres.add(
+      m[1]
+        .replace(/[[\]]/g, '')
+        // Quita los marcadores de parámetro del final: «ANTI X Y+», «Avanzadilla X"».
+        .replace(/(\s+[A-Z]"?\+?)+$/, '')
+        .trim()
+        .toLowerCase()
+    )
+  }
+  return nombres
 }
 
-process.exit(sinDefinir.length > 0 ? 1 : 0)
+const enMd = nombresEnMd()
+const enCodigo = [...Object.keys(REGLAS_ESPECIALES), ...Object.keys(HABILIDADES_UNIDAD)]
+const sinDocumentar = enCodigo.filter(n => !enMd.has(n.toLowerCase()))
+
+if (sinDocumentar.length > 0) {
+  console.log(`\n✗ EN reglas.ts PERO NO EN ${RUTA_MD} (${sinDocumentar.length})`)
+  console.log('  El Árbitro las tiene como citables pero no puede leer su texto.\n')
+  for (const n of sinDocumentar) console.log(`  - ${n}`)
+}
+
+const hayProblemas = sinDefinir.length > 0 || sinDocumentar.length > 0
+if (!hayProblemas && sinUsar.length === 0) {
+  console.log('\n✓ Reglas, armas y biblioteca coherentes')
+} else if (!hayProblemas) {
+  console.log(`\n✓ Sin huecos: las ${enCodigo.length} habilidades están documentadas en ${RUTA_MD}`)
+}
+
+process.exit(hayProblemas ? 1 : 0)

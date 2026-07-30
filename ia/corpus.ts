@@ -42,8 +42,7 @@ export interface FuentesCorpus {
 export function construirCorpus({ reglasMd, facciones }: FuentesCorpus): string {
   const bloques = [
     seccionReglasProsa(reglasMd),
-    seccionReglasEspeciales(),
-    seccionHabilidadesUnidad(),
+    seccionIndiceHabilidades(),
     seccionReglasSinDefinir(facciones),
     seccionEstratagemasUniversales(),
     ...facciones.map(id => seccionFaccion(FACCIONES_MAP[id])).filter(Boolean),
@@ -75,36 +74,26 @@ function degradarTitulos(md: string): string {
 // ─── Reglas especiales de arma ────────────────────────────────────────────────
 
 /**
- * `REGLAS_ESPECIALES` mezcla strings con funciones, para reglas paramétricas
- * (Fuego Rápido X, Anti X). Se invocan con el marcador `X` para obtener el texto
- * con el hueco visible. Las que ramifican sobre el valor —el plural de
- * «Ataque/Ataques»— saldrán en singular; es cosmético y no cambia la regla.
+ * Índice de habilidades citables. El TEXTO de cada habilidad vive en
+ * `rules/05-habilidades.md`, que ya va en el corpus: aquí solo se emite el nombre
+ * canónico, sus alias y a qué familia pertenece, para que el Árbitro sepa qué id
+ * citar. Duplicar las descripciones costaría tokens y abriría deriva entre las dos
+ * redacciones.
  */
-function seccionReglasEspeciales(): string {
-  const lineas = Object.entries(REGLAS_ESPECIALES)
-    .sort(([a], [b]) => a.localeCompare(b))
-    .map(([nombre, desc]) => {
-      const texto = typeof desc === 'function' ? desc('X') : desc
-      const otros = ALIAS_REGLAS[nombre]
-      const alias = otros ? ` (también aparece como: ${otros.join(', ')})` : ''
-      return `- ${nombre}${alias}: ${texto}`
-    })
+function seccionIndiceHabilidades(): string {
+  const linea = (nombre: string) => {
+    const otros = ALIAS_REGLAS[nombre]
+    return `- ${nombre}${otros ? ` (también aparece como: ${otros.join(', ')})` : ''}`
+  }
+  const arma = Object.keys(REGLAS_ESPECIALES).sort((a, b) => a.localeCompare(b)).map(linea)
+  const unidad = Object.keys(HABILIDADES_UNIDAD).sort((a, b) => a.localeCompare(b)).map(linea)
 
-  const preambulo =
-    'El id citable de cada regla es el nombre en negrita al inicio de la línea. Cuando el reglamento en prosa o el perfil de un arma use otro nombre para la misma regla, cita el id de aquí.'
-
-  return `# REGLAS ESPECIALES DE ARMA\n\n${preambulo}\n\n${lineas.join('\n')}`
-}
-
-/**
- * Habilidades básicas de unidad. Van en la hoja de datos y no en el perfil de un
- * arma, así que no aparecen en `especial` y hay que emitirlas aparte.
- */
-function seccionHabilidadesUnidad(): string {
-  const lineas = Object.entries(HABILIDADES_UNIDAD)
-    .sort(([a], [b]) => a.localeCompare(b))
-    .map(([nombre, desc]) => `- ${nombre}: ${typeof desc === 'function' ? desc('X') : desc}`)
-  return `# HABILIDADES BÁSICAS DE UNIDAD\n\nVan en la hoja de datos de la unidad, sin corchetes, a diferencia de las habilidades de arma.\n\n${lineas.join('\n')}`
+  return [
+    '# ÍNDICE DE HABILIDADES CITABLES',
+    'Su texto completo está en rules/05-habilidades.md, con el número de sección. Al citar en "reglasAplicadas" usa EXACTAMENTE uno de estos nombres, o el número de sección (por ejemplo 24.07). Si un arma o el reglamento en prosa usa otro nombre para la misma habilidad, cita el canónico de esta lista.',
+    `## De arma\n${arma.join('\n')}`,
+    `## Básicas de unidad\n${unidad.join('\n')}`,
+  ].join('\n\n')
 }
 
 /**
@@ -309,13 +298,41 @@ function seccionMisiones(): string {
 
 // ─── Verificación de citas ────────────────────────────────────────────────────
 
+/** Referencia de sección del reglamento, del tipo `10.06`. */
+const RE_SECCION = /\b(\d{1,2})\.(\d{2})\b/g
+
+/** Normaliza a dos dígitos por lado, para que `9.06` y `09.06` sean lo mismo. */
+export function normalizarSeccion(ref: string): string {
+  const m = ref.trim().match(/^(\d{1,2})\.(\d{2})$/)
+  return m ? `${m[1].padStart(2, '0')}.${m[2]}` : ref.trim()
+}
+
+export function esReferenciaSeccion(id: string): boolean {
+  return /^\d{1,2}\.\d{2}$/.test(id.trim())
+}
+
+/**
+ * Números de sección que aparecen en el reglamento en prosa. El Árbitro los cita
+ * de forma natural —«disparo a quemarropa (10.06)»— y son la referencia más
+ * precisa que puede dar para una regla básica, así que cuentan como citables.
+ */
+function seccionesDelReglamento(reglasMd: Record<string, string>): Set<string> {
+  const refs = new Set<string>()
+  for (const contenido of Object.values(reglasMd)) {
+    for (const m of contenido.matchAll(RE_SECCION)) {
+      refs.add(normalizarSeccion(`${m[1]}.${m[2]}`))
+    }
+  }
+  return refs
+}
+
 /**
  * Todos los ids citables que existen de verdad. El Árbitro devuelve
  * `reglasAplicadas` y el cliente comprueba contra este conjunto: si cita algo que
  * no está, se ve al instante en vez de pasar por bueno.
  */
-export function idsCitables(facciones: string[]): Set<string> {
-  const ids = new Set<string>()
+export function idsCitables({ reglasMd, facciones }: FuentesCorpus): Set<string> {
+  const ids = seccionesDelReglamento(reglasMd)
 
   for (const nombre of Object.keys(REGLAS_ESPECIALES)) ids.add(nombre)
   for (const nombre of Object.keys(HABILIDADES_UNIDAD)) ids.add(nombre)
