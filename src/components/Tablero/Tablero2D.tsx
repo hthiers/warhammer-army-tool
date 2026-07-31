@@ -40,6 +40,8 @@ import type { PosturaId } from '../../types/misiones'
 import { cargarEstadoDisposicion } from '../../data/misiones/estadoDisposicion'
 import { controlObjetivo, distancia, lineaDeVision, movimiento, zonaDe } from '../../engine/geometria'
 import { construirInforme, resolverUnidad, resumenSincronizacion } from '../../engine/informe'
+import { TacticoPanel, MARCAS_POR_ACCION } from './TacticoPanel'
+import type { AccionValidada } from '../../../ia/validarPlan'
 import styles from './Tablero2D.module.css'
 
 const FASES: Fase[] = ['mando', 'movimiento', 'disparo', 'carga', 'combate', 'final']
@@ -310,6 +312,27 @@ export function Tablero2D() {
     if (!confirm('¿Quitar todas las unidades del tablero?')) return
     setEstado(prev => ({ ...prev, unidades: [] }))
     setSeleccionada(null)
+  }
+
+  /**
+   * Ejecuta una acción del plan sobre el tablero: mueve la ficha al destino y deja
+   * la marca de estado que corresponda. La ficha sigue arrastrable, porque sobre la
+   * mesa real puede no caber exactamente ahí.
+   */
+  function handleAplicarAccion(v: AccionValidada) {
+    const marca = MARCAS_POR_ACCION[v.accion.tipo]
+    setEstado(prev => ({
+      ...prev,
+      unidades: prev.unidades.map(u => {
+        if (u.instanciaId !== v.accion.unidadId) return u
+        return {
+          ...u,
+          pos: v.accion.destino ?? u.pos,
+          marcas: marca && !u.marcas.includes(marca) ? [...u.marcas, marca] : u.marcas,
+        }
+      }),
+    }))
+    setSeleccionada(v.accion.unidadId)
   }
 
   function handleSiguienteFase() {
@@ -890,6 +913,8 @@ export function Tablero2D() {
           </div>
         </section>
       )}
+
+      <TacticoPanel estado={estado} onAplicar={handleAplicarAccion} />
 
       {mostrarResumen && informe && (
         <section className={styles.resumen}>
