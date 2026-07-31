@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
-import type { PointerEvent as ReactPointerEvent } from 'react'
+import type { PointerEvent as ReactPointerEvent, ReactNode } from 'react'
 import type { Unidad } from '../../types'
 import type {
   EstadoTablero,
@@ -40,11 +40,15 @@ import type { PosturaId } from '../../types/misiones'
 import { cargarEstadoDisposicion } from '../../data/misiones/estadoDisposicion'
 import { controlObjetivo, distancia, lineaDeVision, movimiento, zonaDe } from '../../engine/geometria'
 import { construirInforme, resolverUnidad, resumenSincronizacion } from '../../engine/informe'
-import { TacticoPanel, MARCAS_POR_ACCION } from './TacticoPanel'
+import { TacticoPanel } from './TacticoPanel'
+import { MARCAS_POR_ACCION } from '../../../ia/validarPlan'
 import type { AccionValidada } from '../../../ia/validarPlan'
 import styles from './Tablero2D.module.css'
 
 const FASES: Fase[] = ['mando', 'movimiento', 'disparo', 'carga', 'combate', 'final']
+
+/** Marcas que solo valen durante el turno y se limpian al pasar el mando. */
+const MARCAS_DE_TURNO: MarcaEstado[] = ['ha_disparado', 'ha_cargado', 'avanzada', 'retrocedida']
 
 const ICONO_OBJETIVO: Record<TipoObjetivo, string> = {
   local: '⌂',
@@ -107,6 +111,29 @@ interface Arrastre {
   movido: boolean
 }
 
+interface SeccionColapsableProps {
+  id: string
+  titulo: ReactNode
+  colapsadas: Set<string>
+  onToggle: (id: string) => void
+  children: ReactNode
+}
+
+/** Sección del panel lateral que se puede plegar tocando su cabecera, para
+ *  liberar espacio vertical sin perder la mesa de vista. */
+function SeccionColapsable({ id, titulo, colapsadas, onToggle, children }: SeccionColapsableProps) {
+  const colapsada = colapsadas.has(id)
+  return (
+    <section className={styles.seccion}>
+      <button className={styles.seccionCabecera} onClick={() => onToggle(id)}>
+        <h3 className={styles.seccionTitulo}>{titulo}</h3>
+        <span className={styles.chevron}>{colapsada ? '▸' : '▾'}</span>
+      </button>
+      {!colapsada && children}
+    </section>
+  )
+}
+
 export function Tablero2D() {
   const [estado, setEstado] = useState<EstadoTablero>(cargarEstadoTablero)
   const [seleccionada, setSeleccionada] = useState<string | null>(null)
@@ -116,6 +143,7 @@ export function Tablero2D() {
   const [piezaSel, setPiezaSel] = useState<string | null>(null)
   const [mostrarResumen, setMostrarResumen] = useState(false)
   const [exportado, setExportado] = useState<string | null>(null)
+  const [seccionesColapsadas, setSeccionesColapsadas] = useState<Set<string>>(new Set())
   const svgRef = useRef<SVGSVGElement>(null)
   const arrastreRef = useRef<Arrastre | null>(null)
 
@@ -314,12 +342,21 @@ export function Tablero2D() {
     setSeleccionada(null)
   }
 
+  function toggleSeccion(id: string) {
+    setSeccionesColapsadas(prev => {
+      const next = new Set(prev)
+      if (next.has(id)) next.delete(id)
+      else next.add(id)
+      return next
+    })
+  }
+
   /**
    * Ejecuta una acción del plan sobre el tablero: mueve la ficha al destino y deja
    * la marca de estado que corresponda. La ficha sigue arrastrable, porque sobre la
    * mesa real puede no caber exactamente ahí.
    */
-  function handleAplicarAccion(v: AccionValidada) {
+  function handleAplicarAccion(v: AccionValidada, destino?: Punto) {
     const marca = MARCAS_POR_ACCION[v.accion.tipo]
     setEstado(prev => ({
       ...prev,
@@ -327,12 +364,29 @@ export function Tablero2D() {
         if (u.instanciaId !== v.accion.unidadId) return u
         return {
           ...u,
-          pos: v.accion.destino ?? u.pos,
+          pos: destino ?? u.pos,
           marcas: marca && !u.marcas.includes(marca) ? [...u.marcas, marca] : u.marcas,
         }
       }),
     }))
     setSeleccionada(v.accion.unidadId)
+  }
+
+  /** Cierra el turno en curso y pasa el mando al otro bando, en la fase de mando. */
+  function handleTerminarTurno() {
+    setEstado(prev => {
+      const siguiente: Lado = prev.turnoDe === 'propio' ? 'oponente' : 'propio'
+      return {
+        ...prev,
+        turnoDe: siguiente,
+        fase: 'mando',
+        ronda: siguiente === 'propio' ? prev.ronda + 1 : prev.ronda,
+        unidades: prev.unidades.map(u => ({
+          ...u,
+          marcas: u.marcas.filter(m => !MARCAS_DE_TURNO.includes(m)),
+        })),
+      }
+    })
   }
 
   function handleSiguienteFase() {
@@ -347,7 +401,7 @@ export function Tablero2D() {
         ronda: cambiaTurno === 'propio' ? prev.ronda + 1 : prev.ronda,
         unidades: prev.unidades.map(u => ({
           ...u,
-          marcas: u.marcas.filter(m => m !== 'ha_disparado' && m !== 'ha_cargado' && m !== 'avanzada'),
+          marcas: u.marcas.filter(m => !MARCAS_DE_TURNO.includes(m)),
         })),
       }
     })
@@ -566,8 +620,12 @@ export function Tablero2D() {
         </div>
 
         <aside className={styles.panel}>
-          <section className={styles.seccion}>
-            <h3 className={styles.seccionTitulo}>Layout de mesa</h3>
+          <SeccionColapsable
+            id="layout"
+            titulo="Layout de mesa"
+            colapsadas={seccionesColapsadas}
+            onToggle={toggleSeccion}
+          >
             <label className={styles.etiqueta}>Tu disposición</label>
             <select
               className={styles.select}
@@ -660,10 +718,14 @@ export function Tablero2D() {
             <p className={styles.metaTenue}>
               El atacante despliega en el borde superior; el defensor en el inferior.
             </p>
-          </section>
+          </SeccionColapsable>
 
-          <section className={styles.seccion}>
-            <h3 className={styles.seccionTitulo}>Añadir unidad</h3>
+          <SeccionColapsable
+            id="agregar"
+            titulo="Añadir unidad"
+            colapsadas={seccionesColapsadas}
+            onToggle={toggleSeccion}
+          >
             <select
               className={styles.select}
               value={faccionAlta}
@@ -707,11 +769,15 @@ export function Tablero2D() {
             <button className={styles.btn} onClick={handleAgregar}>
               + Añadir al tablero
             </button>
-          </section>
+          </SeccionColapsable>
 
           {unidadSel && perfilSel ? (
-            <section className={styles.seccion}>
-              <h3 className={styles.seccionTitulo}>{perfilSel.nombre}</h3>
+            <SeccionColapsable
+              id="unidad"
+              titulo={perfilSel.nombre}
+              colapsadas={seccionesColapsadas}
+              onToggle={toggleSeccion}
+            >
               <p className={styles.meta}>
                 {unidadSel.bando === 'propio' ? 'Propio' : 'Oponente'} · MOV{' '}
                 {perfilSel.stats.MOV} · OC {perfilSel.stats.OC}
@@ -738,6 +804,7 @@ export function Tablero2D() {
                   +
                 </button>
               </div>
+
 
               <div className={styles.marcas}>
                 {MARCAS_ESTADO.map(m => (
@@ -773,7 +840,7 @@ export function Tablero2D() {
               <button className={styles.btnPeligro} onClick={handleEliminar}>
                 Quitar del tablero
               </button>
-            </section>
+            </SeccionColapsable>
           ) : (
             <section className={styles.seccion}>
               <p className={styles.vacio}>Selecciona una ficha para editarla.</p>
@@ -781,10 +848,16 @@ export function Tablero2D() {
           )}
 
           {piezaEditando && (
-            <section className={styles.seccion}>
-              <h3 className={styles.seccionTitulo}>
-                Pieza {piezaEditando.id} · {FOOTPRINTS[piezaEditando.footprint].nombre}
-              </h3>
+            <SeccionColapsable
+              id="pieza"
+              titulo={
+                <>
+                  Pieza {piezaEditando.id} · {FOOTPRINTS[piezaEditando.footprint].nombre}
+                </>
+              }
+              colapsadas={seccionesColapsadas}
+              onToggle={toggleSeccion}
+            >
               <p className={styles.metaTenue}>
                 {FOOTPRINTS[piezaEditando.footprint].ancho}&quot; ×{' '}
                 {FOOTPRINTS[piezaEditando.footprint].alto}&quot; · ancla{' '}
@@ -837,11 +910,15 @@ export function Tablero2D() {
                   {piezaEditando.reflejada ? 'Quitar reflejo' : 'Reflejar'}
                 </button>
               )}
-            </section>
+            </SeccionColapsable>
           )}
 
-          <section className={styles.seccion}>
-            <h3 className={styles.seccionTitulo}>Objetivos</h3>
+          <SeccionColapsable
+            id="objetivos"
+            titulo="Objetivos"
+            colapsadas={seccionesColapsadas}
+            onToggle={toggleSeccion}
+          >
             {controles.map(({ obj, control }) => (
               <div key={obj.id} className={styles.filaObjetivo}>
                 <span title={NOMBRE_TIPO_OBJETIVO[obj.tipo]}>
@@ -863,11 +940,15 @@ export function Tablero2D() {
                 </span>
               </div>
             ))}
-          </section>
+          </SeccionColapsable>
 
           {estado.piezas.length > 0 && (
-            <section className={styles.seccion}>
-              <h3 className={styles.seccionTitulo}>Simetría</h3>
+            <SeccionColapsable
+              id="simetria"
+              titulo="Simetría"
+              colapsadas={seccionesColapsadas}
+              onToggle={toggleSeccion}
+            >
               {asimetricas.length === 0 ? (
                 <p className={styles.metaTenue}>
                   Las 8 parejas son rotación de 180° una de la otra.
@@ -882,7 +963,7 @@ export function Tablero2D() {
                   </button>
                 </>
               )}
-            </section>
+            </SeccionColapsable>
           )}
 
           <button className={styles.btnSutil} onClick={handleExportar}>
@@ -914,7 +995,12 @@ export function Tablero2D() {
         </section>
       )}
 
-      <TacticoPanel estado={estado} onAplicar={handleAplicarAccion} />
+      <TacticoPanel
+        estado={estado}
+        onAplicar={handleAplicarAccion}
+        onTerminarTurno={handleTerminarTurno}
+        onFase={fase => setEstado(prev => ({ ...prev, fase }))}
+      />
 
       {mostrarResumen && informe && (
         <section className={styles.resumen}>

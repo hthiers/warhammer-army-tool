@@ -2,6 +2,8 @@
   display: flex;
   flex-direction: column;
   gap: 12px;
+  /* Hueco para la barra plegada del cajón del Táctico, que va fija abajo. */
+  padding-bottom: 56px;
 }
 
 /* ─── Barra superior ─────────────────────────────────────────────────────── */
@@ -291,6 +293,27 @@
   font-size: 13px;
   font-weight: 600;
   color: var(--text);
+}
+
+.seccionCabecera {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  width: 100%;
+  padding: 0;
+  margin: 0;
+  font: inherit;
+  background: none;
+  border: none;
+  cursor: pointer;
+  text-align: left;
+}
+
+.chevron {
+  flex-shrink: 0;
+  font-size: 11px;
+  color: var(--text-tertiary);
 }
 
 .seccionSub {
