@@ -174,8 +174,9 @@ export function parejasAsimetricas(piezas: PiezaTerreno[]): string[] {
  * v4: tipos de objetivo con nomenclatura oficial (local/central/expansion).
  * v5: el terreno se guarda como PiezaTerreno[] (footprint + ancla + rotación).
  * v6: marca 'replegada' renombrada a 'retrocedida' (terminología de 11ª).
+ * v7: seguimiento de heridas en toda unidad (miniaturasIniciales + heridasRestantes).
  */
-const VERSION_TABLERO = 6
+const VERSION_TABLERO = 7
 
 interface EstadoGuardado extends EstadoTablero {
   version?: number
@@ -250,7 +251,8 @@ export function crearUnidadEnMesa(
     pos: posicionDespliegue(zona),
     radio: radioPorMiniaturas(miniaturas),
     miniaturas,
-    heridasRestantes: miniaturas === 1 ? unidad.stats.HER : undefined,
+    miniaturasIniciales: miniaturas,
+    heridasRestantes: unidad.stats.HER,
     marcas: [],
   }
 }

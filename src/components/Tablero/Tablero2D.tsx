@@ -40,12 +40,25 @@ import type { PosturaId } from '../../types/misiones'
 import { cargarEstadoDisposicion } from '../../data/misiones/estadoDisposicion'
 import { controlObjetivo, distancia, lineaDeVision, movimiento, zonaDe } from '../../engine/geometria'
 import { construirInforme, resolverUnidad, resumenSincronizacion } from '../../engine/informe'
+import {
+  aplicarDano,
+  heridasDeLaHerida,
+  heridasMaximas,
+  heridasTotales,
+} from '../../engine/heridas'
 import { TacticoPanel } from './TacticoPanel'
 import { MARCAS_POR_ACCION } from '../../../ia/validarPlan'
 import type { AccionValidada } from '../../../ia/validarPlan'
 import styles from './Tablero2D.module.css'
 
 const FASES: Fase[] = ['mando', 'movimiento', 'disparo', 'carga', 'combate', 'final']
+
+/** Verde → ámbar → rojo según cuánta unidad queda en pie. */
+function colorHeridas(fraccion: number): string {
+  if (fraccion > 0.66) return '#2f6b4f'
+  if (fraccion > 0.33) return '#c08a2e'
+  return '#a63535'
+}
 
 /** Marcas que solo valen durante el turno y se limpian al pasar el mando. */
 const MARCAS_DE_TURNO: MarcaEstado[] = ['ha_disparado', 'ha_cargado', 'avanzada', 'retrocedida']
@@ -305,6 +318,8 @@ export function Tablero2D() {
     setEstado(prev => ({ ...prev, piezas: simetrizar(prev.piezas) }))
   }
 
+  /** Ajusta el tamaño de la escuadra. Es edición de lista, no daño: mueve también
+   *  el tamaño inicial para que el desgaste siga midiéndose contra el correcto. */
   function handleMiniaturas(delta: number) {
     if (!unidadSel) return
     const miniaturas = Math.max(0, unidadSel.miniaturas + delta)
@@ -314,6 +329,23 @@ export function Tablero2D() {
         : unidadSel.marcas
     actualizarUnidad(unidadSel.instanciaId, {
       miniaturas,
+      miniaturasIniciales: miniaturas,
+      radio: radioPorMiniaturas(miniaturas),
+      marcas,
+    })
+  }
+
+  /** Aplica daño (o lo revierte con `delta` negativo) miniatura a miniatura. */
+  function handleDano(delta: number) {
+    if (!unidadSel || !perfilSel) return
+    const { miniaturas, heridasRestantes } = aplicarDano(unidadSel, perfilSel.stats.HER, delta)
+    const destruida = miniaturas === 0
+    const marcas = destruida
+      ? [...new Set<MarcaEstado>([...unidadSel.marcas, 'destruida'])]
+      : unidadSel.marcas.filter(m => m !== 'destruida')
+    actualizarUnidad(unidadSel.instanciaId, {
+      miniaturas,
+      heridasRestantes,
       radio: radioPorMiniaturas(miniaturas),
       marcas,
     })
@@ -586,6 +618,13 @@ export function Tablero2D() {
             {estado.unidades.map(u => {
               const perfil = resolverUnidad(u)
               const destruida = u.marcas.includes('destruida')
+              // Anillo de heridas: solo aparece si la unidad está tocada, para no
+              // ensuciar el mapa con aros llenos en unidades intactas.
+              const her = perfil?.stats.HER ?? 1
+              const max = heridasMaximas(u, her)
+              const fraccion = max > 0 ? heridasTotales(u, her) / max : 1
+              const radioAnillo = u.radio + 0.5
+              const perimetro = 2 * Math.PI * radioAnillo
               return (
                 <g
                   key={u.instanciaId}
@@ -605,6 +644,20 @@ export function Tablero2D() {
                         : styles.fichaCirculoOponente
                     }
                   />
+                  {!destruida && fraccion < 1 && (
+                    <circle
+                      cx={u.pos.x}
+                      cy={aSvgY(u.pos.y)}
+                      r={radioAnillo}
+                      fill="none"
+                      stroke={colorHeridas(fraccion)}
+                      strokeWidth={0.5}
+                      strokeLinecap="round"
+                      strokeDasharray={`${fraccion * perimetro} ${perimetro}`}
+                      transform={`rotate(-90 ${u.pos.x} ${aSvgY(u.pos.y)})`}
+                      className={styles.anilloHeridas}
+                    />
+                  )}
                   <text x={u.pos.x} y={aSvgY(u.pos.y) + 0.6} className={styles.fichaTexto}>
                     {u.miniaturas}
                   </text>
@@ -805,6 +858,44 @@ export function Tablero2D() {
                 </button>
               </div>
 
+              {(() => {
+                const her = perfilSel.stats.HER
+                const total = heridasTotales(unidadSel, her)
+                const max = heridasMaximas(unidadSel, her)
+                const enPie = heridasDeLaHerida(unidadSel, her)
+                return (
+                  <div className={styles.heridas}>
+                    <div className={styles.contador}>
+                      <span>Heridas</span>
+                      <button className={styles.btnMini} onClick={() => handleDano(1)}>
+                        −
+                      </button>
+                      <strong>
+                        {total}
+                        <span className={styles.heridasMax}>/{max}</span>
+                      </strong>
+                      <button
+                        className={styles.btnMini}
+                        onClick={() => handleDano(-1)}
+                        disabled={total >= max}
+                      >
+                        +
+                      </button>
+                    </div>
+                    <div className={styles.barraHeridas}>
+                      <div
+                        className={styles.barraHeridasLlena}
+                        style={{ width: `${max > 0 ? (total / max) * 100 : 0}%` }}
+                      />
+                    </div>
+                    {her > 1 && unidadSel.miniaturas > 0 && (
+                      <p className={styles.metaTenue}>
+                        La miniatura que recibe el daño va con {enPie}/{her}.
+                      </p>
+                    )}
+                  </div>
+                )
+              })()}
 
               <div className={styles.marcas}>
                 {MARCAS_ESTADO.map(m => (

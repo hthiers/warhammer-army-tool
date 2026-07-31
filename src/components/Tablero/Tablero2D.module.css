@@ -477,6 +477,48 @@
   color: var(--text);
 }
 
+.btnMini:disabled {
+  opacity: 0.4;
+  cursor: default;
+}
+
+/* ─── Heridas ────────────────────────────────────────────────────────────── */
+
+.heridas {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-top: 8px;
+}
+
+.heridas .contador strong {
+  min-width: 46px;
+}
+
+.heridasMax {
+  font-weight: 400;
+  color: var(--text-tertiary);
+}
+
+.barraHeridas {
+  height: 6px;
+  overflow: hidden;
+  background: var(--bg-tertiary);
+  border-radius: 3px;
+}
+
+.barraHeridasLlena {
+  height: 100%;
+  background: var(--color-gold);
+  border-radius: 3px;
+  transition: width 0.18s ease;
+}
+
+/* El aro rodea la ficha; no debe robar el puntero al arrastrarla. */
+.anilloHeridas {
+  pointer-events: none;
+}
+
 /* ─── Marcas de estado ───────────────────────────────────────────────────── */
 
 .marcas {

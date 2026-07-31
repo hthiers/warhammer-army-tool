@@ -10,6 +10,7 @@ import type {
   Terreno,
   UnidadInforme,
 } from '../types/tablero'
+import { heridasDeLaHerida, heridasMaximas, heridasTotales } from './heridas'
 import { terrenoDePiezas } from '../data/tablero/footprints'
 import { FACCIONES_MAP } from '../data/facciones'
 import {
@@ -75,7 +76,9 @@ export function construirInforme(estado: EstadoTablero): InformeTactico {
         rolIA: perfil.rolIA,
         palabrasClave: perfil.palabrasClave,
         miniaturas: u.miniaturas,
-        heridasRestantes: u.heridasRestantes,
+        heridasRestantes: heridasDeLaHerida(u, perfil.stats.HER),
+        heridasTotales: heridasTotales(u, perfil.stats.HER),
+        heridasMaximas: heridasMaximas(u, perfil.stats.HER),
         pos: u.pos,
         marcas: u.marcas,
         enCobertura: enCobertura(u, terreno),
@@ -194,6 +197,8 @@ export function resumenSincronizacion(estado: EstadoTablero): string[] {
       const sector = `${u.pos.x < 20 ? 'izq' : u.pos.x > 40 ? 'der' : 'centro'}-${
         u.pos.y < 15 ? 'inf' : u.pos.y > 29 ? 'sup' : 'med'
       }`
-      return `${nombreDe(u)}: ${u.miniaturas} min, ${sector}`
+      const her = resolverUnidad(u)?.stats.HER
+      const heridas = her ? `, ${heridasTotales(u, her)}/${heridasMaximas(u, her)} her` : ''
+      return `${nombreDe(u)}: ${u.miniaturas} min${heridas}, ${sector}`
     })
 }

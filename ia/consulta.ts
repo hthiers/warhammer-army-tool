@@ -43,10 +43,14 @@ export function informeATexto(informe: InformeTactico): string {
   partes.push(
     '\nUNIDADES EN MESA',
     ...informe.unidades.map(u => {
+      const herida =
+        u.heridasRestantes != null && u.heridasRestantes < u.stats.HER
+          ? `, la que recibe daño con ${u.heridasRestantes}/${u.stats.HER}`
+          : ''
       const extras = [
         u.marcas.length > 0 ? `marcas: ${u.marcas.join(', ')}` : null,
         u.enCobertura ? 'en cobertura' : null,
-        u.heridasRestantes != null ? `${u.heridasRestantes} heridas` : null,
+        `heridas ${u.heridasTotales}/${u.heridasMaximas}${herida}`,
         u.rolIA ? `rol ${u.rolIA}` : null,
       ].filter(Boolean)
       return (

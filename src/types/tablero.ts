@@ -62,8 +62,15 @@ export interface UnidadEnMesa {
   pos: Punto
   /** Huella aproximada; se deriva del número de miniaturas. */
   radio: Pulgadas
+  /** Miniaturas todavía en pie. */
   miniaturas: number
-  /** Solo se lleva para personajes y vehículos. */
+  /** Tamaño de la escuadra al desplegar. Es la referencia para medir el desgaste. */
+  miniaturasIniciales?: number
+  /**
+   * Heridas que le quedan a la miniatura que está recibiendo el daño; las demás
+   * están intactas. El total de la unidad se deriva en `src/engine/heridas.ts`.
+   * Si falta, se asume que esa miniatura está a plena salud.
+   */
   heridasRestantes?: number
   marcas: MarcaEstado[]
   /** instanciaId de la unidad a la que va adjunta. */
@@ -181,7 +188,12 @@ export interface UnidadInforme {
   rolIA?: RolIA
   palabrasClave: string[]
   miniaturas: number
+  /** Heridas de la miniatura que está recibiendo el daño. */
   heridasRestantes?: number
+  /** Heridas que le quedan a la unidad entera. */
+  heridasTotales: number
+  /** Las que aguantaría a plena potencia, para leer el desgaste de un vistazo. */
+  heridasMaximas: number
   pos: Punto
   marcas: MarcaEstado[]
   enCobertura: boolean
