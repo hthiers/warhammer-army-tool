@@ -1,7 +1,11 @@
 # Asistente IA para juego en solitario — Diseño técnico y plan de implementación
 
-> Estado: propuesta. No implementado.
-> Última actualización: 2026-07-29
+> Estado: fases 1–5 implementadas. Ver el plan en § 6.
+> Última actualización: 2026-07-31
+>
+> Este documento arrancó como propuesta y se mantiene al día con lo construido. Donde
+> la implementación se apartó del diseño original queda anotado el porqué, no borrado:
+> las razones del desvío son lo que evita repetir el análisis.
 
 ## Problema
 
@@ -29,11 +33,23 @@ Tres decisiones cargan con todo el diseño:
    hechos. Esto elimina el riesgo de alucinación geométrica, elimina el round-trip de
    herramientas y baja la latencia a una sola llamada. El modelo decide; nunca mide.
 
-3. **El SDK de Anthropic vive en un Worker, no en el navegador.**
-   El bundle del cliente sigue sin dependencias nuevas y la API key nunca sale del
-   servidor. El browser solo hace `fetch`.
+3. **La API key nunca vive en el navegador.**
+   El bundle del cliente sigue sin dependencias nuevas.
+
+   *Diseño original:* un Cloudflare Worker con el SDK de Anthropic; el browser solo
+   hace `fetch`. *Lo implementado:* **copiar/pegar contra la sesión de Claude que ya
+   pagas**, sin servidor y sin cuenta de API aparte. La app arma el prompt completo y
+   lo copia al portapapeles; pegas la respuesta JSON de vuelta.
+
+   El motivo del cambio fue de alcance, no técnico: no se quería desplegar nada ni
+   abrir una segunda cuenta para probar la idea. El Worker sigue siendo la ruta
+   correcta si la app llega a servidor, y § 4 conserva sus detalles porque el prompt,
+   el esquema y la validación son los mismos en ambos modos — solo cambia el
+   transporte.
 
 ## Arquitectura
+
+Lo implementado (copiar/pegar, sin servidor):
 
 ```
 ┌─────────────────────── Navegador (sin deps nuevas) ────────────────────┐
@@ -43,18 +59,25 @@ Tres decisiones cargan con todo el diseño:
 │                                           ▼                            │
 │                                  engine/informe.ts                     │
 │                          (hechos derivados: distancias, LdV,           │
-│                           control de objetivos, amenazas)              │
+│                           control de objetivos, amenazas, heridas)     │
 │                                           │                            │
-│                                     fetch POST                         │
+│                    ia/corpus.ts ──► ia/consulta.ts                     │
+│                   (reglas inlined)   (arma el texto del prompt)        │
+│                                           │                            │
+│                                    📋 portapapeles                     │
 └───────────────────────────────────────────┼────────────────────────────┘
                                             ▼
-                          ┌─────────── Cloudflare Worker ───────────┐
-                          │  @anthropic-ai/sdk + ANTHROPIC_API_KEY  │
-                          │  prompt cache (corpus estático, TTL 1h) │
-                          └──────────────────┬──────────────────────┘
-                                             ▼
-                                   Claude Sonnet 5 → JSON tipado
+                              Tu sesión de Claude (pegar)
+                                            │
+                                     JSON tipado (pegar de vuelta)
+                                            ▼
+                            ia/validarPlan.ts  ──►  el plan, acción
+                          (legalidad determinista)   por acción en la UI
 ```
+
+La ruta con servidor, si algún día se despliega, sustituye el tramo del portapapeles
+por un `fetch` a un Cloudflare Worker con `@anthropic-ai/sdk` y `ANTHROPIC_API_KEY`.
+Todo lo demás —corpus, prompt, esquema, validación— queda igual.
 
 ---
 
@@ -78,7 +101,7 @@ export type Fase = 'mando' | 'movimiento' | 'disparo' | 'carga' | 'combate' | 'f
 export interface Punto { x: Pulgadas; y: Pulgadas }
 
 export type MarcaEstado =
-  | 'empeñada' | 'replegada' | 'avanzada' | 'ha_disparado'
+  | 'empeñada' | 'retrocedida' | 'avanzada' | 'ha_disparado'
   | 'ha_cargado' | 'en_reserva' | 'destruida'
 
 export interface UnidadEnMesa {
@@ -87,19 +110,20 @@ export interface UnidadEnMesa {
   bando: Lado
   pos: Punto                   // centro del pelotón
   radio: Pulgadas              // huella aproximada, derivada del nº de miniaturas
-  miniaturas: number
-  heridasRestantes?: number    // solo personajes / vehículos
+  miniaturas: number           // las que siguen en pie
+  miniaturasIniciales?: number // referencia del desgaste
+  heridasRestantes?: number    // heridas de la miniatura que recibe el daño
   marcas: MarcaEstado[]
   adjuntoA?: string            // instanciaId de la unidad que lidera
 }
 
-export type TipoObjetivo = 'hogar' | 'centro' | 'tierra-de-nadie'
+export type TipoObjetivo = 'local' | 'central' | 'expansion'
 
 export interface ObjetivoMesa {
   id: string
   pos: Punto
   tipo: TipoObjetivo
-  deRol?: Rol            // solo para objetivos de hogar
+  deRol?: Rol            // solo para objetivos locales
 }
 
 /** Zona de despliegue como polígono: cubre bandas, L escalonadas y diagonales. */
@@ -157,7 +181,27 @@ export interface EstadoTablero {
 Se persiste bajo la clave `wh40k-tablero`, junto al `wh40k-partida-actual` que ya usa
 `PartidaTracker.tsx`. El guardado lleva un número de versión: cuando un cambio de
 modelo invalida el formato anterior se sube la versión y el estado viejo se descarta
-en vez de cargarse a medias.
+en vez de cargarse a medias. Va por la **v7**; el historial está en
+`src/data/tablero/estadoTablero.ts`.
+
+### Heridas
+
+Una unidad no tiene una barra de vida: tiene N miniaturas de HER heridas cada una, y el
+daño se asigna miniatura a miniatura. Por eso el estado son **dos** números —`miniaturas`
+en pie y `heridasRestantes` de la que está recibiendo el daño— y el total se deriva:
+
+```
+heridasTotales = (miniaturas − 1) × HER + heridasRestantes
+```
+
+Guardar un solo total sería más simple y perdería justo lo que importa en la mesa:
+cuántos modelos retiras. Las funciones puras están en `src/engine/heridas.ts`, y
+`miniaturasIniciales` existe para poder medir el desgaste contra el tamaño desplegado y
+no contra el actual.
+
+Los dos contadores del panel tienen roles distintos a propósito: **Miniaturas** es
+edición de lista y mueve también el tamaño inicial; **Heridas** es daño y solo consume
+el estado actual.
 
 ### Layouts de mesa
 
@@ -219,7 +263,7 @@ calza y ofrece `Simetrizar`, que las snapea al espejo exacto.
 > conviene saberlo al revisar un export.
 
 Los objetivos habituales son **5**: uno al centro exacto de la mesa y dos pares
-simétricos a 180° (hogar y tierra de nadie).
+simétricos a 180° (local y de expansión).
 
 ---
 
@@ -274,6 +318,7 @@ export interface InformeTactico {
     id: string; nombre: string; bando: Lado; pts: number
     stats: Stats; rolIA?: RolIA; palabrasClave: string[]
     miniaturas: number; heridasRestantes?: number
+    heridasTotales: number; heridasMaximas: number
     pos: Punto; marcas: MarcaEstado[]
     enCobertura: boolean
   }[]
@@ -306,6 +351,35 @@ táctica.
 
 ## 4. Capa LLM
 
+> **Lo implementado es el modo copiar/pegar** (§ 4.0). El resto de la sección describe
+> la ruta con Worker, que no se construyó pero cuyo prompt, esquema y validación son
+> los mismos. Las notas de modelo, effort y caché aplican en cuanto haya API de por
+> medio; hoy el modelo y el effort los eliges tú al pegar.
+
+### 4.0 Modo copiar/pegar (implementado)
+
+Sin servidor, sin API key, sin segunda cuenta. El flujo:
+
+1. `ia/corpus.ts` arma el corpus a partir de `rules/**/*.md` y los datos de facción,
+   inlined en el bundle con `import.meta.glob(..., { query: '?raw', eager: true })`.
+2. `ia/consulta.ts` compone el texto: corpus + prompt del agente + informe serializado.
+   La primera consulta de la sesión manda el corpus completo; las siguientes usan la
+   variante breve, porque el corpus ya está en la conversación.
+3. Botón → portapapeles → lo pegas en tu sesión de Claude.
+4. Pegas el JSON de vuelta; `leerRespuesta` / `leerPlan` lo parsean y
+   `ia/validarPlan.ts` comprueba la legalidad antes de mostrarlo.
+
+El informe se serializa como **texto tabulado, no JSON**: se lee mejor si necesitas
+revisarlo a ojo y gasta menos tokens. Ocupa ~2,5k caracteres con dos unidades en mesa.
+
+Lo que este modo pierde respecto al Worker: el caché de prompt no se controla desde la
+app (depende de la sesión), y no hay forma de forzar `effort` por agente. Lo que gana:
+cero despliegue, cero credenciales en el repo y cero costo adicional.
+
+**Restricción explícita:** no se extraen las credenciales de la sesión de Claude Code
+para inyectarlas en la app. Si algún día se va a servidor, la key se crea aparte y vive
+en `wrangler secret`, nunca en el repo — `.env` ya está en `.gitignore`.
+
 ### Elección de modelo
 
 **Un solo modelo para los tres agentes: `claude-sonnet-5`.** La diferenciación va por
@@ -328,7 +402,7 @@ Nota de calibración: en Sonnet 5, `medium` rinde aproximadamente como Sonnet 4.
 `high`. No trasladar intuiciones de effort de otros modelos — barrer los niveles sobre
 partidas reales.
 
-### Worker
+### Worker (no construido)
 
 ```ts
 // worker/index.ts
@@ -433,31 +507,40 @@ export default {
 - **Manejar `stop_reason: 'refusal'`** antes de leer `content`. Poco probable en este
   dominio, pero `content` puede venir vacío.
 
-### Cliente
+### Validación del plan (`ia/validarPlan.ts`, implementado)
 
-```ts
-// src/ia/cliente.ts — cero dependencias
-export async function pedirPlan(informe: InformeTactico): Promise<PlanTactico> {
-  const r = await fetch(`${import.meta.env.VITE_IA_ENDPOINT}/tactico`, {
-    method: 'POST',
-    headers: { 'content-type': 'application/json' },
-    body: JSON.stringify({ agente: 'tactico', informe }),
-  })
-  if (!r.ok) throw new ErrorIA(r.status)
-  return validarPlan(await r.json())
-}
-```
+Determinista, corre en el navegador y es idéntica en ambos modos de transporte.
+Comprueba que:
 
-`validarPlan` es determinista y corre en el navegador. Comprueba que:
-
-- cada `unidadId` existe en mesa y no está destruida,
-- cada `destino` está dentro del alcance de movimiento de esa unidad,
+- cada `unidadId` existe en mesa, está viva y es del bando que juega el Táctico,
+- ninguna unidad recibe dos movimientos en el mismo plan,
+- cada `destino` cae dentro de la mesa y del alcance de movimiento de esa unidad
+  (con media pulgada de tolerancia, para no rechazar por redondeo),
+- una unidad trabada solo retrocede,
 - cada `blancoId` venía marcado `enRango` en el informe,
+- la carga solo se declara si el informe la marcó apta,
 - hay PM suficientes para las estratagemas propuestas.
 
 **Una acción que no pasa la validación se muestra tachada con el motivo, no se descarta en
 silencio.** El contraste entre lo que el modelo propuso y lo que era legal es información
 útil para el jugador.
+
+#### Tiradas
+
+El plan propone destinos, pero avanzar y cargar son aleatorios: el destino es una
+intención, no un hecho. `tiradaRequerida` calcula qué hay que tirar y el mínimo que
+necesita, y la UI ofrece el dado.
+
+| Acción | Distancia | Tirada |
+|---|---|---|
+| `mover` | hasta M | — |
+| `retroceder` | hasta M (09.07) | — |
+| `avanzar` | M + 1D6 | 1D6 |
+| `cargar` | 2D6 | 2D6 |
+
+Si la tirada se queda corta, un avance **recorta el destino** en esa dirección en vez de
+dejar la unidad quieta; una carga fallida no mueve nada. La UI muestra las pulgadas
+planeadas y, cuando difieren, las que recorrió de verdad.
 
 ### Personalidad de facción
 
@@ -473,10 +556,29 @@ la importante. No juegues óptimo salvo a nivel 5.
 Esto reemplaza el ruido D6 actual con algo mejor: error *caracterizado* en vez de error
 aleatorio.
 
+### Etapas del turno
+
+El Táctico planifica el turno del oponente en **dos etapas**, no de una vez:
+
+1. **Intención y movimiento** — dónde va cada unidad y por qué.
+2. **Disparo y carga** — con las unidades ya colocadas sobre la mesa.
+
+El orden no es una preferencia: el movimiento ocurre antes que el disparo, así que pedir
+el ataque con las unidades aún sin colocar produce un plan sobre posiciones que ya no
+existen. Por eso la etapa se **deriva de la fase de la partida** y no se puede elegir a
+mano: pasar a la etapa 2 exige haber aplicado todas las acciones legales de la etapa 1.
+El botón "Siguiente fase" de la barra superior avanza sin condiciones y sirve de escape
+si el copiar/pegar falla.
+
+Al cambiar de etapa se descarta el plan anterior —describía posiciones que ya cambiaron—
+pero no la marca de "corpus ya enviado", para que la segunda consulta del turno siga
+siendo la breve.
+
 ### Build single-file
 
-`vite-plugin-singlefile` produce un `dist/index.html` autónomo. Con Worker se necesita
-`VITE_IA_ENDPOINT` como URL absoluta en el build, y CORS habilitado en el Worker. El modo
+`vite-plugin-singlefile` produce un `dist/index.html` autónomo. `dist/` **no** se versiona
+(el despliegue es por Cloudflare, no GitHub Pages). Con Worker se necesitaría
+`VITE_IA_ENDPOINT` como URL absoluta en el build y CORS habilitado en el Worker; el modo
 sin endpoint debe caer al motor D6 actual — eso da un degradado limpio y offline.
 
 ---
@@ -492,11 +594,22 @@ sin endpoint debe caer al motor D6 actual — eso da un degradado limpio y offli
 
   Se descartó usar el PNG del layout como fondo: las imágenes disponibles no calzan con
   las dimensiones reales, y el sistema de coordenadas es la fuente de verdad.
-- **`PanelPlan`** — el plan devuelto, acción por acción, con ✓ aplicar / ✗ vetar /
-  ✎ ajustar. Acciones inválidas tachadas con su motivo.
-- **`ArbitroModal`** — pregunta libre, respuesta con enlaces a las reglas citadas
-  (reutiliza `ReglaBadge` y `ReglasModal`).
-- Indicador de estado IA: pensando / offline / cayó al motor D6.
+
+  Cada ficha lleva el número de miniaturas y, si está tocada, un **aro de heridas** con
+  el arco proporcional a la vida restante (verde → ámbar → rojo). Solo aparece cuando hay
+  daño: aros llenos en unidades intactas ensuciarían el mapa sin decir nada.
+- **`TacticoPanel`** — cajón fijo al pie que se sube y se baja **sobre** el mapa, en vez
+  de vivir debajo de él. Es el panel que más se mira durante el turno del oponente y al
+  final de la página quedaba fuera de vista. Se abre solo cuando le toca jugar al
+  Táctico y se pliega cuando el turno vuelve a ti. Muestra el plan acción por acción,
+  con botón de dado donde hace falta y ✓ aplicar; las inválidas van tachadas con su
+  motivo.
+- **`ArbitroModal`** — pregunta libre, respuesta con las reglas citadas. Distingue tres
+  estados de cita: regla conocida (con su descripción), referencia a sección (`NN.NN`) y
+  id inexistente (en rojo).
+- **Panel lateral** — secciones plegables, para liberar alto sin perder la mesa de vista.
+  La ficha de unidad lleva los dos contadores (Miniaturas y Heridas), la barra de vida y
+  las marcas de estado.
 
 ---
 
@@ -508,14 +621,26 @@ sin endpoint debe caer al motor D6 actual — eso da un degradado limpio y offli
 | 2 | **Mini-mapa 2D** | `src/components/Tablero/`, arrastrar, regla virtual | 1 | ✅ hecho |
 | 3 | **Motor de geometría** | `src/engine/geometria.ts` + `informe.ts` | 1, 2 | ✅ hecho |
 | 3b | **Layouts y terreno** | `footprints.ts`, `layouts.ts`, editor + exportación | 3 | 🔶 1 de 45 layouts cargado |
-| 4 | **Worker + Árbitro** | `worker/`, corpus build-time, `ArbitroModal` | 3 | ⬜ pendiente |
-| 5 | **Táctico** | Esquema del plan, `validarPlan`, `PanelPlan` | 4 | ⬜ pendiente |
+| 4 | **Árbitro** | `ia/corpus.ts`, `ia/consulta.ts`, `ArbitroModal` | 3 | ✅ hecho — en copiar/pegar, sin Worker |
+| 5 | **Táctico** | `ia/esquemas.ts`, `validarPlan`, `TacticoPanel` | 4 | ✅ hecho |
 | 6 | **Comandante + bitácora** | Intención por ronda, memoria entre turnos | 5 | ⬜ pendiente |
 | 7 | **Voz** | Web Speech API → parser → mutaciones de estado | 1 | ⬜ pendiente |
 
 La fase 3b no estaba en el plan original: apareció al descubrir que el terreno de 11ª es
 un catálogo fijo de footprints y no polígonos libres. El único layout cargado es el
 **1-A (Take & Hold espejo)**; los otros 44 degradan a mesa vacía con zonas genéricas.
+Cargarlos es transcripción manual, sin nada que diseñar.
+
+Dos trabajos transversales que tampoco estaban en el plan y salieron en el camino:
+
+- **Biblioteca de reglas en `rules/`.** El Árbitro citaba secciones que el validador
+  marcaba como inventadas, porque solo conocía los nombres de regla de `src/data/`. Se
+  movieron las reglas a `rules/**/*.md` en la raíz y `idsCitables` pasó a extraer también
+  las referencias `NN.NN`, de 270 a 372 ids válidos. `rules/05-habilidades.md` es ahora la
+  autoridad sobre las habilidades; `src/data/reglas.ts` quedó como índice para tooltips.
+- **Heridas** (§ 1). El informe no le daba al Táctico con qué decidir a quién rematar ni
+  qué unidad propia retirar. Es además prerrequisito de la fase 6: sin heridas la bitácora
+  no puede razonar sobre desgaste entre rondas.
 
 ### Notas por fase
 
@@ -523,8 +648,11 @@ un catálogo fijo de footprints y no polígonos libres. El único layout cargado
 proyecto se detuviera ahí, la herramienta igual mejoró mucho.
 
 **Fase 4 (Árbitro) va antes que el Táctico** deliberadamente: es el agente de menor riesgo
-(no toma decisiones, solo consulta reglas que ya están en `src/data/`), valida toda la
-infraestructura del Worker y la caché, y le sirve al jugador tanto como al oponente.
+(no toma decisiones, solo consulta reglas que ya están escritas), valida el corpus y el
+formato de respuesta, y le sirve al jugador tanto como al oponente. Se confirmó en la
+práctica: hacer de Árbitro a mano contra el corpus real, antes de gastar un peso, destapó
+cuatro defectos —incluido un bug de legalidad de carga en `informe.ts`, que solo miraba
+`replegada` cuando el reglamento también prohíbe cargar tras avanzar o estando trabada.
 
 **Fase 7 (voz)** solo depende de la fase 1 — se puede adelantar. Es el canal correcto
 durante una partida porque las manos están ocupadas con las miniaturas.
@@ -533,16 +661,25 @@ durante una partida porque las manos están ocupadas con las miniaturas.
 
 ## 7. Costos estimados
 
+**En el modo copiar/pegar el costo marginal es cero**: consume la sesión de Claude que ya
+pagas. Lo de abajo aplica solo si se va a servidor.
+
 Con el corpus cacheado a 1h en Sonnet 5 ($3/$15 por millón; precio introductorio $2/$10
 hasta el 2026-08-31):
 
-- Escritura de caché (TTL 1h, 2×): ~40k tokens → **~$0.16–0.24**, una vez por partida.
-- Lectura por llamada (0.1×): ~40k tokens → **~$0.008–0.012**.
-- ~30 llamadas por partida más los tokens de salida ≈ **$0.60–1 por partida completa**.
+- Escritura de caché (TTL 1h, 2×): ~65k tokens → **~$0.26–0.39**, una vez por partida.
+- Lectura por llamada (0.1×): ~65k tokens → **~$0.013–0.020**.
+- ~30 llamadas por partida más los tokens de salida ≈ **~$1 por partida completa**.
 
-Son estimaciones con supuestos sobre el tamaño del corpus y el número de llamadas.
-**Medir con `count_tokens` sobre el corpus real y con `usage` en las primeras partidas
-antes de darlas por buenas.**
+El corpus real pesa ~207k caracteres (372 ids citables, 13 archivos `.md`). Los ~65k
+tokens salen de dividir por 3,2 caracteres/token: es una **estimación, no una medición**.
+`scripts/spike-arbitro.ts` (`npm run spike:arbitro`) mide lo real con `count_tokens` y
+verifica los aciertos de caché con `usage.cache_read_input_tokens`, pero nunca se ha
+ejecutado porque no hay API key. Correrlo es el primer paso de cualquier salida a
+servidor.
+
+Si se llega a desplegar, conviene un Workspace de Anthropic dedicado con límite de gasto
+mensual bajo ($5–10): si la URL del Worker se filtra, el daño queda acotado.
 
 ---
 
@@ -559,12 +696,19 @@ antes de darlas por buenas.**
 
 3. **Desincronización mesa ↔ app.** Es inevitable mover una miniatura y olvidar arrastrar
    la ficha.
-   *Mitigación barata:* al inicio de cada ronda, un resumen de una línea por unidad
-   ("Guerreros: 6 min, sector centro-izq") que se revisa de un vistazo.
+   *Mitigación, ya implementada:* `resumenSincronizacion()` da una línea por unidad
+   ("Guerreros: 6 min, 6/10 her, centro-izq") que se revisa de un vistazo.
 
 4. **Latencia.** Con `effort: xhigh` y pensamiento adaptativo, una llamada del Táctico
    puede tardar decenas de segundos. Es aceptable una vez por fase; no lo es por unidad.
    *Mitigación:* el Táctico devuelve el plan de la fase completa en una sola llamada.
+
+5. **Citas inventadas.** El Árbitro puede citar reglas que no existen, y una respuesta con
+   citas falsas no sirve aunque el razonamiento sea bueno.
+   *Mitigación, ya implementada:* `citaValida` contrasta cada cita contra los ids del
+   corpus y la UI marca en rojo las que no existen. Ojo con el falso positivo inverso: el
+   validador marcaba como inventadas referencias `NN.NN` que sí estaban en el corpus, y
+   eso erosiona la confianza igual de rápido que una cita falsa.
 
 ---
 
